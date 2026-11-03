@@ -27,6 +27,7 @@ import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.view.DisplayCutout;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowManager;
@@ -96,6 +97,13 @@ public class AndroidPlatformSupport extends PlatformSupport {
 	}
 
 	@Override
+	//MOD: radius of one rounded screen corner in pixels, 0 if square or unknown
+	@android.annotation.TargetApi(Build.VERSION_CODES.S)
+	private static int cornerRadius(WindowInsets insets, int position) {
+		RoundedCorner corner = insets.getRoundedCorner(position);
+		return corner == null ? 0 : corner.getRadius();
+	}
+
 	public RectF getSafeInsets( int level ) {
 		RectF insets = new RectF();
 
@@ -109,6 +117,19 @@ public class AndroidPlatformSupport extends PlatformSupport {
 					insets.left = Math.max(insets.left, rootInsets.getStableInsetLeft());
 					insets.right = Math.max(insets.right, rootInsets.getStableInsetRight());
 					insets.bottom = Math.max(insets.bottom, rootInsets.getStableInsetBottom());
+				}
+
+				//MOD: rounded screen corners (e.g. Galaxy S24). A UI corner needs to sit ~30% of the
+				// corner radius in from both edges to stay clear of the curve, so we inset by that.
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+					int tl = cornerRadius(rootInsets, RoundedCorner.POSITION_TOP_LEFT);
+					int tr = cornerRadius(rootInsets, RoundedCorner.POSITION_TOP_RIGHT);
+					int bl = cornerRadius(rootInsets, RoundedCorner.POSITION_BOTTOM_LEFT);
+					int br = cornerRadius(rootInsets, RoundedCorner.POSITION_BOTTOM_RIGHT);
+					insets.left = Math.max(insets.left, 0.3f * Math.max(tl, bl));
+					insets.right = Math.max(insets.right, 0.3f * Math.max(tr, br));
+					insets.top = Math.max(insets.top, 0.3f * Math.max(tl, tr));
+					insets.bottom = Math.max(insets.bottom, 0.3f * Math.max(bl, br));
 				}
 
 				//display cutout
