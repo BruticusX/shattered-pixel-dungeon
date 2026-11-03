@@ -96,7 +96,6 @@ public class AndroidPlatformSupport extends PlatformSupport {
 		return cutoutRect;
 	}
 
-	@Override
 	//MOD: radius of one rounded screen corner in pixels, 0 if square or unknown
 	@android.annotation.TargetApi(Build.VERSION_CODES.S)
 	private static int cornerRadius(WindowInsets insets, int position) {
@@ -104,6 +103,7 @@ public class AndroidPlatformSupport extends PlatformSupport {
 		return corner == null ? 0 : corner.getRadius();
 	}
 
+	@Override
 	public RectF getSafeInsets( int level ) {
 		RectF insets = new RectF();
 
