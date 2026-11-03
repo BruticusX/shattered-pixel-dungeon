@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
+import com.shatteredpixel.shatteredpixeldungeon.effects.ItemAura;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -642,7 +643,13 @@ public class Armor extends EquipableItem {
 
 	@Override
 	public Emitter emitter() {
-		if (seal == null) return super.emitter();
+		//MOD: glyph aura around the armor outline (see effects/ItemAura)
+		if (seal == null) {
+			if (glyph != null && (cursedKnown || !glyph.curse())) {
+				return ItemAura.armor(image(), glyph, glyph.curse());
+			}
+			return super.emitter();
+		}
 		Emitter emitter = new Emitter();
 		emitter.pos(ItemSpriteSheet.film.width(image)/2f + 2f, ItemSpriteSheet.film.height(image)/3f);
 		emitter.fillTarget = false;
@@ -785,7 +792,8 @@ public class Armor extends EquipableItem {
 				&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || glyph == null)){
 			return HOLY;
 		} else {
-			return glyph != null && (cursedKnown || !glyph.curse()) ? glyph.glowing() : null;
+			//MOD: glyphs show as a particle aura around the armor instead of a colour pulse
+			return null;
 		}
 	}
 	

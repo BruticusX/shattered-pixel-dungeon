@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
 
+import com.watabou.noosa.particles.Emitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.ItemAura;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -509,8 +511,18 @@ abstract public class Weapon extends KindOfWeapon {
 				&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || enchantment == null)){
 			return HOLY;
 		} else {
-			return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.glowing() : null;
+			//MOD: enchantments show as a particle aura on the blade instead of a colour pulse
+			return null;
 		}
+	}
+
+	//MOD: enchantment aura along the blade (see effects/ItemAura)
+	@Override
+	public Emitter emitter() {
+		if (enchantment != null && (cursedKnown || !enchantment.curse())) {
+			return ItemAura.weapon(image(), enchantment, enchantment.curse());
+		}
+		return super.emitter();
 	}
 
 	public static abstract class Enchantment implements Bundlable {
