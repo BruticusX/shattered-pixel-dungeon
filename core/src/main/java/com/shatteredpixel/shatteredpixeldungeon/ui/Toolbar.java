@@ -798,7 +798,8 @@ public class Toolbar extends Component {
 		protected void layout() {
 			super.layout();
 			slot.setRect( x, y, width, height );
-			slot.slotMargins(borderLeft, 2, borderRight, 2);
+			//MOD: refreshed toolbar frames have a thicker bevel, keep counts/levels inside it
+			slot.slotMargins(borderLeft + 2, 3, borderRight + 2, 3);
 		}
 
 		@Override

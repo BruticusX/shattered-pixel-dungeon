@@ -130,8 +130,10 @@ public class ItemSlot extends Button {
 		
 		if (status != null) {
 			status.measure();
-			if (status.width > width - (margin.left + margin.right)){
-				status.scale.set(PixelScene.align(0.8f));
+			//MOD: shrink long counts (e.g. 0/20) just enough to fit inside the slot
+			float room = width - (margin.left + margin.right);
+			if (status.width > room){
+				status.scale.set(PixelScene.align(Math.max(0.6f, room / status.width)));
 			} else {
 				status.scale.set(1f);
 			}
