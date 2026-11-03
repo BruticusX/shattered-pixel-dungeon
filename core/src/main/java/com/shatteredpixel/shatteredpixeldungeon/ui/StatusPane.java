@@ -38,6 +38,7 @@ import com.watabou.input.GameAction;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.particles.Emitter;
@@ -64,6 +65,9 @@ public class StatusPane extends Component {
 	private Button heroInfoOnBar;
 
 	private Image exp;
+	//MOD: extra XP bar under the health bar (phone layout)
+	private ColorBlock expTrack;
+	private Image expBar;
 	private BitmapText expText;
 
 	private int lastLvl = -1;
@@ -165,6 +169,13 @@ public class StatusPane extends Component {
 		else        exp = new Image(asset, 0, 48, 17, 4);
 		add( exp );
 
+		if (!large) {
+			expTrack = new ColorBlock(1, 1, 0xFF1C1C18);
+			add(expTrack);
+			expBar = new Image(asset, 0, 48, 17, 4);
+			add(expBar);
+		}
+
 		expText = new BitmapText(PixelScene.pixelFont);
 		expText.hardlight( 0xFFFFAA );
 		expText.alpha(0.6f);
@@ -258,6 +269,12 @@ public class StatusPane extends Component {
 			hp.x = shieldHP.x = Dot.x = hpleft;
 			hp.y = shieldHP.y = Dot.y = y + 2;
 
+			//MOD: thin XP bar directly under the health bar
+			expTrack.size(hp.width, 3);
+			expTrack.x = expBar.x = hp.x;
+			expTrack.y = expBar.y = hp.y + hp.height + 1;
+			expBar.scale.y = 3f / expBar.height;
+
 			hpText.scale.set(PixelScene.align(0.5f));
 			hpText.x = hp.x + 1;
 			hpText.y = hp.y + (hp.height - (hpText.baseLine()+hpText.scale.y))/2f;
@@ -278,7 +295,7 @@ public class StatusPane extends Component {
 			if (buffBarRowAdjusts != null){
 				buffs.rowHeightAdjusts = buffBarRowAdjusts;
 			}
-			buffs.setRect( x + heroPaneWidth + 1, y + 8, 55, 16 );
+			buffs.setRect( x + heroPaneWidth + 1, y + 11, 55, 16 ); //MOD: moved down for the XP bar
 
 			busy.x = x + 1;
 			busy.y = y + 37;
@@ -355,6 +372,7 @@ public class StatusPane extends Component {
 		} else {
 			exp.scale.x = ((17 + heroPaneExtraWidth) / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 			expText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());
+			expBar.scale.x = (expTrack.width() / expBar.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 		}
 
 		if (Dungeon.hero.lvl != lastLvl) {
@@ -402,6 +420,8 @@ public class StatusPane extends Component {
 		hp.alpha(value);
 		hpText.alpha(0.6f*value);
 		exp.alpha(value);
+		if (expTrack != null) expTrack.alpha(value);
+		if (expBar != null) expBar.alpha(value);
 		if (expText != null) expText.alpha(0.6f*value);
 		level.alpha(value);
 		compass.alpha(value);
