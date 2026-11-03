@@ -1,3 +1,27 @@
 [
-  {"asset_id": "ecdf2e6c-f0de-4885-b0a5-71c29611dec0", "sha12": "321d562d61cd", "label": "obsidian_khopesh"}
+  {
+    "asset_id": "ecdf2e6c-f0de-4885-b0a5-71c29611dec0",
+    "sha12": "321d562d61cd",
+    "label": "obsidian_khopesh"
+  },
+  {
+    "asset_id": "5c1b89b9-1f3b-4f1d-9be0-28c11afc2812",
+    "sha12": "8453a7da466a",
+    "label": "hd_sword"
+  },
+  {
+    "asset_id": "0212ff66-4d70-4f2c-82d7-1d2ac5e1bc99",
+    "sha12": "fc236b6210b2",
+    "label": "hd_spear"
+  },
+  {
+    "asset_id": "d739b3f0-3ea8-499a-8323-3490273cd4aa",
+    "sha12": "84a659d8432d",
+    "label": "hd_flail"
+  },
+  {
+    "asset_id": "c0e84b7e-f9de-4492-bb0b-9b9d12080c1b",
+    "sha12": "29054eb3df07",
+    "label": "hd_greataxe"
+  }
 ]
