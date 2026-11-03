@@ -275,10 +275,12 @@ public class StatusPane extends Component {
 			hp.y = shieldHP.y = Dot.y = y + 2;
 
 			//MOD: framed XP bar directly under the health bar, sharing its border
-			expFrame.size(hp.width + 2, expFrame.height);
+			//it sits one bevel lower, so it ends 5px earlier to continue the HP bar's slope
+			int expWidth = (int)hp.width - 5;
+			expFrame.size(expWidth + 2, expFrame.height);
 			expFrame.x = hp.x - 2;
 			expFrame.y = y + 7;
-			expBar.frame(60 + 50 - (int)hp.width, 52, (int)hp.width, 4);
+			expBar.frame(60 + 50 - expWidth, 52, expWidth, 4);
 			expBar.x = hp.x;
 			expBar.y = expFrame.y + 2;
 
