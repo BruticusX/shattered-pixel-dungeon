@@ -21,6 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
+import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.watabou.noosa.Scene;
 import com.watabou.noosa.NinePatch;
 
 public class Chrome {
@@ -45,7 +48,10 @@ public class Chrome {
 	}
 	
 	public static NinePatch get( Type type ) {
-		String Asset = Assets.Interfaces.CHROME;
+		//MOD: in-dungeon screens use the refreshed window art, menus keep the original
+		Scene current = ShatteredPixelDungeon.scene();
+		String Asset = (current instanceof GameScene || current instanceof AlchemyScene)
+				? Assets.Interfaces.CHROME_GAME : Assets.Interfaces.CHROME;
 		switch (type) {
 		case WINDOW:
 			return new NinePatch( Asset, 0, 0, 20, 20, 6 );

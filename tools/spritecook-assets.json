@@ -28,5 +28,40 @@
     "asset_id": "f25e0686-a876-4e04-ba00-e4d6466e9520",
     "sha12": "41b2d1be995b",
     "label": "ui_status_pane (aligned 2x)"
+  },
+  {
+    "asset_id": "71aa04d7-a0a4-47a2-b4d7-f475c6992ca1",
+    "sha12": "9a7af695fa46",
+    "label": "ui_toolbar"
+  },
+  {
+    "asset_id": "c9a6740b-a305-46a3-9d8d-773b3ad0c273",
+    "sha12": "51c18651cf75",
+    "label": "ui_chrome"
+  },
+  {
+    "asset_id": "d3bf029f-c8a6-45c1-ad4c-3381511c7885",
+    "sha12": "f9bf1d20aa4c",
+    "label": "ui_menu_pane"
+  },
+  {
+    "asset_id": "7c46af4b-4c79-4800-9386-108c6878e906",
+    "sha12": "004d9e2a260b",
+    "label": "ui_menu_button"
+  },
+  {
+    "asset_id": "243f487f-ddeb-4ab6-82f1-fc0a57ffe0bb",
+    "sha12": "72203cc12b9b",
+    "label": "ui_talent_button"
+  },
+  {
+    "asset_id": "a0d7be4d-3d95-43a4-88d6-bf0eeec02a8c",
+    "sha12": "c09e2de7e1c3",
+    "label": "ui_radial_menu"
+  },
+  {
+    "asset_id": "21a366ac-e133-43a4-959e-3f3082d8f535",
+    "sha12": null,
+    "label": "ui_boss_hp (not used yet)"
   }
 ]
