@@ -23,5 +23,10 @@
     "asset_id": "c0e84b7e-f9de-4492-bb0b-9b9d12080c1b",
     "sha12": "29054eb3df07",
     "label": "hd_greataxe"
+  },
+  {
+    "asset_id": "f25e0686-a876-4e04-ba00-e4d6466e9520",
+    "sha12": "41b2d1be995b",
+    "label": "ui_status_pane (aligned 2x)"
   }
 ]
