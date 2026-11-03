@@ -23,8 +23,19 @@ android {
         targetSdkVersion appAndroidTargetSDK
     }
 
+    //MOD: fixed debug signing key so each new build installs over the last one (keeps saves)
+    signingConfigs {
+        debug {
+            storeFile file('sureshot-debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         debug {
+            signingConfig signingConfigs.debug
             applicationIdSuffix ".indev"
             versionNameSuffix '-INDEV'
             dependencies {
