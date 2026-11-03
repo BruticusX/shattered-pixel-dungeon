@@ -38,7 +38,6 @@ import com.watabou.input.GameAction;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
-import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.particles.Emitter;
@@ -66,8 +65,9 @@ public class StatusPane extends Component {
 
 	private Image exp;
 	//MOD: extra XP bar under the health bar (phone layout)
-	private ColorBlock expTrack;
+	private NinePatch expFrame;
 	private Image expBar;
+	private BitmapText expBarText;
 	private BitmapText expText;
 
 	private int lastLvl = -1;
@@ -170,10 +170,15 @@ public class StatusPane extends Component {
 		add( exp );
 
 		if (!large) {
-			expTrack = new ColorBlock(1, 1, 0xFF1C1C18);
-			add(expTrack);
-			expBar = new Image(asset, 0, 48, 17, 4);
+			//frame cut from the HP bar's frame (same bevel and angled tip), gold fill shaped like the HP bar
+			expFrame = new NinePatch(asset, 0, 52, 52, 8, 2, 0, 5, 0);
+			add(expFrame);
+			expBar = new Image(asset, 60, 52, 50, 4);
 			add(expBar);
+			expBarText = new BitmapText(PixelScene.pixelFont);
+			expBarText.hardlight(0xFFFFAA);
+			expBarText.alpha(0.6f);
+			add(expBarText);
 		}
 
 		expText = new BitmapText(PixelScene.pixelFont);
@@ -269,11 +274,13 @@ public class StatusPane extends Component {
 			hp.x = shieldHP.x = Dot.x = hpleft;
 			hp.y = shieldHP.y = Dot.y = y + 2;
 
-			//MOD: thin XP bar directly under the health bar
-			expTrack.size(hp.width, 3);
-			expTrack.x = expBar.x = hp.x;
-			expTrack.y = expBar.y = hp.y + hp.height + 1;
-			expBar.scale.y = 3f / expBar.height;
+			//MOD: framed XP bar directly under the health bar, sharing its border
+			expFrame.size(hp.width + 2, expFrame.height);
+			expFrame.x = hp.x - 2;
+			expFrame.y = y + 7;
+			expBar.frame(60 + 50 - (int)hp.width, 52, (int)hp.width, 4);
+			expBar.x = hp.x;
+			expBar.y = expFrame.y + 2;
 
 			hpText.scale.set(PixelScene.align(0.5f));
 			hpText.x = hp.x + 1;
@@ -295,7 +302,7 @@ public class StatusPane extends Component {
 			if (buffBarRowAdjusts != null){
 				buffs.rowHeightAdjusts = buffBarRowAdjusts;
 			}
-			buffs.setRect( x + heroPaneWidth + 1, y + 11, 55, 16 ); //MOD: moved down for the XP bar
+			buffs.setRect( x + heroPaneWidth + 1, y + 16, 55, 16 ); //MOD: moved down for the XP bar
 
 			busy.x = x + 1;
 			busy.y = y + 37;
@@ -372,7 +379,12 @@ public class StatusPane extends Component {
 		} else {
 			exp.scale.x = ((17 + heroPaneExtraWidth) / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 			expText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());
-			expBar.scale.x = (expTrack.width() / expBar.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
+			expBar.scale.x = (float)Dungeon.hero.exp / Dungeon.hero.maxExp();
+			expBarText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());
+			expBarText.scale.set(PixelScene.align(0.5f));
+			expBarText.x = expBar.x + 1;
+			expBarText.y = expBar.y + (4 - (expBarText.baseLine() + expBarText.scale.y)) / 2f - 0.001f;
+			PixelScene.align(expBarText);
 		}
 
 		if (Dungeon.hero.lvl != lastLvl) {
@@ -420,8 +432,9 @@ public class StatusPane extends Component {
 		hp.alpha(value);
 		hpText.alpha(0.6f*value);
 		exp.alpha(value);
-		if (expTrack != null) expTrack.alpha(value);
+		if (expFrame != null) expFrame.alpha(value);
 		if (expBar != null) expBar.alpha(value);
+		if (expBarText != null) expBarText.alpha(0.6f*value);
 		if (expText != null) expText.alpha(0.6f*value);
 		level.alpha(value);
 		compass.alpha(value);
