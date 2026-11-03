@@ -220,6 +220,11 @@ public class Armor extends EquipableItem {
 		return m == null ? name : Messages.get(Armor.class, "material_name", m.title(), name);
 	}
 
+	@Override
+	public String spriteSheet() {
+		return material() != null ? material().spriteSheet() : super.spriteSheet();
+	}
+
 	private static final String MATERIAL  = "material";
 	private static final String CONDITION = "condition";
 

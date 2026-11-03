@@ -21,6 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.RepairKit;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
@@ -354,6 +357,13 @@ public class ShopRoom extends SpecialRoom {
 		Random.pushGenerator(Random.Long());
 			Random.shuffle(itemsToSpawn);
 		Random.popGenerator();
+
+		//MOD: shops stock repair kits, and their gear comes in a material suited to the depth
+		itemsToSpawn.add( new RepairKit().quantity(2) );
+		for (Item i : itemsToSpawn){
+			if (i instanceof Weapon) ((Weapon) i).rollMaterial();
+			if (i instanceof Armor)  ((Armor) i).rollMaterial();
+		}
 
 		return itemsToSpawn;
 	}

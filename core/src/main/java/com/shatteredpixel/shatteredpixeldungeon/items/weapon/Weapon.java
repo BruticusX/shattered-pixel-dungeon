@@ -304,6 +304,11 @@ abstract public class Weapon extends KindOfWeapon {
 		return s;
 	}
 
+	@Override
+	public String spriteSheet() {
+		return material() != null ? material().spriteSheet() : super.spriteSheet();
+	}
+
 	private static final String MATERIAL  = "material";
 	private static final String CONDITION = "condition";
 
