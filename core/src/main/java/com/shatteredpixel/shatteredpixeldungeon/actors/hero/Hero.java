@@ -558,7 +558,8 @@ public class Hero extends Char {
 		}
 		
 		if (!RingOfForce.fightingUnarmed(this)) {
-			return Math.max(1, Math.round(attackSkill * accuracy * wep.accuracyFactor( this, target )));
+			//MOD: weapon attacks never miss (only infinite-evasion effects still dodge)
+			return INFINITE_ACCURACY;
 		} else {
 			return Math.max(1, Math.round(attackSkill * accuracy));
 		}

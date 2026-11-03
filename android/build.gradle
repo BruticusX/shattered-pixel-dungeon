@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         manifestPlaceholders = [appName:appName]
-        applicationId appPackageName
+        applicationId 'io.github.bruticusx.sureshotdungeon'
 
         versionCode appVersionCode
         versionName appVersionName
