@@ -259,11 +259,7 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	public int STRReq(int lvl){
-		int req = STRReq(tier, lvl);
-		if (masteryPotionBonus){
-			req -= 2;
-		}
-		return req;
+		return 0; //MOD: strength requirements removed
 	}
 
 	private static boolean evaluatingTwinUpgrades = false;
@@ -295,7 +291,7 @@ public class MeleeWeapon extends Weapon {
 		int damage = augment.damageFactor(super.damageRoll( owner ));
 
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = 0 /*MOD: no strength*/;
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
@@ -313,7 +309,7 @@ public class MeleeWeapon extends Weapon {
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
-				} else if (Dungeon.hero.STR() > STRReq()) {
+				} else if (false) { //MOD: no excess strength
 					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 				}
 			}

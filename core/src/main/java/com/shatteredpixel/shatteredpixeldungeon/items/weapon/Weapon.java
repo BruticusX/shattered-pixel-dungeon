@@ -352,7 +352,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	public int STRReq(){
-		return STRReq(level());
+		return 0; //MOD: strength requirements removed
 	}
 
 	public abstract int STRReq(int lvl);
@@ -360,8 +360,8 @@ abstract public class Weapon extends KindOfWeapon {
 	protected static int STRReq(int tier, int lvl){
 		lvl = Math.max(0, lvl);
 
-		//strength req decreases at +1,+3,+6,+10,etc.
-		return (8 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
+		//MOD: strength requirements removed from the game
+		return 0;
 	}
 
 	@Override

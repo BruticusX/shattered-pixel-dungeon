@@ -49,15 +49,16 @@ public class ElixirOfMight extends Elixir {
 	public void apply( Hero hero ) {
 		identify();
 		
-		hero.STR++;
-		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
+		//MOD: permanent max HP like a potion of strength, plus the usual temporary boost
+		hero.HTBoost += PotionOfStrength.HP_BONUS;
+		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(PotionOfStrength.HP_BONUS), FloatingText.HEALING);
 		
 		Buff.affect(hero, HTBoost.class).reset();
 		HTBoost boost = Buff.affect(hero, HTBoost.class);
 		boost.reset();
 		
 		hero.updateHT( true );
-		GLog.p( Messages.get(this, "msg", hero.STR()) );
+		GLog.p( Messages.get(this, "msg", PotionOfStrength.HP_BONUS, hero.HT) );
 
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();

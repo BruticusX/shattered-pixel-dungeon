@@ -128,11 +128,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	public int STRReq(int lvl){
-		int req = STRReq(tier, lvl) - 1; //1 less str than normal for their tier
-		if (masteryPotionBonus){
-			req -= 2;
-		}
-		return req;
+		return 0; //MOD: strength requirements removed
 	}
 
 	//use the parent item if this has been thrown from a parent
@@ -536,7 +532,7 @@ abstract public class MissileWeapon extends Weapon {
 		int damage = augment.damageFactor(super.damageRoll( owner ));
 		
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = 0 /*MOD: no strength*/;
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
@@ -662,7 +658,7 @@ abstract public class MissileWeapon extends Weapon {
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
-				} else if (Dungeon.hero.STR() > STRReq()) {
+				} else if (false) { //MOD: no excess strength
 					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 				}
 			}

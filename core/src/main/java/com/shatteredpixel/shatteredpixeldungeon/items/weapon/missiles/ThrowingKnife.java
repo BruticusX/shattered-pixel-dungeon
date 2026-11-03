@@ -59,7 +59,7 @@ public class ThrowingKnife extends MissileWeapon {
 				int damage = augment.damageFactor(Hero.heroDamageIntRange(
 						min() + Math.round(diff*0.75f),
 						max()));
-				int exStr = hero.STR() - STRReq();
+				int exStr = 0 /*MOD: no strength*/;
 				if (exStr > 0) {
 					damage += Hero.heroDamageIntRange(0, exStr);
 				}

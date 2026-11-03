@@ -219,6 +219,15 @@ public class ItemSlot extends Button {
 		}
 	}
 
+	//MOD: durability readout for weapons and armor, e.g. "87%"
+	protected String durabilityText(Item item){
+		return null;
+	}
+
+	protected int durabilityColor(Item item){
+		return 0xFFFFFF;
+	}
+
 	public void updateText(){
 
 		if (itemIcon != null){
@@ -253,23 +262,9 @@ public class ItemSlot extends Button {
 
 		} else if (item instanceof Weapon || item instanceof Armor) {
 
-			if (item.levelKnown){
-				int str = item instanceof Weapon ? ((Weapon)item).STRReq() : ((Armor)item).STRReq();
-				extra.text( Messages.format( TXT_STRENGTH, str ) );
-				if (Dungeon.hero != null && str > Dungeon.hero.STR()) {
-					extra.hardlight( DEGRADED );
-				} else if (item instanceof Weapon && ((Weapon) item).masteryPotionBonus){
-					extra.hardlight( MASTERED );
-				} else if (item instanceof Armor && ((Armor) item).masteryPotionBonus) {
-					extra.hardlight( MASTERED );
-				} else {
-					extra.resetColor();
-				}
-			} else {
-				int str = item instanceof Weapon ? ((Weapon)item).STRReq(0) : ((Armor)item).STRReq(0);
-				extra.text( Messages.format( TXT_TYPICAL_STR, str ) );
-				extra.hardlight( WARNING );
-			}
+			//MOD: strength requirements are gone; durability is shown here instead (see durabilityText)
+			extra.text( durabilityText(item) );
+			extra.hardlight( durabilityColor(item) );
 			extra.measure();
 
 		} else {
