@@ -16,7 +16,8 @@ allprojects {
 
         //Full releases gets +2 on version code, needed for an F-Droid quirk
         appVersionCode = 922
-        appVersionName = '4.0.2'
+        //MOD: CI build number is appended so the title screen shows which build is installed
+        appVersionName = '4.0.2' + (System.getenv('GITHUB_RUN_NUMBER') ? '-b' + System.getenv('GITHUB_RUN_NUMBER') : '')
 
         appJavaCompatibility = JavaVersion.VERSION_11
 

@@ -22,7 +22,14 @@ jobs:
           chmod +x gradlew
           ./gradlew android:assembleDebug --no-daemon
 
+      - name: Check refreshed art is inside the APK
+        run: |
+          APK=$(ls android/build/outputs/apk/debug/*.apk | head -1)
+          echo "repo  status_pane: $(sha256sum core/src/main/assets/interfaces/status_pane.png | cut -c1-12)"
+          echo "apk   status_pane: $(unzip -p "$APK" assets/interfaces/status_pane.png | sha256sum | cut -c1-12)"
+          echo "version: $(unzip -p "$APK" AndroidManifest.xml | strings | grep -m1 -o '4\.0\.2[^ ]*' || true)"
+
       - uses: actions/upload-artifact@v4
         with:
-          name: SureShotDungeon-apk
+          name: SureShotDungeon-build-${{ github.run_number }}
           path: android/build/outputs/apk/debug/*.apk
