@@ -175,6 +175,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarScythe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Bloodletter;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfArsenal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
@@ -444,9 +446,10 @@ public class Generator {
 					Scimitar.class,
 					RoundShield.class,
 					Sai.class,
-					Whip.class
+					Whip.class,
+					Bloodletter.class //MOD
 			};
-			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2 };
+			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2 }; //MOD: +Bloodletter
 			WEP_T3.probs = WEP_T3.defaultProbs.clone();
 			
 			WEP_T4.classes = new Class<?>[]{
@@ -735,6 +738,11 @@ public class Generator {
 					if (Random.Float() < ExoticCrystals.consumableExoticChance()){
 						itemCls = ExoticScroll.regToExo.get(itemCls);
 					}
+				}
+
+				//MOD: 1 in 8 scroll drops is a scroll of arsenal
+				if (cat == Category.SCROLL && Random.Int(8) == 0){
+					itemCls = ScrollOfArsenal.class;
 				}
 
 				return ((Item) Reflection.newInstance(itemCls)).random();

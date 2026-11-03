@@ -256,6 +256,7 @@ public class ItemSpriteSheet {
 	public static final int ROUND_SHIELD    = WEP_TIER3+3;
 	public static final int SAI             = WEP_TIER3+4;
 	public static final int WHIP            = WEP_TIER3+5;
+	public static final int BLOODLETTER     = WEP_TIER3+6; //MOD
 	static{
 		assignItemRect(SWORD,           14, 14);
 		assignItemRect(MACE,            15, 15);
@@ -263,6 +264,7 @@ public class ItemSpriteSheet {
 		assignItemRect(ROUND_SHIELD,    16, 16);
 		assignItemRect(SAI,             16, 16);
 		assignItemRect(WHIP,            14, 14);
+		assignItemRect(BLOODLETTER,     14, 14); //MOD
 	}
 
 	private static final int WEP_TIER4      =                               xy(9, 8);   //8 slots
@@ -539,6 +541,7 @@ public class ItemSpriteSheet {
 	public static final int SCROLL_BERKANAN = SCROLLS+9;
 	public static final int SCROLL_ODAL     = SCROLLS+10;
 	public static final int SCROLL_TIWAZ    = SCROLLS+11;
+	public static final int SCROLL_ARSENAL  = SCROLLS+12; //MOD
 
 	public static final int ARCANE_RESIN    = SCROLLS+13;
 	static {
