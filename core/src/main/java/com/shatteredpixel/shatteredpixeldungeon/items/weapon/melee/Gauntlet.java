@@ -38,7 +38,7 @@ public class Gauntlet extends MeleeWeapon {
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  Math.round(2.5f*(tier+1)) +     //15 base, down from 30
 				lvl*Math.round(0.5f*(tier+1));  //+3 per level, down from +6
 	}

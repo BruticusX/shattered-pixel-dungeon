@@ -46,6 +46,13 @@ import com.watabou.utils.Callback;
 import java.util.ArrayList;
 
 public class Pickaxe extends MeleeWeapon {
+
+	//MOD: material family
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind materialKind() {
+		return null;
+	}
+
 	
 	{
 		image = ItemSpriteSheet.PICKAXE;

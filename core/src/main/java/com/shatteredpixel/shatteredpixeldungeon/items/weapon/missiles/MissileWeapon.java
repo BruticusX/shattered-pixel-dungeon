@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.Material;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -106,10 +107,30 @@ abstract public class MissileWeapon extends Weapon {
 		}
 	}
 	
-	@Override
-	public int min(int lvl) {
+	//MOD: base profile at the type's own tier, scaled by its material
+	public int baseMin(int lvl) {
 		return  2 * tier +                      //base
 				lvl;                            //level scaling
+	}
+
+	@Override
+	public final int min(int lvl) {
+		return Math.max(0, Math.round(baseMin(lvl) * materialScale()));
+	}
+
+	@Override
+	public final int max(int lvl) {
+		return Math.max(min(lvl), Math.round(baseMax(lvl) * materialScale()));
+	}
+
+	@Override
+	public Material.Kind materialKind() {
+		return Material.Kind.METAL;
+	}
+
+	@Override
+	protected int typeTier() {
+		return tier;
 	}
 	
 	@Override
@@ -121,8 +142,7 @@ abstract public class MissileWeapon extends Weapon {
 		}
 	}
 	
-	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  5 * tier +                      //base
 				tier*lvl;                       //level scaling
 	}
@@ -181,7 +201,8 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	public boolean isSimilar( Item item ) {
-		return trueLevel() == item.trueLevel() && getClass() == item.getClass() && setID == (((MissileWeapon) item).setID);
+		return trueLevel() == item.trueLevel() && getClass() == item.getClass() && setID == (((MissileWeapon) item).setID)
+				&& ((MissileWeapon) item).material() == material(); //MOD: materials don't mix in a stack
 	}
 	
 	@Override
@@ -387,6 +408,7 @@ abstract public class MissileWeapon extends Weapon {
 
 		Random.popGenerator();
 
+		rollMaterial(); //MOD
 		return this;
 	}
 
@@ -449,6 +471,9 @@ abstract public class MissileWeapon extends Weapon {
 
 	public float durabilityPerUse( int level ){
 		float usages = baseUses * (float)(Math.pow(1.5f, level));
+
+		//MOD: harder metals survive more throws (iron = the old baseline), brittle obsidian far fewer
+		if (material() != null) usages *= material().hits / 400f;
 
 		//+50%/75% durability
 		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){

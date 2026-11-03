@@ -221,11 +221,22 @@ public class ItemSlot extends Button {
 
 	//MOD: durability readout for weapons and armor, e.g. "87%"
 	protected String durabilityText(Item item){
-		return null;
+		float c = conditionOf(item);
+		return c < 0 ? null : (int)Math.ceil(c) + "%";
 	}
 
 	protected int durabilityColor(Item item){
-		return 0xFFFFFF;
+		float c = conditionOf(item);
+		if (c <= 10) return DEGRADED;
+		if (c <= 25) return WARNING;
+		return 0xCCCCCC;
+	}
+
+	//condition 0-100 of a weapon/armor that wears down, or -1 if it doesn't
+	private static float conditionOf(Item item){
+		if (item instanceof Weapon && ((Weapon) item).usesCondition()) return ((Weapon) item).condition;
+		if (item instanceof Armor && ((Armor) item).usesCondition()) return ((Armor) item).condition;
+		return -1;
 	}
 
 	public void updateText(){

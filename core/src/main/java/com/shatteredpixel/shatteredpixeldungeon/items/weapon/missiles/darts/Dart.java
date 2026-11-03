@@ -47,6 +47,13 @@ import java.util.ArrayList;
 
 public class Dart extends MissileWeapon {
 
+	//MOD: not made of metal
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind materialKind() {
+		return null;
+	}
+
+
 	{
 		levelKnown = true;
 
@@ -81,7 +88,7 @@ public class Dart extends MissileWeapon {
 	}
 	
 	@Override
-	public int min(int lvl) {
+	public int baseMin(int lvl) {
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				return bow.dartMin()            //crossbow dart damage
@@ -98,7 +105,7 @@ public class Dart extends MissileWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				return bow.dartMax()            //crossbow dart damage

@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.Material;
 import com.watabou.noosa.particles.Emitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ItemAura;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
@@ -225,9 +226,92 @@ abstract public class Weapon extends KindOfWeapon {
 	private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 	private static final String AUGMENT	        = "augment";
 
+	//MOD: ---- materials and condition (durability) ----
+	public Material material = null;
+	public float condition = 100f;
+
+	//which family of materials this weapon is made from; null = no material (keeps vanilla stats)
+	public Material.Kind materialKind() {
+		return null;
+	}
+
+	//the weapon type's own tier, which its stat formulas were designed around
+	protected int typeTier() {
+		return 1;
+	}
+
+	public Material material() {
+		if (material == null && materialKind() != null) material = Material.lowest(materialKind());
+		return material;
+	}
+
+	public void rollMaterial() {
+		if (materialKind() != null) material = Material.randomFor(materialKind());
+	}
+
+	//light weapons hit a bit softer but faster, heavy ones harder but slower (see baseDelay)
+	public float weightFactor() {
+		return 1f;
+	}
+
+	//multiplier taking the type's formula from its own tier to its material's power
+	public float materialScale() {
+		Material m = material();
+		if (m == null) return 1f;
+		return (m.power + 1f) / (typeTier() + 1f) * weightFactor();
+	}
+
+	public boolean usesCondition() {
+		return false;
+	}
+
+	public boolean broken() {
+		return usesCondition() && condition <= 0;
+	}
+
+	public void wear(float amount) {
+		if (!usesCondition() || amount <= 0) return;
+		float before = condition;
+		condition = Math.max(0, condition - amount);
+		if (before > 0 && condition <= 0) {
+			GLog.n(Messages.get(Weapon.class, "now_broken", name()));
+		} else if (before > 10 && condition <= 10) {
+			GLog.w(Messages.get(Weapon.class, "almost_broken", name()));
+		} else if (before > 25 && condition <= 25) {
+			GLog.w(Messages.get(Weapon.class, "wearing_down", name()));
+		}
+		updateQuickslot();
+	}
+
+	public void repair(float amount) {
+		condition = Math.min(100f, condition + amount);
+		updateQuickslot();
+	}
+
+	protected String materialName(String name) {
+		Material m = material();
+		return m == null ? name : Messages.get(Weapon.class, "material_name", m.title(), name);
+	}
+
+	protected String materialInfo() {
+		Material m = material();
+		if (m == null) return "";
+		String s = Messages.get(Weapon.class, "material_info", m.title());
+		if (usesCondition()) {
+			s += " " + (broken() ? Messages.get(Weapon.class, "condition_broken")
+					: Messages.get(Weapon.class, "condition_info", (int)Math.ceil(condition)));
+		}
+		return s;
+	}
+
+	private static final String MATERIAL  = "material";
+	private static final String CONDITION = "condition";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
+		if (material != null) bundle.put( MATERIAL, material.name() );
+		bundle.put( CONDITION, condition );
 		bundle.put( USES_LEFT_TO_ID, usesLeftToID );
 		bundle.put( AVAILABLE_USES, availableUsesToID );
 		bundle.put( ENCHANTMENT, enchantment );
@@ -248,6 +332,15 @@ abstract public class Weapon extends KindOfWeapon {
 		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 
 		augment = bundle.getEnum(AUGMENT, Augment.class);
+
+		if (bundle.contains(MATERIAL)) material = Material.fromName(bundle.getString(MATERIAL), null);
+		if (bundle.contains(CONDITION)) condition = bundle.getFloat(CONDITION);
+	}
+
+	@Override
+	public boolean isSimilar( Item item ) {
+		//different materials never stack together
+		return super.isSimilar(item) && (!(item instanceof Weapon) || ((Weapon) item).material() == material());
 	}
 	
 	@Override
@@ -413,9 +506,9 @@ abstract public class Weapon extends KindOfWeapon {
 	public String name() {
 		if (isEquipped(Dungeon.hero) && !hasCurseEnchant() && Dungeon.hero.buff(HolyWeapon.HolyWepBuff.class) != null
 			&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || enchantment == null)){
-				return Messages.get(HolyWeapon.class, "ench_name", super.name());
+				return Messages.get(HolyWeapon.class, "ench_name", materialName(super.name()));
 			} else {
-				return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.name(super.name()) : super.name();
+				return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.name(materialName(super.name())) : materialName(super.name());
 
 		}
 	}

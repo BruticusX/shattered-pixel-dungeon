@@ -49,7 +49,7 @@ public class Mace extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  4*(tier+1) +    //16 base, down from 20
 				lvl*(tier+1);   //scaling unchanged
 	}

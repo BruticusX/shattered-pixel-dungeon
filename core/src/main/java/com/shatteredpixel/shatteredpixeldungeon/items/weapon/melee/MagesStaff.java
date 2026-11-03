@@ -61,6 +61,13 @@ import java.util.ArrayList;
 
 public class MagesStaff extends MeleeWeapon {
 
+	//MOD: material family
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind materialKind() {
+		return null;
+	}
+
+
 	private Wand wand;
 
 	public static final String AC_IMBUE = "IMBUE";
@@ -87,7 +94,7 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  Math.round(3f*(tier+1)) +   //6 base damage, down from 10
 				lvl*(tier+1);               //scaling unaffected
 	}

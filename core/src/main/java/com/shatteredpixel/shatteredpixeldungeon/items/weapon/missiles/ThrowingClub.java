@@ -25,6 +25,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ThrowingClub extends MissileWeapon {
+
+	//MOD: not made of metal
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind materialKind() {
+		return null;
+	}
+
 	
 	{
 		image = ItemSpriteSheet.THROWING_CLUB;
@@ -42,7 +49,7 @@ public class ThrowingClub extends MissileWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  4 * tier +                  //8 base, down from 10
 				(tier) * lvl;               //scaling unchanged
 	}

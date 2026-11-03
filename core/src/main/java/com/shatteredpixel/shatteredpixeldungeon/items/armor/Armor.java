@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.Material;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ItemAura;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -140,9 +141,93 @@ public class Armor extends EquipableItem {
 	private static final String SEAL            = "seal";
 	private static final String AUGMENT			= "augment";
 
+	//MOD: ---- materials and condition (durability) ----
+	public Material material = null;
+	public float condition = 100f;
+
+	public Material.Kind materialKind() {
+		if (this instanceof ClothArmor)   return Material.Kind.CLOTH;
+		if (this instanceof LeatherArmor) return Material.Kind.LEATHER;
+		if (this instanceof MailArmor || this instanceof ScaleArmor || this instanceof PlateArmor) return Material.Kind.METAL;
+		return null; //class armor etc. keep vanilla stats
+	}
+
+	public Material material() {
+		if (material == null && materialKind() != null) material = Material.lowest(materialKind());
+		return material;
+	}
+
+	public void rollMaterial() {
+		if (materialKind() != null) material = Material.randomFor(materialKind());
+	}
+
+	//heavier metal armor types block more for the same metal
+	protected float typeFactor() {
+		if (this instanceof MailArmor)  return 0.9f;
+		if (this instanceof PlateArmor) return 1.15f;
+		return 1f;
+	}
+
+	//replaces tier in the block formula
+	public float armorPower() {
+		Material m = material();
+		return m == null ? tier : m.power * typeFactor();
+	}
+
+	//evasion lost to heavy metal armor (stealth is reduced alongside it)
+	public float weightPenalty() {
+		if (material() == null) return 0f;
+		if (this instanceof MailArmor)  return 0.10f;
+		if (this instanceof ScaleArmor) return 0.20f;
+		if (this instanceof PlateArmor) return 0.30f;
+		return 0f;
+	}
+
+	public float magicResist() {
+		Material m = material();
+		return (m == null || broken()) ? 0f : m.magicResist;
+	}
+
+	public boolean usesCondition() {
+		return material() != null;
+	}
+
+	public boolean broken() {
+		return usesCondition() && condition <= 0;
+	}
+
+	public void wear(float amount) {
+		if (!usesCondition() || amount <= 0) return;
+		float before = condition;
+		condition = Math.max(0, condition - amount);
+		if (before > 0 && condition <= 0) {
+			GLog.n(Messages.get(Armor.class, "now_broken", name()));
+		} else if (before > 10 && condition <= 10) {
+			GLog.w(Messages.get(Armor.class, "almost_broken", name()));
+		} else if (before > 25 && condition <= 25) {
+			GLog.w(Messages.get(Armor.class, "wearing_down", name()));
+		}
+		updateQuickslot();
+	}
+
+	public void repair(float amount) {
+		condition = Math.min(100f, condition + amount);
+		updateQuickslot();
+	}
+
+	protected String materialName(String name) {
+		Material m = material();
+		return m == null ? name : Messages.get(Armor.class, "material_name", m.title(), name);
+	}
+
+	private static final String MATERIAL  = "material";
+	private static final String CONDITION = "condition";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
+		if (material != null) bundle.put( MATERIAL, material.name() );
+		bundle.put( CONDITION, condition );
 		bundle.put( USES_LEFT_TO_ID, usesLeftToID );
 		bundle.put( AVAILABLE_USES, availableUsesToID );
 		bundle.put( GLYPH, glyph );
@@ -165,6 +250,14 @@ public class Armor extends EquipableItem {
 		seal = (BrokenSeal)bundle.get(SEAL);
 		
 		augment = bundle.getEnum(AUGMENT, Augment.class);
+
+		if (bundle.contains(MATERIAL)) material = Material.fromName(bundle.getString(MATERIAL), null);
+		if (bundle.contains(CONDITION)) condition = bundle.getFloat(CONDITION);
+	}
+
+	@Override
+	public boolean isSimilar( Item item ) {
+		return super.isSimilar(item) && (!(item instanceof Armor) || ((Armor) item).material() == material());
 	}
 
 	@Override
@@ -382,7 +475,8 @@ public class Armor extends EquipableItem {
 			return 1 + tier + lvl + augment.defenseFactor(lvl);
 		}
 
-		int max = tier * (2 + lvl) + augment.defenseFactor(lvl);
+		if (broken()) return 0; //MOD: broken armor blocks nothing
+		int max = Math.round(armorPower() * (2 + lvl)) + augment.defenseFactor(lvl); //MOD: material sets the block
 		if (lvl > max){
 			return ((lvl - max)+1)/2;
 		} else {
@@ -395,7 +489,7 @@ public class Armor extends EquipableItem {
 	}
 
 	public int DRMin(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+		if (Dungeon.isChallenged(Challenges.NO_ARMOR) || broken()){
 			return 0;
 		}
 
@@ -428,6 +522,7 @@ public class Armor extends EquipableItem {
 			}
 		}
 		
+		evasion *= 1f - weightPenalty(); //MOD: heavy metal armor instead of strength penalties
 		return evasion + augment.evasionFactor(buffedLvl());
 	}
 	
@@ -558,6 +653,7 @@ public class Armor extends EquipableItem {
 			}
 		}
 		
+		if (defender instanceof Hero && material() != null) wear(material().wearPerUse()); //MOD
 		return damage;
 	}
 	
@@ -574,9 +670,9 @@ public class Armor extends EquipableItem {
 	public String name() {
 		if (isEquipped(Dungeon.hero) && !hasCurseGlyph() && Dungeon.hero.buff(HolyWard.HolyArmBuff.class) != null
 			&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || glyph == null)){
-				return Messages.get(HolyWard.class, "glyph_name", super.name());
+				return Messages.get(HolyWard.class, "glyph_name", materialName(super.name()));
 			} else {
-				return glyph != null && (cursedKnown || !glyph.curse()) ? glyph.name( super.name() ) : super.name();
+				return glyph != null && (cursedKnown || !glyph.curse()) ? glyph.name( materialName(super.name()) ) : materialName(super.name());
 
 		}
 	}
@@ -588,6 +684,12 @@ public class Armor extends EquipableItem {
 		if (levelKnown) {
 
 			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", tier, DRMin(), DRMax(), STRReq());
+			if (material() != null) {
+				info += "\n\n" + Messages.get(Armor.class, "material_info", material().title()) + " "
+						+ (broken() ? Messages.get(Armor.class, "condition_broken") : Messages.get(Armor.class, "condition_info", (int)Math.ceil(condition)));
+				if (magicResist() > 0)   info += " " + Messages.get(Armor.class, "magic_resist", Math.round(magicResist()*100));
+				if (weightPenalty() > 0) info += " " + Messages.get(Armor.class, "weight_penalty", Math.round(weightPenalty()*100));
+			}
 			
 			if (Dungeon.hero != null && STRReq() > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "too_heavy");
@@ -687,6 +789,7 @@ public class Armor extends EquipableItem {
 
 		Random.popGenerator();
 
+		rollMaterial(); //MOD
 		return this;
 	}
 

@@ -28,6 +28,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Bolas extends MissileWeapon {
+
+	//MOD: not made of metal
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind materialKind() {
+		return null;
+	}
+
 	
 	{
 		image = ItemSpriteSheet.BOLAS;
@@ -39,13 +46,13 @@ public class Bolas extends MissileWeapon {
 	}
 
 	@Override
-	public int min(int lvl) {
+	public int baseMin(int lvl) {
 		return  2 * (tier-1) +                  //4 base, down from 6
 				0*lvl;                          //0 scaling, down from 1
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  3 * tier +                      //9 base, down from 15
 				(tier-1)*lvl;                   //2 scaling, down from 3
 	}

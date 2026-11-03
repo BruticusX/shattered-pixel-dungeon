@@ -36,6 +36,13 @@ import java.util.ArrayList;
 
 public class Whip extends MeleeWeapon {
 
+	//MOD: material family
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind materialKind() {
+		return com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.LEATHER;
+	}
+
+
 	{
 		image = ItemSpriteSheet.WHIP;
 		hitSound = Assets.Sounds.HIT;
@@ -46,7 +53,7 @@ public class Whip extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  5*(tier) +      //15 base, down from 20
 				lvl*(tier);     //+3 per level, down from +4
 	}
