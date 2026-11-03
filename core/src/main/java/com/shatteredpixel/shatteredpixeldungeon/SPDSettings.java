@@ -233,7 +233,8 @@ public class SPDSettings extends GameSettings {
 	}
 	
 	public static boolean intro() {
-		return getBoolean( KEY_INTRO, true );
+		//MOD: tutorial start-up sequence disabled for testing (HUD shows immediately)
+		return getBoolean( KEY_INTRO, false );
 	}
 	
 	public static void lastClass( int value ) {
