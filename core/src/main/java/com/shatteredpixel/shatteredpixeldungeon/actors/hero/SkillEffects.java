@@ -952,6 +952,11 @@ public class SkillEffects {
 			cd = Math.round(cd * (1f - 0.15f * hero.pointsInTalent(Talent.VARIED_CHARGE)));
 		}
 		last.family = s.family.name();
+		//counter ability (feint): a skill used soon after the afterimage is attacked has its cooldown cut by 25/50/75%
+		if (hero.buff(Talent.CounterAbilityTacker.class) != null) {
+			cd = Math.round(cd * (1f - 0.25f * hero.pointsInTalent(Talent.COUNTER_ABILITY)));
+			hero.buff(Talent.CounterAbilityTacker.class).detach();
+		}
 		//aggressive barrier: shielding when using a skill at half health or less
 		if (hero.hasTalent(Talent.AGGRESSIVE_BARRIER) && hero.HP <= hero.HT / 2) {
 			int shield = 1 + 2 * hero.pointsInTalent(Talent.AGGRESSIVE_BARRIER);

@@ -449,7 +449,7 @@ public class Generator {
 					Whip.class,
 					Bloodletter.class //MOD
 			};
-			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2 }; //MOD: +Bloodletter
+			WEP_T3.defaultProbs = new float[]{ 2, 2, 0, 2, 2, 2, 2 }; //MOD: +Bloodletter, scimitar cut (kept for old saves)
 			WEP_T3.probs = WEP_T3.defaultProbs.clone();
 			
 			WEP_T4.classes = new Class<?>[]{
@@ -502,7 +502,7 @@ public class Generator {
 					ThrowingSpike.class,
 					Dart.class
 			};
-			MIS_T1.defaultProbs = new float[]{ 3, 3, 3, 0 };
+			MIS_T1.defaultProbs = new float[]{ 3, 3, 0, 0 }; //MOD: throwing spike cut
 			MIS_T1.probs = MIS_T1.defaultProbs.clone();
 			
 			MIS_T2.classes = new Class<?>[]{
@@ -510,7 +510,7 @@ public class Generator {
 					ThrowingClub.class,
 					Shuriken.class
 			};
-			MIS_T2.defaultProbs = new float[]{ 3, 3, 3 };
+			MIS_T2.defaultProbs = new float[]{ 3, 0, 3 }; //MOD: throwing club cut
 			MIS_T2.probs = MIS_T2.defaultProbs.clone();
 			
 			MIS_T3.classes = new Class<?>[]{
@@ -518,7 +518,7 @@ public class Generator {
 					Kunai.class,
 					Bolas.class
 			};
-			MIS_T3.defaultProbs = new float[]{ 3, 3, 3 };
+			MIS_T3.defaultProbs = new float[]{ 0, 3, 3 }; //MOD: throwing spear cut
 			MIS_T3.probs = MIS_T3.defaultProbs.clone();
 			
 			MIS_T4.classes = new Class<?>[]{
@@ -534,7 +534,7 @@ public class Generator {
 					ThrowingHammer.class,
 					ForceCube.class
 			};
-			MIS_T5.defaultProbs = new float[]{ 3, 3, 3 };
+			MIS_T5.defaultProbs = new float[]{ 3, 3, 0 }; //MOD: force cube cut
 			MIS_T5.probs = MIS_T5.defaultProbs.clone();
 			
 			FOOD.classes = new Class<?>[]{
