@@ -112,12 +112,14 @@ public class ArcaneResin extends Item {
 			if (item != null && item instanceof Wand) {
 				Wand w = (Wand)item;
 
-				if (w.level() >= 3){
+				//MOD: resin is an early wand booster up to +3; umbralite levels don't count against it
+				int baseLevel = w.level() - w.umbraBonus();
+				if (baseLevel >= 3){
 					GLog.w(Messages.get(ArcaneResin.class, "level_too_high"));
 					return;
 				}
 
-				int resinToUse = w.level()+1;
+				int resinToUse = baseLevel+1;
 
 				if (quantity() < resinToUse){
 					GLog.w(Messages.get(ArcaneResin.class, "not_enough"));
