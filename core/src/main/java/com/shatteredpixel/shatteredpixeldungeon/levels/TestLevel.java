@@ -154,6 +154,11 @@ public class TestLevel extends Level {
 			spend( showcase( this, beat++ ) );
 			return true;
 		}
+		@Override
+		public void onMotionComplete() {
+			//the run loop would otherwise keep playing after the single step
+			if (sprite != null && isAlive()) sprite.idle();
+		}
 	}
 
 	public static class ShowGoo extends Mob {
@@ -170,6 +175,11 @@ public class TestLevel extends Level {
 			state = PASSIVE;
 			spend( showcase( this, beat++ ) );
 			return true;
+		}
+		@Override
+		public void onMotionComplete() {
+			//the run loop would otherwise keep playing after the single step
+			if (sprite != null && isAlive()) sprite.idle();
 		}
 	}
 
