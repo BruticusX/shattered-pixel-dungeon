@@ -28,26 +28,24 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.utils.PointF;
 
+//MOD: mirror images use the hero's redrawn (HD) sprite, armor look and held weapon
 public class MirrorSprite extends MobSprite {
-	
-	private static final int FRAME_WIDTH	= 12;
-	private static final int FRAME_HEIGHT	= 15;
-	
+
+	private HeroHD.Layout L;
+	private int[] idleF, runF, attackF;
+
 	public MirrorSprite() {
 		super();
-		
-		texture( Dungeon.hero != null ? Dungeon.hero.heroClass.spritesheet() : HeroClass.WARRIOR.spritesheet() );
 		updateArmor( 0 );
 		idle();
 	}
-	
+
 	@Override
 	public void link( Char ch ) {
 		super.link( ch );
 		updateArmor();
 	}
 
-	//MOD: mirror images hold the hero's weapon too
 	private final HeldWeapon held = new HeldWeapon();
 
 	@Override
@@ -58,16 +56,14 @@ public class MirrorSprite extends MobSprite {
 
 	@Override
 	public void draw() {
-		//the weapon is in the far hand: draw it first so the body covers its grip
-		
-		if (Dungeon.hero == null || ch == null || !ch.isAlive()) { super.draw(); return; }
+		if (Dungeon.hero == null || ch == null || !ch.isAlive() || L == null) { super.draw(); return; }
 		int f;
-		if (curAnim == idle) f = new int[]{0, 0, 0, 1, 0, 0, 1, 1}[Math.min(curFrame, 7)];
-		else if (curAnim == run) f = 2 + Math.min(curFrame, 5);
-		else if (curAnim == attack) f = new int[]{13, 14, 15, 0}[Math.min(curFrame, 3)];
-		else if (curAnim == die) f = -1;
-		else f = 0;
-		held.draw(this, Dungeon.hero.belongings.weapon(), f);
+		if (curAnim == idle) f = HeroHD.shown(idleF, curFrame);
+		else if (curAnim == run) f = HeroHD.shown(runF, curFrame);
+		else if (curAnim == attack) f = HeroHD.shown(attackF, curFrame);
+		else f = -1;
+		//the weapon is in the far hand: drawn first so the body covers its grip
+		if (f >= 0) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null, L);
 		super.draw();
 	}
 
@@ -77,26 +73,29 @@ public class MirrorSprite extends MobSprite {
 	}
 
 	public void updateArmor(){
-		//MOD: mirror images wear the hero's armor colours too
-		if (Dungeon.hero != null) texture( HeroSprite.sheetFor( Dungeon.hero.heroClass, Dungeon.hero.belongings.armor() ) );
 		updateArmor( ((MirrorImage)ch).armTier );
 	}
-	
+
 	public void updateArmor( int tier ) {
-		TextureFilm film = new TextureFilm( HeroSprite.tiers(), tier, FRAME_WIDTH, FRAME_HEIGHT );
-		
-		idle = new Animation( 1, true );
-		idle.frames( film, 0, 0, 0, 1, 0, 0, 1, 1 );
-		
+		HeroClass cls = Dungeon.hero != null ? Dungeon.hero.heroClass : HeroClass.WARRIOR;
+		L = HeroHD.layout( cls );
+		hdScale = L.scale();
+		texture( HeroHD.sheet( cls, Dungeon.hero != null ? Dungeon.hero.belongings.armor() : null ) );
+		TextureFilm film = new TextureFilm( texture, L.frame, L.frame );
+		int row = tier * L.frames;
+		idleF = L.range("idle");
+		runF = L.range("run");
+		attackF = L.range("attack");
+
+		idle = new Animation( 6, true );
+		idle.frames( film, HeroHD.keys(idleF, row) );
 		run = new Animation( 20, true );
-		run.frames( film, 2, 3, 4, 5, 6, 7 );
-		
+		run.frames( film, HeroHD.keys(runF, row) );
 		die = new Animation( 20, false );
-		die.frames( film, 0 );
-		
-		attack = new Animation( 15, false );
-		attack.frames( film, 13, 14, 15, 0 );
-		
+		die.frames( film, idleF[0] + row );
+		attack = new Animation( 22, false );
+		attack.frames( film, HeroHD.keys(attackF, row) );
+
 		idle();
 	}
 }

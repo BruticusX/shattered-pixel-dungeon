@@ -21,51 +21,47 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.utils.GameMath;
 
+//MOD: statues are a stone version of the redrawn (HD) warrior, in the armor they wear, holding
+//the weapon they fight with (sprites/hero_hd_warrior_stone.png, made by tools/heroes/stone_sheet.py)
 public class StatueSprite extends MobSprite {
-	
+
+	public static final String STONE = "sprites/hero_hd_warrior_stone.png";
+
+	private final HeroHD.Layout L = HeroHD.layout( HeroClass.WARRIOR );
+	private int[] idleF, runF, attackF, deathF;
+
 	public StatueSprite() {
 		super();
-		
-		texture( Assets.Sprites.STATUE );
-		
-		TextureFilm frames = new TextureFilm( texture, 12, 15 );
-		
-		idle = new Animation( 2, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 1, 1 );
-		
-		run = new Animation( 15, true );
-		run.frames( frames, 2, 3, 4, 5, 6, 7 );
-		
-		attack = new Animation( 12, false );
-		attack.frames( frames, 8, 9, 10 );
-		
-		die = new Animation( 5, false );
-		die.frames( frames, 11, 12, 13, 14, 15, 15 );
-		
-		play( idle );
+		setArmor( 0 );
 	}
-
-	private static int[] tierFrames = {0, 21, 32, 43, 54, 65};
 
 	public void setArmor( int tier ){
-		int c = tierFrames[(int)GameMath.gate(0, tier, 5)];
+		hdScale = L.scale();
+		texture( STONE );
+		TextureFilm film = new TextureFilm( texture, L.frame, L.frame );
+		//armor tiers 1-5 are cloth, leather, mail, scale and plate: rows 1-5 of the hero sheet
+		int row = (int) GameMath.gate( 0, tier, 5 ) * L.frames;
+		idleF = L.range("idle");
+		runF = L.range("run");
+		attackF = L.range("attack");
+		deathF = L.range("death");
 
-		TextureFilm frames = new TextureFilm( texture, 12, 15 );
-
-		idle.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 1+c );
-		run.frames( frames, 2+c, 3+c, 4+c, 5+c, 6+c, 7+c );
-		attack.frames( frames, 8+c, 9+c, 10+c );
-		//death animation is always armorless
+		idle = new Animation( 4, true );
+		idle.frames( film, HeroHD.keys(idleF, row) );
+		run = new Animation( 15, true );
+		run.frames( film, HeroHD.keys(runF, row) );
+		attack = new Animation( 18, false );
+		attack.frames( film, HeroHD.keys(attackF, row) );
+		die = new Animation( 12, false );
+		die.frames( film, HeroHD.keys(deathF, row) );
 
 		play( idle, true );
-
 	}
 
-	//MOD: statues hold the weapon they actually fight with
 	private final HeldWeapon held = new HeldWeapon();
 
 	@Override
@@ -76,17 +72,14 @@ public class StatueSprite extends MobSprite {
 
 	@Override
 	public void draw() {
-		//the weapon is in the far hand: draw it first so the body covers its grip
-		
 		if (!(ch instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) || !ch.isAlive()) { super.draw(); return; }
 		int f;
-		//statue frames follow the hero's: idle 0-1, run 2-7, then its attack 8-10 = the hero's 13-15
-		if (curAnim == idle) f = new int[]{0, 0, 0, 0, 0, 1, 1}[Math.min(curFrame, 6)];
-		else if (curAnim == run) f = 2 + Math.min(curFrame, 5);
-		else if (curAnim == attack) f = 13 + Math.min(curFrame, 2);
-		else if (curAnim == die) f = -1;
-		else f = 0;
-		held.draw(this, ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) ch).weapon(), f);
+		if (curAnim == idle) f = HeroHD.shown(idleF, curFrame);
+		else if (curAnim == run) f = HeroHD.shown(runF, curFrame);
+		else if (curAnim == attack) f = HeroHD.shown(attackF, curFrame);
+		else f = -1;
+		//the weapon is in the far hand: drawn first so the body covers its grip
+		if (f >= 0) held.drawHD(this, ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) ch).weapon(), f, hdScale, null, L);
 		super.draw();
 	}
 

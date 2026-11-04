@@ -58,6 +58,19 @@ public class HeroHD {
 
 	// ---- per-class layouts (generated HeroHD<Class>.java files) ----
 
+	//frame numbers within an armor row, shifted to that row
+	public static Object[] keys( int[] frames, int offset ){
+		Object[] k = new Object[frames.length];
+		for (int i = 0; i < frames.length; i++) k[i] = frames[i] + offset;
+		return k;
+	}
+
+	//the frame (within a row) a sprite is showing, for placing its held weapon
+	public static int shown( int[] frames, int curFrame ){
+		if (frames == null || frames.length == 0) return 0;
+		return frames[Math.max(0, Math.min(curFrame, frames.length - 1))];
+	}
+
 	public static Layout layout( HeroClass cls ){
 		switch (cls) {
 			case WARRIOR:  return HeroHDWarrior.LAYOUT;
