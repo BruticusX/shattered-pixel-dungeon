@@ -68,14 +68,35 @@ public class Elite extends ChampionEnemy {
 
 	public static void provoke(Char ch) {
 		Elite e = ch.buff(Elite.class);
-		if (e != null) e.provoked = true;
+		if (e != null && !e.provoked) {
+			e.provoked = true;
+			if (ch.sprite != null && ch.sprite.visible) {
+				ch.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+			}
+			if (ch instanceof Mob) {
+				((Mob) ch).aggro(com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero);
+				((Mob) ch).state = ((Mob) ch).HUNTING;
+			}
+		}
+	}
+
+	//attacking a peaceful elite is a mistake: it parries the blow and strikes back at once
+	public static void parryAndCounter(Char elite, Char attacker) {
+		provoke(elite);
+		if (elite.sprite != null && elite.sprite.visible) {
+			elite.sprite.showStatus(CharSprite.NEUTRAL, Messages.get(Elite.class, "parried"));
+			com.watabou.noosa.audio.Sample.INSTANCE.play(com.shatteredpixel.shatteredpixeldungeon.Assets.Sounds.HIT_PARRY);
+		}
+		if (elite.isAlive() && attacker.isAlive()) {
+			elite.attack(attacker);
+		}
 	}
 
 	@Override
 	public boolean attachTo(Char target) {
 		if (super.attachTo(target)) {
 			if (!boosted) {
-				target.HT = Math.round(target.HT * 1.3f);
+				target.HT = Math.round(target.HT * 1.6f);
 				target.HP = target.HT;
 				boosted = true;
 			}
