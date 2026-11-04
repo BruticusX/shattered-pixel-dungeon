@@ -51,27 +51,29 @@ public class GooSprite extends MobSprite {
 	public GooSprite() {
 		super();
 		
-		texture( Assets.Sprites.GOO );
-		
-		TextureFilm frames = new TextureFilm( texture, 20, 14 );
-		
-		idle = new Animation( 10, true );
-		idle.frames( frames, 2, 1, 0, 0, 1 );
-		
-		run = new Animation( 15, true );
-		run.frames( frames, 3, 2, 1, 2 );
-		
-		pump = new Animation( 20, true );
-		pump.frames( frames, 4, 3, 2, 1, 0 );
+		//MOD: redrawn. One row of 16 frames: ooze 0-3, slam 4-7, death 8-11, charging up 12-15
+		texture( Assets.Sprites.GOO_HD );
+		hdScale = 13f / 40f;
 
-		pumpAttack = new Animation ( 20, false );
-		pumpAttack.frames( frames, 4, 3, 2, 1, 0, 7);
+		TextureFilm frames = new TextureFilm( texture, 65, 65 );
+
+		idle = new Animation( 4, true );
+		idle.frames( frames, 0, 0, 3, 3 );
+
+		run = new Animation( 8, true );
+		run.frames( frames, 0, 1, 2, 3 );
+
+		pump = new Animation( 10, true );
+		pump.frames( frames, 12, 13, 14, 15, 14, 15 );
+
+		pumpAttack = new Animation ( 14, false );
+		pumpAttack.frames( frames, 13, 14, 15, 5, 6, 7 );
 
 		attack = new Animation( 10, false );
-		attack.frames( frames, 8, 9, 10 );
-		
-		die = new Animation( 10, false );
-		die.frames( frames, 5, 6, 7 );
+		attack.frames( frames, 4, 5, 6, 7 );
+
+		die = new Animation( 8, false );
+		die.frames( frames, 8, 9, 10, 11 );
 		
 		play(idle);
 

@@ -114,6 +114,62 @@ public class TestLevel extends Level {
 		com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue statue = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue();
 		statue.pos = cell(W / 2 + 6, H - 3);
 		mobs.add(statue);
+		//redrawn monsters on show: they pace and bite at the air, but never fight back
+		Mob rat = new ShowRat();
+		rat.pos = cell(W / 2 - 3, H - 5);
+		mobs.add(rat);
+		Mob goo = new ShowGoo();
+		goo.pos = cell(W / 2 + 3, H - 5);
+		mobs.add(goo);
+	}
+
+	//shows off a monster's animations: steps one tile and back, then attacks the air.
+	//returns how long the monster should wait
+	private static float showcase( Mob m, int beat ){
+		int phase = beat % 4;
+		if (m.sprite == null || !m.sprite.visible) return 1f;
+		if (phase == 0 || phase == 1) {
+			int to = m.pos + (phase == 0 ? 1 : -1);
+			if (Dungeon.level.passable[to] && Actor.findChar( to ) == null) {
+				int from = m.pos;
+				m.move( to );
+				m.sprite.move( from, to );
+			}
+		} else if (phase == 2) {
+			m.sprite.showcaseAttack( m.pos, m.pos + 1 );
+		} else {
+			m.sprite.idle();
+		}
+		return 1.5f;
+	}
+
+	public static class ShowRat extends Rat {
+		{ state = PASSIVE; EXP = 0; maxLvl = -1; }
+		private int beat = 0;
+		@Override
+		protected boolean act() {
+			if (!isAlive()) return super.act();
+			state = PASSIVE;
+			spend( showcase( this, beat++ ) );
+			return true;
+		}
+	}
+
+	public static class ShowGoo extends Mob {
+		{
+			spriteClass = com.shatteredpixel.shatteredpixeldungeon.sprites.GooSprite.class;
+			HP = HT = 100;
+			EXP = 0; maxLvl = -1;
+			state = PASSIVE;
+		}
+		private int beat = 0;
+		@Override
+		protected boolean act() {
+			if (!isAlive()) return super.act();
+			state = PASSIVE;
+			spend( showcase( this, beat++ ) );
+			return true;
+		}
 	}
 
 	public Actor addRespawner() {

@@ -14,10 +14,11 @@ sheet = Image.open(f'core/src/main/assets/sprites/hero_hd_{CLS}_steel.png').conv
 hands = Image.open(f'core/src/main/assets/sprites/hero_hd_{CLS}_hands.png').convert('RGBA')
 items = Image.open('core/src/main/assets/sprites/items_hd_steel.png').convert('RGBA')
 v = slots.load()
+LENS = {int(a): int(b) for a, b in re.findall(r'LEN\[(\d+)\] = (\d+);', open('core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/sprites/ItemSpriteSheetHD.java').read())}
 def wep(n):
     w, h, gx, gy, ax = G[n]; c, r = n % 16, n // 16
     BODY = int(re.search(r'Layout\(\s*\d+,\s*\d+,\s*(\d+)', J).group(1))
-    px = max(w, h); L = 20 + (px - 24) * 1.5
+    px = max(w, h); L = LENS.get(n, 20 + (px - 24) * 1.5)
     hs = min(12 + (max(14, L) - 20) * 20 / 12, 34) / px  # ItemSpriteSheetHD.handScale
     f = 0.375 * BODY / 20 * hs
     im = items.crop((c * 32, r * 32, c * 32 + w, r * 32 + h))

@@ -283,6 +283,7 @@ public class Assets {
 		public static final String AMULET   = "sprites/amulet.png";
 
 		public static final String RAT      = "sprites/rat.png";
+		public static final String RAT_HD   = "sprites/rat_hd.png";   //MOD: redrawn
 		public static final String BRUTE    = "sprites/brute.png";
 		public static final String SPINNER  = "sprites/spinner.png";
 		public static final String DM300    = "sprites/dm300.png";
@@ -294,6 +295,7 @@ public class Assets {
 		public static final String GNOLL    = "sprites/gnoll.png";
 		public static final String CRAB     = "sprites/crab.png";
 		public static final String GOO      = "sprites/goo.png";
+		public static final String GOO_HD   = "sprites/goo_hd.png";   //MOD: redrawn
 		public static final String SWARM    = "sprites/swarm.png";
 		public static final String SKELETON = "sprites/skeleton.png";
 		public static final String SHAMAN   = "sprites/shaman.png";
