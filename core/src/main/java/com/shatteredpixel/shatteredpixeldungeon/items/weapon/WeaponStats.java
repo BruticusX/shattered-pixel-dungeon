@@ -115,14 +115,14 @@ public class WeaponStats {
 		melee(Kusarigama.class,     1.2f, 0.85f);
 		melee(BeardedAxe.class,     1.3f, 0.95f);
 		melee(Khopesh.class,        1.4f, 0.95f);
-		melee(Falchion.class,       1.6f, 1.00f);
+		melee(Falchion.class,       1.6f, 0.95f); //its first-hit bonus makes up the rest
 		melee(MorningStar.class,    2.2f, 0.95f);
 		melee(IronShodStaff.class,  2.4f, 0.80f);
-		melee(MeteorHammer.class,   2.6f, 0.95f);
-		melee(Halberd.class,        3.2f, 0.90f);
+		melee(MeteorHammer.class,   2.6f, 0.90f); //reach and knockback
+		melee(Halberd.class,        3.2f, 0.85f); //reach and armor cleaving
 		melee(KiteShield.class,     3.5f, 0.60f);
-		melee(Pike.class,           3.6f, 0.90f);
-		melee(Maul.class,           4.5f, 1.10f); //the slowest weapon, the biggest hits
+		melee(Pike.class,           3.6f, 0.80f); //reach 3
+		melee(Maul.class,           4.5f, 1.00f); //the slowest weapon, the biggest hits
 
 		//thrown (metal ones; stones, clubs, bolas, darts and the force cube keep their own stats)
 		thrown(Shuriken.class,       0.10f, 1.00f);

@@ -36,6 +36,7 @@ public class MeteorHammer extends MeleeWeapon {
 
 		tier = 4;
 		RCH = 2;
+		ACC = 0.85f; //a whirling weight is hard to aim
 	}
 
 	@Override

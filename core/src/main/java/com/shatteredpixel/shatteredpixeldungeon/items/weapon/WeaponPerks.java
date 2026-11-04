@@ -46,7 +46,7 @@ public class WeaponPerks {
 	public static float drKeep(Hero hero) {
 		KindOfWeapon w = hero.belongings.attackingWeapon();
 		if (w instanceof Stiletto) return 0.25f; //slips between plates
-		if (w instanceof Halberd)  return 0.5f;  //the axe head cleaves armor
+		if (w instanceof Halberd)  return 0.6f;  //the axe head cleaves armor
 		if (w instanceof Khopesh)  return 0.7f;  //hooks the guard aside
 		return 1f;
 	}
