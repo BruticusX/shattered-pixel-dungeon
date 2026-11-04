@@ -38,6 +38,11 @@ public class WndSkillTree extends Window {
 	private static final int MAX_HEIGHT = 200;
 
 	public WndSkillTree(final HeroClass cls, final Proficiency.Family f) {
+		this(cls, f, -1);
+	}
+
+	//assignSlot >= 0: opened from an empty skill button; tapping a learned active skill puts it there
+	public WndSkillTree(final HeroClass cls, final Proficiency.Family f, final int assignSlot) {
 		super();
 
 		RenderedTextBlock title = PixelScene.renderTextBlock(Messages.titleCase(f.title()), 9);
@@ -49,14 +54,36 @@ public class WndSkillTree extends Window {
 				Proficiency.pointsAvailable(cls, f), Proficiency.level(cls, f)), 6);
 		pts.setPos((WIDTH - pts.width()) / 2f, title.bottom() + 2);
 		add(pts);
+		float headerBottom = pts.bottom();
+
+		if (assignSlot >= 0) {
+			RenderedTextBlock hint = PixelScene.renderTextBlock(Messages.get(this, "assign_hint"), 6);
+			hint.maxWidth(WIDTH);
+			hint.hardlight(0x66FF66);
+			hint.setPos(0, headerBottom + 3);
+			add(hint);
+			RedButton others = new RedButton(Messages.get(this, "other_families"), 6) {
+				@Override
+				protected void onClick() {
+					hide();
+					GameScene.show(new WndProficiency(cls, assignSlot));
+				}
+			};
+			others.setRect(0, hint.bottom() + 2, WIDTH, 14);
+			add(others);
+			headerBottom = others.bottom();
+		}
 
 		Component content = new Component();
 		//buttons inside a scroll pane don't get taps directly; the pane hands them over (see below)
 		final java.util.ArrayList<RedButton> buttons = new java.util.ArrayList<>();
 		final java.util.ArrayList<Skill> buttonSkills = new java.util.ArrayList<>();
+		final java.util.ArrayList<float[]> rows = new java.util.ArrayList<>();
+		final java.util.ArrayList<Skill> rowSkills = new java.util.ArrayList<>();
 		float pos = 0;
 		for (final Skill s : Skill.of(f)) {
 			int rank = Proficiency.rank(cls, s);
+			float rowTop = pos;
 			String kind = Messages.get(this, "kind_" + s.kind.name().toLowerCase());
 			com.watabou.noosa.Image ic = s.icon();
 			ic.x = 0; ic.y = pos;
@@ -77,6 +104,11 @@ public class WndSkillTree extends Window {
 			desc.setPos(0, pos);
 			content.add(desc);
 			pos = desc.bottom() + 2;
+			if (assignSlot >= 0 && s.usable() && rank > 0) {
+				name.hardlight(0x66FF66);
+				rows.add(new float[]{rowTop, pos});
+				rowSkills.add(s);
+			}
 
 			if (s.implemented && rank < s.maxRank()) {
 				String why = null;
@@ -88,7 +120,7 @@ public class WndSkillTree extends Window {
 					protected void onClick() {
 						Proficiency.learn(cls, s);
 						hide();
-						reopen(cls, f);
+						reopen(cls, f, assignSlot);
 						GameScene.updateSkillBar();
 					}
 				};
@@ -104,13 +136,23 @@ public class WndSkillTree extends Window {
 		}
 		content.setSize(WIDTH, pos);
 
-		float top = pts.bottom() + 4;
+		float top = headerBottom + 4;
 		int h = (int) Math.min(MAX_HEIGHT, top + pos);
 		resize(WIDTH, h);
 
 		ScrollPane pane = new ScrollPane(content) {
 			@Override
 			public void onClick(float x, float y) {
+				//assigning a skill to the button that opened this window
+				for (int i = 0; i < rows.size(); i++) {
+					if (y >= rows.get(i)[0] && y <= rows.get(i)[1]) {
+						Proficiency.setSlot(cls, assignSlot, rowSkills.get(i));
+						com.watabou.noosa.audio.Sample.INSTANCE.play(com.shatteredpixel.shatteredpixeldungeon.Assets.Sounds.CLICK);
+						WndSkillTree.this.hide();
+						GameScene.updateSkillBar();
+						return;
+					}
+				}
 				for (int i = 0; i < buttons.size(); i++) {
 					if (buttons.get(i).inside(x, y)) {
 						Skill s = buttonSkills.get(i);
@@ -118,7 +160,7 @@ public class WndSkillTree extends Window {
 							Proficiency.learn(cls, s);
 							com.watabou.noosa.audio.Sample.INSTANCE.play(com.shatteredpixel.shatteredpixeldungeon.Assets.Sounds.LEVELUP);
 							WndSkillTree.this.hide();
-							reopen(cls, f);
+							reopen(cls, f, assignSlot);
 							GameScene.updateSkillBar();
 						}
 						return;
@@ -130,11 +172,11 @@ public class WndSkillTree extends Window {
 		pane.setRect(0, top, WIDTH, h - top);
 	}
 
-	private static void reopen(HeroClass cls, Proficiency.Family f) {
+	private static void reopen(HeroClass cls, Proficiency.Family f, int assignSlot) {
 		if (ShatteredPixelDungeon.scene() instanceof GameScene) {
-			GameScene.show(new WndSkillTree(cls, f));
+			GameScene.show(new WndSkillTree(cls, f, assignSlot));
 		} else {
-			ShatteredPixelDungeon.scene().addToFront(new WndSkillTree(cls, f));
+			ShatteredPixelDungeon.scene().addToFront(new WndSkillTree(cls, f, assignSlot));
 		}
 	}
 }

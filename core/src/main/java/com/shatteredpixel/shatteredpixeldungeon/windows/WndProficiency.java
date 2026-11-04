@@ -33,6 +33,11 @@ public class WndProficiency extends Window {
 	private static final int BAR_H = 2;
 
 	public WndProficiency(final HeroClass cls) {
+		this(cls, -1);
+	}
+
+	//assignSlot >= 0: picking a skill for an empty skill button (see WndSkillTree)
+	public WndProficiency(final HeroClass cls, final int assignSlot) {
 		super();
 
 		RenderedTextBlock title = PixelScene.renderTextBlock(Messages.get(this, "title"), 9);
@@ -87,7 +92,8 @@ public class WndProficiency extends Window {
 			com.shatteredpixel.shatteredpixeldungeon.ui.Button row = new com.shatteredpixel.shatteredpixeldungeon.ui.Button() {
 				@Override
 				protected void onClick() {
-					com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene.show(new WndSkillTree(cls, fam));
+					hide();
+					com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene.show(new WndSkillTree(cls, fam, assignSlot));
 				}
 			};
 			row.setRect(0, rowTop, WIDTH, pos + BAR_H - rowTop);
