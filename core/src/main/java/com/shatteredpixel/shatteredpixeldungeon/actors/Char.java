@@ -374,6 +374,7 @@ public abstract class Char extends Actor {
 		if (enemy == null) return false;
 		
 		boolean visibleFight = Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[enemy.pos];
+		boolean glancing = false;
 
 		if (enemy.isInvulnerable(getClass())) {
 
@@ -385,7 +386,13 @@ public abstract class Char extends Actor {
 
 			return false;
 
-		} else if (hit( this, enemy, accMulti, false )) {
+		} else if (hit( this, enemy, accMulti, false ) || (glancing = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.rollGlancing(this, enemy))) {
+
+			//MOD: a missed weapon attack can still land as a weak glancing blow
+			if (glancing) {
+				dmgMulti *= com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.GLANCING_DAMAGE;
+				if (visibleFight) enemy.sprite.showStatus( CharSprite.NEUTRAL, Messages.get(Char.class, "glancing") );
+			}
 			
 			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
 			

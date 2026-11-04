@@ -571,8 +571,9 @@ public class Hero extends Char {
 		}
 		
 		if (!RingOfForce.fightingUnarmed(this)) {
-			//MOD: weapon attacks never miss (only infinite-evasion effects still dodge)
-			return INFINITE_ACCURACY;
+			//MOD: accuracy depends on your proficiency with the weapon's family (see Proficiency)
+			accuracy *= Proficiency.accuracyFactor( this, wep );
+			return Math.max(1, Math.round(attackSkill * accuracy * wep.accuracyFactor( this, target )));
 		} else {
 			return Math.max(1, Math.round(attackSkill * accuracy));
 		}
@@ -697,6 +698,8 @@ public class Hero extends Char {
 
 		//MOD: strength is gone; the old strength sources now boost weapon damage instead
 		dmg = Math.round(dmg * mightDamageMultiplier());
+		//MOD: +2% damage per proficiency level with this weapon family
+		if (!RingOfForce.fightingUnarmed(this)) dmg = Math.round(dmg * Proficiency.damageFactor(this, wep));
 
 		PhysicalEmpower emp = buff(PhysicalEmpower.class);
 		if (emp != null){

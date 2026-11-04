@@ -810,6 +810,7 @@ public class GameScene extends PixelScene {
 		scene = null;
 		Badges.saveGlobal();
 		Journal.saveGlobal();
+		com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.save(); //MOD
 		
 		super.destroy();
 	}
@@ -843,6 +844,7 @@ public class GameScene extends PixelScene {
 			Dungeon.saveAll();
 			Badges.saveGlobal();
 			Journal.saveGlobal();
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.save(); //MOD
 		} catch (IOException e) {
 			ShatteredPixelDungeon.reportException(e);
 		}
