@@ -33,7 +33,7 @@ import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.ui.Component;
 
 //MOD: the active weapon skill buttons (2, a third at hero level 20), stacked above the toolbar.
-//Tap to use; tap an empty slot or long-press a full one to choose which skill goes there.
+//Tap to use; tap an empty slot to choose its skill; long-press a full one to empty it.
 public class SkillBar extends Component {
 
 	public static final int SIZE = 20;
@@ -90,7 +90,7 @@ public class SkillBar extends Component {
 
 		private final int index;
 		private ColorBlock bg, border;
-		private ItemSprite icon;
+		private com.watabou.noosa.Image icon;
 		private BitmapText label;
 
 		SkillSlot(int index) {
@@ -118,7 +118,7 @@ public class SkillBar extends Component {
 			Skill s = skill();
 			Hero hero = Dungeon.hero;
 			if (s != null && hero != null) {
-				icon = new ItemSprite(familyIcon(s.family));
+				icon = s.icon();
 				addToBack(icon);
 				bringToFront(label);
 				int cd = SkillEffects.Cooldowns.left(hero, s);
@@ -166,9 +166,12 @@ public class SkillBar extends Component {
 			}
 		}
 
+		//long-press empties the button
 		@Override
 		protected boolean onLongClick() {
-			GameScene.show(new WndSkillSlot(index));
+			if (Dungeon.hero == null || skill() == null) return false;
+			Proficiency.setSlot(Dungeon.hero.heroClass, index, null);
+			refresh();
 			return true;
 		}
 	}

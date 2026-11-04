@@ -58,12 +58,16 @@ public class WndSkillTree extends Window {
 		for (final Skill s : Skill.of(f)) {
 			int rank = Proficiency.rank(cls, s);
 			String kind = Messages.get(this, "kind_" + s.kind.name().toLowerCase());
+			com.watabou.noosa.Image ic = s.icon();
+			ic.x = 0; ic.y = pos;
+			if (rank == 0) ic.alpha(0.5f);
+			content.add(ic);
 			RenderedTextBlock name = PixelScene.renderTextBlock(
-					"_" + Messages.titleCase(s.title()) + "_  " + kind + "  " + rank + "/" + s.maxRank(), 7);
-			name.maxWidth(WIDTH);
-			name.setPos(0, pos);
+					"_" + Messages.titleCase(s.title()) + "_\n" + kind + "  " + rank + "/" + s.maxRank(), 7);
+			name.maxWidth(WIDTH - Skill.ICON_SIZE - 3);
+			name.setPos(Skill.ICON_SIZE + 3, pos + (Skill.ICON_SIZE - name.height()) / 2f);
 			content.add(name);
-			pos = name.bottom() + 1;
+			pos = Math.max(ic.y + Skill.ICON_SIZE, name.bottom()) + 2;
 
 			String d = s.desc();
 			if (s.cooldown(Math.max(1, rank)) > 0) d += " " + Messages.get(this, "cooldown", s.cooldown(Math.max(1, rank)));

@@ -54,11 +54,10 @@ public class WndSkillSlot extends WndOptions {
 	}
 
 	private static String[] labels(ArrayList<Skill> options) {
-		String[] l = new String[options.size() + 1];
+		String[] l = new String[options.size()];
 		for (int i = 0; i < options.size(); i++) {
 			l[i] = Messages.titleCase(options.get(i).title()) + " (" + Messages.titleCase(options.get(i).family.title()) + ")";
 		}
-		l[options.size()] = Messages.get(WndSkillSlot.class, "clear");
 		return l;
 	}
 
@@ -66,7 +65,6 @@ public class WndSkillSlot extends WndOptions {
 	protected void onSelect(int i) {
 		HeroClass cls = Dungeon.hero.heroClass;
 		if (i < options.size()) Proficiency.setSlot(cls, index, options.get(i));
-		else Proficiency.setSlot(cls, index, null);
 		GameScene.updateSkillBar();
 	}
 }
