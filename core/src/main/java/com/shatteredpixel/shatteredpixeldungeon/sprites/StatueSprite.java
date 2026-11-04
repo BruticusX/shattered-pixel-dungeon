@@ -76,9 +76,9 @@ public class StatueSprite extends MobSprite {
 
 	@Override
 	public void draw() {
-		//facing left, the weapon is in the far hand: draw it first so the body covers its grip
-		if (!flipHorizontal) super.draw();
-		if (!(ch instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) || !ch.isAlive()) { if (flipHorizontal) super.draw(); return; }
+		//the weapon is in the far hand: draw it first so the body covers its grip
+		
+		if (!(ch instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) || !ch.isAlive()) { super.draw(); return; }
 		int f;
 		//statue frames follow the hero's: idle 0-1, run 2-7, then its attack 8-10 = the hero's 13-15
 		if (curAnim == idle) f = new int[]{0, 0, 0, 0, 0, 1, 1}[Math.min(curFrame, 6)];
@@ -87,7 +87,7 @@ public class StatueSprite extends MobSprite {
 		else if (curAnim == die) f = -1;
 		else f = 0;
 		held.draw(this, ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) ch).weapon(), f);
-		if (flipHorizontal) super.draw();
+		super.draw();
 	}
 
 	@Override
