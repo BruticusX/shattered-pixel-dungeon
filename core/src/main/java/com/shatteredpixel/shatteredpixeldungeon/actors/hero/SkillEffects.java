@@ -44,13 +44,18 @@ public class SkillEffects {
 	// ---------------- using actives ----------------
 
 	//why a skill can't be used right now, or null if it can
+	//is the hero holding a weapon of this family right now (the equipped weapon, not a thrown one)
+	public static boolean holding(Hero hero, Proficiency.Family f) {
+		return Proficiency.familyOf(hero.belongings.weapon()) == f;
+	}
+
 	public static String unusableReason(Hero hero, Skill s) {
 		if (Proficiency.rank(hero.heroClass, s) <= 0) return Messages.get(SkillEffects.class, "not_learned");
 		if (s.family == Proficiency.Family.RANGED) {
 			if (rangedWeapon(hero) == null) return Messages.get(SkillEffects.class, "wrong_weapon", s.family.title());
 		} else if (s.family == Proficiency.Family.WANDS) {
 			if (!hasWand(hero)) return Messages.get(SkillEffects.class, "need_wand");
-		} else if (Proficiency.familyOf(hero.belongings.attackingWeapon()) != s.family) {
+		} else if (!holding(hero, s.family)) {
 			return Messages.get(SkillEffects.class, "wrong_weapon", s.family.title());
 		}
 		int cd = Cooldowns.left(hero, s);
@@ -564,7 +569,7 @@ public class SkillEffects {
 		boolean wasIn = Dungeon.level.distance(from, hero.pos) <= reach;
 		boolean nowIn = Dungeon.level.distance(mob.pos, hero.pos) <= reach;
 		if (wasIn || !nowIn) return;
-		if (hero.buff(ReapingStorm.class) != null) {
+		if (hero.buff(ReapingStorm.class) != null && holding(hero, Proficiency.Family.POLEARMS)) {
 			hero.attack(mob, 1f, 0, 1f);
 			return;
 		}
@@ -667,7 +672,7 @@ public class SkillEffects {
 	//aegis: physical damage to the hero is absorbed (returns the damage still taken)
 	public static int onHeroDamaged(Hero hero, int dmg, Object src) {
 		Aegis a = hero.buff(Aegis.class);
-		if (a != null && src instanceof Char) {
+		if (a != null && src instanceof Char && holding(hero, Proficiency.Family.SHIELDS)) {
 			a.absorbed += dmg;
 			if (hero.sprite != null) hero.sprite.showStatus(CharSprite.NEUTRAL, Messages.get(SkillEffects.class, "blocked"));
 			return 0;
@@ -689,7 +694,7 @@ public class SkillEffects {
 	//extra block: bulwark doubles shield block, steadfast and deflection add to it
 	public static int bonusBlock(Hero hero, int weaponBlock) {
 		int extra = 0;
-		if (hero.buff(Bulwark.class) != null) extra += weaponBlock;
+		if (hero.buff(Bulwark.class) != null && holding(hero, Proficiency.Family.SHIELDS)) extra += weaponBlock;
 		float mult = 1f;
 		com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon w = hero.belongings.weapon();
 		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon
@@ -955,6 +960,7 @@ public class SkillEffects {
 		if (!(defender instanceof Hero)) return false;
 		Riposte r = defender.buff(Riposte.class);
 		if (r == null || !Dungeon.level.adjacent(attacker.pos, defender.pos)) return false;
+		if (!holding((Hero) defender, Proficiency.Family.SWORDS)) return false;
 		if (defender.sprite != null) defender.sprite.showStatus(CharSprite.NEUTRAL, Messages.get(SkillEffects.class, "parried"));
 		Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY);
 		if (attacker.isAlive()) defender.attack(attacker, 0.75f + 0.25f * r.rank, 0, Char.INFINITE_ACCURACY);
@@ -995,7 +1001,7 @@ public class SkillEffects {
 		int ex = Proficiency.activeRank(hero, Skill.EXECUTIONER);
 		if (ex > 0 && enemy.HP < enemy.HT * 0.3f) mult += 0.10f + 0.15f * ex;
 		//rampage: +40%, and heals for 10% of damage dealt
-		if (hero.buff(Rampage.class) != null) {
+		if (hero.buff(Rampage.class) != null && holding(hero, Proficiency.Family.AXES)) {
 			mult += 0.4f;
 			int heal = Math.max(1, Math.round(damage * mult * 0.1f));
 			heal = Math.min(heal, hero.HT - hero.HP);
@@ -1022,7 +1028,7 @@ public class SkillEffects {
 		FootworkReady fr = hero.buff(FootworkReady.class);
 		if (fr != null) { mult += 0.3f; fr.detach(); }
 		//arcane overload: hits carry extra magic
-		if (hero.buff(ArcaneOverload.class) != null) mult += 0.5f;
+		if (hero.buff(ArcaneOverload.class) != null && holding(hero, Proficiency.Family.STAVES)) mult += 0.5f;
 		//elemental infusion
 		Infusion inf = hero.buff(Infusion.class);
 		if (inf != null) mult += 0.1f + 0.1f * inf.rank;
