@@ -94,8 +94,9 @@ public class HeldWeapon {
 		boolean faceLeft = owner.flipHorizontal;
 		Hold hold = holdOf(w);
 		float[] g = ItemSpriteSheetHD.grip(w.image());
-		//item sprites are 32px art shown at half size; on the hero, one art pixel = one hero pixel
-		float sc = 2f * k;
+		//item sprites are 32px art shown at half size; held weapons use the same pixel size as
+		//items on the floor, whatever resolution the hero's own art was drawn at
+		float sc = 2f * ItemSprite.WORLD_SCALE * 0.5f;
 		if (hold == Hold.FIST) sc *= 0.8f;
 		if (hold == Hold.SHIELD) sc *= 0.7f;   //strapped to the forearm, not as wide as the body
 		ws.scale.set(sc);
@@ -112,7 +113,7 @@ public class HeldWeapon {
 		}
 		float ax = (faceLeft ? L.frame - hx : hx) * k;
 		//a shield sits on the forearm, a little above the fist
-		float lift = hold == Hold.SHIELD ? 4 * k : 0;
+		float lift = hold == Hold.SHIELD ? 1.5f : 0;
 		ws.x = owner.x + ax - ws.origin.x;
 		ws.y = owner.y + hy * k - lift - ws.origin.y;
 		ws.alpha(owner.alpha());

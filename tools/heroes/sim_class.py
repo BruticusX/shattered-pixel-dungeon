@@ -16,16 +16,19 @@ items = Image.open('core/src/main/assets/sprites/items_hd_steel.png').convert('R
 v = slots.load()
 def wep(n):
     w, h, gx, gy, ax = G[n]; c, r = n % 16, n // 16
-    return items.crop((c * 32, r * 32, c * 32 + w, r * 32 + h)), gx, gy, ax
+    BODY = int(re.search(r'Layout\(\s*\d+,\s*\d+,\s*(\d+)', J).group(1))
+    f = 0.375 * BODY / 20  # held weapons share the floor-item pixel size (0.375 logical px per art px)
+    im = items.crop((c * 32, r * 32, c * 32 + w, r * 32 + h))
+    return im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.NEAREST), gx * f, gy * f, ax
 def render(f, tier, n):
     body = sheet.crop((f * FS, tier * FS, f * FS + FS, tier * FS + FS)); hand = hands.crop((f * FS, 0, f * FS + FS, FS))
     W = FS * 2; off = FS // 2
     spr, gx, gy, ax = wep(n)
     layer = Image.new('RGBA', (W, FS))
     if HX[f] >= 0:
-        pad = Image.new('RGBA', (120, 120)); pad.paste(spr, (round(60 - gx), round(60 - gy)), spr)
-        rot = pad.rotate(-(AN[f] - ax), center=(60, 60), resample=Image.NEAREST)
-        layer.paste(rot, (round(off + HX[f] - 60), round(HY[f] - 60)), rot)
+        P = 160; pad = Image.new('RGBA', (2 * P, 2 * P)); pad.paste(spr, (round(P - gx), round(P - gy)), spr)
+        rot = pad.rotate(-(AN[f] - ax), center=(P, P), resample=Image.NEAREST)
+        layer.paste(rot, (round(off + HX[f] - P), round(HY[f] - P)), rot)
     b = Image.new('RGBA', (W, FS)); b.paste(body, (off, 0), body)
     h = Image.new('RGBA', (W, FS)); h.paste(hand, (off, 0), hand)
     if HX[f] >= 0 and BE[f]: return Image.alpha_composite(layer, b)
