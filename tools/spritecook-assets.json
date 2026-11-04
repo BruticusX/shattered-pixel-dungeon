@@ -217,5 +217,29 @@
   {
     "asset_id": "03e595b8-60df-4249-9e57-6d49a2021747",
     "label": "item sheet gear F"
+  },
+  {
+    "asset_id": "5163e858-ce31-4fe3-acdc-d498ef3e4bdb",
+    "label": "hero sample: warrior base"
+  },
+  {
+    "asset_id": "9b2a5e14-bc77-471f-b33c-5560a2972ad6",
+    "label": "hero sample: warrior mail still"
+  },
+  {
+    "asset_id": "65fabc99-40f7-44a2-b774-b18ba6c3e08d",
+    "label": "hero sample: warrior attack"
+  },
+  {
+    "asset_id": "b00ec92b-a6a4-4e37-94cd-ed592b228994",
+    "label": "hero sample: warrior idle"
+  },
+  {
+    "asset_id": "124bc8de-1173-4cd1-92b1-88f3e6fe13f4",
+    "label": "hero sample: warrior death"
+  },
+  {
+    "asset_id": "49167d66-5911-4df0-88be-105aff6ce525",
+    "label": "hero sample: warrior run"
   }
 ]
