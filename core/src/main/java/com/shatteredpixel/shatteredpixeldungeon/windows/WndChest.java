@@ -42,7 +42,7 @@ import com.watabou.noosa.audio.Sample;
 import java.util.ArrayList;
 
 //MOD: opening a chest shows what's inside. Tap an item to take it, or take everything;
-//anything left behind stays on the floor where the chest was.
+//anything left behind stays in the chest, which remains until it's empty.
 public class WndChest extends Window {
 
 	private static final int COLS = 5;

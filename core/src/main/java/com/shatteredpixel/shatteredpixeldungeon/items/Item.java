@@ -535,6 +535,9 @@ public class Item implements Bundlable {
 	}
 
 	public Emitter emitter() { return null; }
+
+	//MOD: on the floor, enchanted/glyphed gear pulses a glow around its edges in this colour (null = none)
+	public ItemSprite.Glowing edgeGlow() { return null; }
 	
 	public String info() {
 
