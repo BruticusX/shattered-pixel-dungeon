@@ -19,6 +19,7 @@ PAL = {
     "4": (195, 195, 195, 255), "5": (240, 240, 240, 255),
     "b": (96, 58, 30, 255), "c": (140, 88, 48, 255), "d": (184, 128, 78, 255),
     "r": (84, 62, 50, 255), "s": (118, 92, 74, 255), "t": (62, 46, 38, 255),
+    "p": (92, 40, 120, 255), "l": (210, 170, 255, 255), "w": (230, 222, 200, 255),
 }
 
 INGOT = """
@@ -118,6 +119,26 @@ SATCHEL = """
 """
 
 
+TOME = """
+................
+................
+...oooooooooo...
+..oppppppppppo..
+..opoooooooopo..
+..opo......opo..
+..opo.l..l.opo..
+..opo..ll..opo..
+..opo..ll..opo..
+..opo.l..l.opo..
+..opo......opo..
+..opoooooooopo..
+..oppppppppppo..
+..owwwwwwwwwwo..
+...oooooooooo...
+................
+"""
+
+
 def grid(art):
     lines = [l for l in art.strip("\n").split("\n")]
     return [l.ljust(16, ".")[:16] for l in lines][:16]
@@ -126,7 +147,7 @@ def grid(art):
 def main():
     im = Image.open(SRC).convert("RGBA")
     px = im.load()
-    for slot, art in ((1, INGOT), (2, BOLT), (3, LEATHER), (4, ORE), (5, SATCHEL)):
+    for slot, art in ((1, INGOT), (2, BOLT), (3, LEATHER), (4, ORE), (5, SATCHEL), (6, TOME)):
         x0 = slot * 16
         for x in range(x0, x0 + 16):
             for y in range(ROW_Y, ROW_Y + 16):
