@@ -97,6 +97,7 @@ public class HeldWeapon {
 		//item sprites are 32px art shown at half size; on the hero, one art pixel = one hero pixel
 		float sc = 2f * k;
 		if (hold == Hold.FIST) sc *= 0.8f;
+		if (hold == Hold.SHIELD) sc *= 0.7f;   //strapped to the forearm, not as wide as the body
 		ws.scale.set(sc);
 		if (hold == Hold.DIAGONAL && g != null) {
 			ws.setFlipped(faceLeft);
@@ -110,13 +111,17 @@ public class HeldWeapon {
 			ws.angle = 0;
 		}
 		float ax = (faceLeft ? HeroHD.FRAME - hx : hx) * k;
+		//a shield sits on the forearm, a little above the fist
+		float lift = hold == Hold.SHIELD ? 4 * k : 0;
 		ws.x = owner.x + ax - ws.origin.x;
-		ws.y = owner.y + hy * k - ws.origin.y;
+		ws.y = owner.y + hy * k - lift - ws.origin.y;
 		ws.alpha(owner.alpha());
 		ws.camera = owner.camera();
 		ws.draw();
 
-		if (hands != null) {
+		//only gripped weapons get the fingers drawn over them: a shield hides the hand, and fist
+		//weapons are worn over it
+		if (hands != null && hold == Hold.DIAGONAL) {
 			if (handsImg == null || !hands.equals(handsTx)) {
 				handsImg = new HeroHD.FitImage(hands);
 				handsTx = hands;
