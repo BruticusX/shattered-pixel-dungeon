@@ -1032,6 +1032,17 @@ public class GameScene extends PixelScene {
 			pos = scene.status.top();
 		}
 
+		//MOD: skill buttons sit flush with the screen's right edge above the toolbar;
+		// when the tags are on the right too, they stack above the skill buttons
+		if (scene.skillBar != null) {
+			scene.skillBar.refresh();
+			float size = com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE;
+			float h = scene.skillBar.visibleSlots() * (size + 2);
+			float sx = uiCamera.width - insets.right - size;
+			scene.skillBar.setRect(sx, scene.toolbar.top() - h, size, h);
+			if (!tagsOnLeft) pos = scene.skillBar.top();
+		}
+
 		if (scene.tagAttack){
 			scene.attack.setRect( tagLeft, pos - Tag.SIZE, tagWidth, Tag.SIZE );
 			scene.attack.flip(tagsOnLeft);
@@ -1055,15 +1066,6 @@ public class GameScene extends PixelScene {
 			scene.resume.flip(tagsOnLeft);
 		}
 
-		//MOD: skill buttons sit on the right, just inside the column of tags, above the toolbar
-		if (scene.skillBar != null) {
-			float h = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.MAX_SLOTS
-					* (com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE + 2);
-			float size = com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE;
-			float sx = tagsOnLeft ? uiCamera.width - insets.right - size - 2 : tagLeft - size - 2;
-			scene.skillBar.setRect(sx, scene.toolbar.top() - 2 - h, com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE, h);
-			scene.skillBar.refresh();
-		}
 	}
 
 	//MOD: refresh the skill buttons (cooldowns, slots, weapon changes)

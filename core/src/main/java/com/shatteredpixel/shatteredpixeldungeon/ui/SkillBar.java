@@ -51,13 +51,17 @@ public class SkillBar extends Component {
 
 	@Override
 	protected void layout() {
-		float y = this.y + height;
+		float y = this.y + height - 2;
 		for (SkillSlot s : slots) {
 			if (!s.visible) continue;
 			y -= SIZE;
 			s.setRect(x, y, SIZE, SIZE);
 			y -= 2;
 		}
+	}
+
+	public int visibleSlots() {
+		return Dungeon.hero == null ? 0 : Proficiency.slotsUnlocked(Dungeon.hero);
 	}
 
 	public void refresh() {
