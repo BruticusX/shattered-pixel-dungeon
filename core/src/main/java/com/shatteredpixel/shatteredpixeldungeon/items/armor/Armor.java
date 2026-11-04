@@ -162,34 +162,41 @@ public class Armor extends EquipableItem {
 		if (materialKind() != null) material = Material.lowest(materialKind());
 	}
 
-	//heavier metal armor types block more for the same metal
-	protected float typeFactor() {
-		if (this instanceof MailArmor)  return 0.9f;
-		if (this instanceof PlateArmor) return 1.15f;
-		return 1f;
+	//MOD: the armor system. Each armor type has a real-world weight which sets its base block
+	// and its evasion/stealth penalty; the material multiplies the block (Material.armorMult).
+	public float armorKg() {
+		if (this instanceof ClothArmor)   return 3f;
+		if (this instanceof LeatherArmor) return 6f;
+		if (this instanceof MailArmor)    return 12f;
+		if (this instanceof ScaleArmor)   return 15f;
+		if (this instanceof PlateArmor)   return 25f;
+		return 0f;
 	}
 
-	//replaces tier in the block formula
-	public float armorPower() {
-		Material m = material();
-		return m == null ? tier : m.power * typeFactor();
+	//block at +0 in the base material: about 1.6 x kg^0.6
+	public int baseBlock() {
+		return Math.round(1.6f * (float) Math.pow(armorKg(), 0.6));
 	}
 
-	//evasion lost to heavy metal armor (stealth is reduced alongside it)
+	//block added per level, before the material multiplier
+	public int levelBlock() {
+		if (this instanceof PlateArmor) return 3;
+		if (this instanceof MailArmor || this instanceof ScaleArmor) return 2;
+		return 1;
+	}
+
+	//evasion (and stealth) lost to the armor's weight: kg / 80
 	public float weightPenalty() {
 		if (material() == null) return 0f;
-		if (this instanceof MailArmor)  return 0.10f;
-		if (this instanceof ScaleArmor) return 0.20f;
-		if (this instanceof PlateArmor) return 0.30f;
-		return 0f;
+		return armorKg() / 80f;
 	}
 
 	public String weightLabel() {
 		if (material() == null) return Messages.get(Armor.class, "tier_label", tier);
 		float p = weightPenalty();
-		if (p <= 0)    return Messages.get(Armor.class, "label_light");
-		if (p <= 0.1f) return Messages.get(Armor.class, "label_medium");
-		if (p <= 0.2f) return Messages.get(Armor.class, "label_heavy");
+		if (p <= 0.05f) return Messages.get(Armor.class, "label_light");
+		if (p <= 0.1f)  return Messages.get(Armor.class, "label_medium");
+		if (p <= 0.2f)  return Messages.get(Armor.class, "label_heavy");
 		return Messages.get(Armor.class, "label_very_heavy");
 	}
 
@@ -491,7 +498,13 @@ public class Armor extends EquipableItem {
 		}
 
 		if (broken()) return 0; //MOD: broken armor blocks nothing
-		int max = Math.round(armorPower() * (2 + lvl)) + augment.defenseFactor(lvl); //MOD: material sets the block
+		int max;
+		if (material() != null) {
+			//MOD: (base + level gain) x the material's multiplier
+			max = Math.round((baseBlock() + lvl * levelBlock()) * material().armorMult()) + augment.defenseFactor(lvl);
+		} else {
+			max = tier * (2 + lvl) + augment.defenseFactor(lvl);
+		}
 		if (lvl > max){
 			return ((lvl - max)+1)/2;
 		} else {
@@ -533,7 +546,9 @@ public class Armor extends EquipableItem {
 			
 			Momentum momentum = owner.buff(Momentum.class);
 			if (momentum != null){
-				evasion += momentum.evasionBonus(((Hero) owner).lvl, 0);
+				//MOD: evasive armor rewards light armor instead of excess strength
+				int lightness = material() == null ? 0 : Math.max(0, Math.round((25f - armorKg()) / 6f));
+				evasion += momentum.evasionBonus(((Hero) owner).lvl, lightness);
 			}
 		}
 		
@@ -668,7 +683,7 @@ public class Armor extends EquipableItem {
 			}
 		}
 		
-		if (defender instanceof Hero && material() != null) wear(material().wearPerUse()); //MOD
+		if (defender instanceof Hero && material() != null) wear(material().wearPerUse() * (masteryPotionBonus ? 0.5f : 1f)); //MOD
 		return damage;
 	}
 	

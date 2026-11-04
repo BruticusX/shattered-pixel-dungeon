@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -259,13 +260,23 @@ public class MeleeWeapon extends Weapon {
 				lvl*(tier+1);   //level scaling
 	}
 
+	//MOD: weapon types with an entry in WeaponStats use the weight-based damage system:
+	// (base + level gain) x the metal's damage multiplier
+	public WeaponStats stats() {
+		return material() != null ? WeaponStats.of(this) : null;
+	}
+
 	@Override
 	public final int min(int lvl) {
+		WeaponStats s = stats();
+		if (s != null) return Math.max(0, Math.round((s.min + lvl * s.lvlMin) * material().damageMult()));
 		return Math.max(0, Math.round(baseMin(lvl) * materialScale()));
 	}
 
 	@Override
 	public final int max(int lvl) {
+		WeaponStats s = stats();
+		if (s != null) return Math.max(min(lvl), Math.round((s.max + lvl * s.lvlMax) * material().damageMult()));
 		return Math.max(min(lvl), Math.round(baseMax(lvl) * materialScale()));
 	}
 
@@ -289,6 +300,10 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public float weightFactor() {
 		if (material() == null) return 1f;
+		WeaponStats s = stats();
+		if (s != null) {
+			return s.weight == WeaponStats.Weight.LIGHT ? 0.85f : (s.weight == WeaponStats.Weight.HEAVY ? 1.15f : 1f);
+		}
 		if (tier <= 2) return 0.85f;
 		if (tier >= 4) return 1.15f;
 		return 1f;
@@ -304,6 +319,9 @@ public class MeleeWeapon extends Weapon {
 
 	@Override
 	protected float baseDelay(Char owner) {
+		WeaponStats s = stats();
+		//the type's weight sets its speed, replacing its old delay
+		if (s != null) return super.baseDelay(owner) * (s.delay / DLY);
 		return super.baseDelay(owner) * weightFactor();
 	}
 
@@ -317,7 +335,7 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 		damage = super.proc(attacker, defender, damage);
-		if (attacker instanceof Hero) wear(material() != null ? material().wearPerUse() : 0);
+		if (attacker instanceof Hero) wear(material() != null ? material().wearPerUse() * wearFactor() : 0);
 		return damage;
 	}
 
@@ -386,8 +404,11 @@ public class MeleeWeapon extends Weapon {
 
 		String matInfo = materialInfo();
 		if (!matInfo.equals("")) info += "\n\n" + matInfo;
-		if (weightFactor() < 1f)      info += " " + Messages.get(MeleeWeapon.class, "weight_light");
-		else if (weightFactor() > 1f) info += " " + Messages.get(MeleeWeapon.class, "weight_heavy");
+		WeaponStats ws = stats();
+		if (ws != null) {
+			info += " " + Messages.get(MeleeWeapon.class, "weight_info", Messages.decimalFormat("#.#", ws.kg),
+					Messages.decimalFormat("#.##", ws.delay));
+		}
 
 		String statsInfo = statsInfo();
 		if (!statsInfo.equals("")) info += "\n\n" + statsInfo;

@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats;
+
 import com.shatteredpixel.shatteredpixeldungeon.items.Material;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -113,14 +115,30 @@ abstract public class MissileWeapon extends Weapon {
 				lvl;                            //level scaling
 	}
 
+	//MOD: metal thrown weapons use the weight-based damage system (see WeaponStats)
+	public WeaponStats stats() {
+		return material() != null ? WeaponStats.of(this) : null;
+	}
+
 	@Override
 	public final int min(int lvl) {
+		WeaponStats s = stats();
+		if (s != null) return Math.max(0, Math.round((s.min + lvl * s.lvlMin) * material().damageMult()));
 		return Math.max(0, Math.round(baseMin(lvl) * materialScale()));
 	}
 
 	@Override
 	public final int max(int lvl) {
+		WeaponStats s = stats();
+		if (s != null) return Math.max(min(lvl), Math.round((s.max + lvl * s.lvlMax) * material().damageMult()));
 		return Math.max(min(lvl), Math.round(baseMax(lvl) * materialScale()));
+	}
+
+	@Override
+	protected float baseDelay(com.shatteredpixel.shatteredpixeldungeon.actors.Char owner) {
+		WeaponStats s = stats();
+		if (s != null) return super.baseDelay(owner) * (s.delay / DLY);
+		return super.baseDelay(owner);
 	}
 
 	@Override
@@ -474,6 +492,7 @@ abstract public class MissileWeapon extends Weapon {
 
 		//MOD: harder metals survive more throws (iron = the old baseline), brittle obsidian far fewer
 		if (material() != null) usages *= material().hits / 400f;
+		if (masteryPotionBonus) usages *= 2f; //MOD: potion of mastery halves wear
 
 		//+50%/75% durability
 		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){

@@ -232,6 +232,7 @@ public class Hero extends Char {
 	public Belongings belongings;
 	
 	public int STR;
+	public int vitalityPotions = 0; //MOD: potions of vitality (strength) drunk, for the bodybuilder badges
 	
 	public float awareness;
 	
@@ -272,6 +273,16 @@ public class Hero extends Char {
 			HP += Math.max(HT - curHT, 0);
 		}
 		HP = Math.min(HP, HT);
+	}
+
+	//MOD: ring of might +5% per level, a strength surge (rotberry) +10% per point,
+	// strongman +8/13/18%
+	public float mightDamageMultiplier() {
+		float bonus = 0.05f * RingOfMight.strengthBonus( this );
+		AdrenalineSurge surge = buff(AdrenalineSurge.class);
+		if (surge != null) bonus += 0.10f * surge.boost();
+		if (hasTalent(Talent.STRONGMAN)) bonus += 0.03f + 0.05f * pointsInTalent(Talent.STRONGMAN);
+		return Math.max(0.1f, 1f + bonus);
 	}
 
 	public int STR() {
@@ -316,6 +327,7 @@ public class Hero extends Char {
 		bundle.put( DEFENSE, defenseSkill );
 		
 		bundle.put( STRENGTH, STR );
+		bundle.put( "vitality_potions", vitalityPotions );
 		
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
@@ -344,6 +356,7 @@ public class Hero extends Char {
 		defenseSkill = bundle.getInt( DEFENSE );
 		
 		STR = bundle.getInt( STRENGTH );
+		vitalityPotions = bundle.getInt( "vitality_potions" );
 
 		belongings.restoreFromBundle( bundle );
 	}
@@ -681,6 +694,9 @@ public class Hero extends Char {
 				dmg = ((Weapon)belongings.attackingWeapon()).augment.damageFactor(dmg);
 			}
 		}
+
+		//MOD: strength is gone; the old strength sources now boost weapon damage instead
+		dmg = Math.round(dmg * mightDamageMultiplier());
 
 		PhysicalEmpower emp = buff(PhysicalEmpower.class);
 		if (emp != null){

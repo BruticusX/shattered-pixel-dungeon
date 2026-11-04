@@ -404,12 +404,14 @@ public class ItemSpriteSheet {
 	public static final int CLOTH_BOLT      = MOD_ITEMS+2;
 	public static final int LEATHER_PIECE   = MOD_ITEMS+3;
 	public static final int METAL_ORE       = MOD_ITEMS+4;
+	public static final int FORGE_SATCHEL   = MOD_ITEMS+5;
 	static{
 		assignItemRect(REPAIR_KIT, 16, 16);
 		assignItemRect(INGOT, 16, 16);
 		assignItemRect(CLOTH_BOLT, 16, 16);
 		assignItemRect(LEATHER_PIECE, 16, 16);
 		assignItemRect(METAL_ORE, 16, 16);
+		assignItemRect(FORGE_SATCHEL, 16, 16);
 	}
 
 	                                                                                    //16 free slots

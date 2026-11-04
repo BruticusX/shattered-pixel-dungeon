@@ -164,13 +164,22 @@ public class TestLevel extends Level {
 			for (Generator.Category cat : melee) {
 				for (Class<?> c : cat.classes) {
 					Weapon w = (Weapon) Reflection.newInstance(c);
-					if (w.materialKind() != Material.Kind.METAL) continue;
+					if (w.materialKind() != Material.Kind.METAL || w.fixedMaterial() != null) continue;
 					w.material = m;
 					place(w);
 				}
 			}
 			newRow();
 		}
+
+		//unique weapons come in one material only
+		for (Generator.Category cat : melee) {
+			for (Class<?> c : cat.classes) {
+				Weapon w = (Weapon) Reflection.newInstance(c);
+				if (w.fixedMaterial() != null) place(w);
+			}
+		}
+		newRow();
 
 		//one row per metal: every metal thrown weapon, then mail, scale and plate armor
 		for (Material m : Material.values()) {

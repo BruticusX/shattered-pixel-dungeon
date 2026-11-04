@@ -360,6 +360,10 @@ public class ShopRoom extends SpecialRoom {
 
 		//MOD: shops stock repair kits; their gear is the base material like everything else
 		itemsToSpawn.add( new RepairKit().quantity(2) );
+		//...a forge satchel if the hero lost theirs or started before it existed
+		if (Dungeon.hero != null && Dungeon.hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel.class) == null) {
+			itemsToSpawn.add( new com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel() );
+		}
 		//...and a few crafting materials for the anvil
 		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth).quantity(3) );
 		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth + 3).quantity(2) );

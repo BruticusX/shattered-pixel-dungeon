@@ -67,6 +67,32 @@ public enum Material {
 		this.maxDepth = maxDepth;
 	}
 
+	//how much a weapon's base damage is multiplied by when made of this metal (see WeaponStats)
+	public float damageMult() {
+		switch (this) {
+			case TIN: default: return 1.0f;
+			case COPPER:   return 1.4f;
+			case BRONZE:   return 2.0f;
+			case IRON:     return 2.5f;
+			case STEEL:    return 2.8f;
+			case TITANIUM: return 3.0f;
+			case TUNGSTEN: return 3.3f;
+			case OBSIDIAN: return 3.1f;
+		}
+	}
+
+	//how much an armor's base block is multiplied by when made of this material
+	public float armorMult() {
+		switch (this) {
+			case LINEN: case HIDE: return 1.0f;
+			case WOOL:  case BOILED_LEATHER: return 1.6f;
+			case SILK:  case WYVERN_HIDE:    return 2.2f;
+			case SPIDER_SILK: return 2.6f;
+			case DRAGONHIDE:  return 2.8f;
+			default: return damageMult(); //metals match their weapon multiplier
+		}
+	}
+
 	//durability lost per use, in percentage points
 	public float wearPerUse() {
 		return 100f / hits;

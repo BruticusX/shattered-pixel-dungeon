@@ -52,6 +52,7 @@ public class PotionOfStrength extends Potion {
 
 		GLog.p( Messages.get(this, "msg", HP_BONUS, hero.HT) );
 		
+		hero.vitalityPotions++;
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();
 	}

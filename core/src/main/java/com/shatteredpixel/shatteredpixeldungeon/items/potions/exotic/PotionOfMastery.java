@@ -76,8 +76,9 @@ public class PotionOfMastery extends ExoticPotion {
 		@Override
 		public boolean itemSelectable(Item item) {
 			return
-					(item instanceof Weapon && !(item instanceof SpiritBow) && !((Weapon) item).masteryPotionBonus)
-					|| (item instanceof Armor && !((Armor) item).masteryPotionBonus);
+					//MOD: only gear with durability; it is fully repaired and wears half as fast from then on
+					(item instanceof Weapon && ((Weapon) item).usesCondition() && !((Weapon) item).masteryPotionBonus)
+					|| (item instanceof Armor && ((Armor) item).usesCondition() && !((Armor) item).masteryPotionBonus);
 		}
 
 		@Override
@@ -107,9 +108,11 @@ public class PotionOfMastery extends ExoticPotion {
 
 				if (item instanceof Weapon) {
 					((Weapon) item).masteryPotionBonus = true;
+					((Weapon) item).repair(100f);
 					GLog.p( Messages.get(PotionOfMastery.class, "weapon_easier") );
 				} else if (item instanceof Armor) {
 					((Armor) item).masteryPotionBonus = true;
+					((Armor) item).repair(100f);
 					GLog.p( Messages.get(PotionOfMastery.class, "armor_easier") );
 				}
 				updateQuickslot();

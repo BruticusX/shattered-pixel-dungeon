@@ -2,7 +2,8 @@
 
     python3 tools/draw_material_items.py
 
-Draws into row 13 of core/src/main/assets/sprites/items.png (slots 1-4, after the repair kit).
+Draws into row 13 of core/src/main/assets/sprites/items.png (slots 1-5, after the repair kit;
+slot 5 is the forge satchel bag).
 They are drawn in neutral greys (metal, cloth) and browns (leather) so that
 tools/recolor_materials.py tints them per material like the weapons and armor.
 """
@@ -97,6 +98,26 @@ ORE = """
 """
 
 
+SATCHEL = """
+................
+................
+.....oooooo.....
+....o.o..o.o....
+....o.o..o.o....
+...oooooooooo...
+..odddddddddddo.
+..odccccccccddo.
+..occoooooocco..
+..occo4223occo..
+..occo3221occo..
+..occooooooccco.
+..occcccccccbco.
+..obbbbbbbbbbbo.
+...ooooooooooo..
+................
+"""
+
+
 def grid(art):
     lines = [l for l in art.strip("\n").split("\n")]
     return [l.ljust(16, ".")[:16] for l in lines][:16]
@@ -105,7 +126,7 @@ def grid(art):
 def main():
     im = Image.open(SRC).convert("RGBA")
     px = im.load()
-    for slot, art in ((1, INGOT), (2, BOLT), (3, LEATHER), (4, ORE)):
+    for slot, art in ((1, INGOT), (2, BOLT), (3, LEATHER), (4, ORE), (5, SATCHEL)):
         x0 = slot * 16
         for x in range(x0, x0 + 16):
             for y in range(ROW_Y, ROW_Y + 16):

@@ -240,7 +240,20 @@ abstract public class Weapon extends KindOfWeapon {
 		return 1;
 	}
 
+	//unique weapons are tougher than ordinary gear of their material: they wear 2x slower
+	public float wearFactor() {
+		float f = fixedMaterial() != null ? 0.5f : 1f;
+		if (masteryPotionBonus) f *= 0.5f; //MOD: potion of mastery halves wear
+		return f;
+	}
+
+	//unique weapons are always made of one material and keep their own look (see RunicBlade etc.)
+	public Material fixedMaterial() {
+		return null;
+	}
+
 	public Material material() {
+		if (fixedMaterial() != null) return material = fixedMaterial();
 		if (material == null && materialKind() != null) material = Material.lowest(materialKind());
 		return material;
 	}
@@ -291,7 +304,7 @@ abstract public class Weapon extends KindOfWeapon {
 
 	protected String materialName(String name) {
 		Material m = material();
-		return m == null ? name : Messages.get(Weapon.class, "material_name", m.title(), name);
+		return (m == null || fixedMaterial() != null) ? name : Messages.get(Weapon.class, "material_name", m.title(), name);
 	}
 
 	protected String materialInfo() {
@@ -307,6 +320,7 @@ abstract public class Weapon extends KindOfWeapon {
 
 	@Override
 	public String spriteSheet() {
+		if (fixedMaterial() != null) return super.spriteSheet();
 		return material() != null ? material().spriteSheet() : super.spriteSheet();
 	}
 
