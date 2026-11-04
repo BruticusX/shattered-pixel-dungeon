@@ -111,7 +111,8 @@ public class TestLevel extends Level {
 			mobs.add(elites[i]);
 		}
 		//a statue in random gear: it stands still until you attack it
-		com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue statue = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue();
+		//(Statue.random gives it its weapon and armor; a bare constructor leaves both empty, which crashes on a hit)
+		com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue statue = com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue.random(false);
 		statue.pos = cell(W / 2 + 6, H - 3);
 		mobs.add(statue);
 		//redrawn monsters on show: they pace and bite at the air, but never fight back
