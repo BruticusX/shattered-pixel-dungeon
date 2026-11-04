@@ -1,16 +1,49 @@
-"""Find the weapon hand (the front fist) in each frame of a SpriteCook hero animation sheet."""
+"""Find the weapon hand (the front fist) in each frame of a SpriteCook hero animation sheet.
+
+Skin is recognised by its closeness to the colours of the character's own face (sampled from the top
+of the first frame), so it works for light and dark skin alike."""
 import colorsys
+from collections import Counter
 from PIL import Image
 
 FS = 62
+_palette = None
 
 
-def is_skin(p):
+def broad_skin(p):
     r, g, b, a = p
     if a < 200:
         return False
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-    return 0.015 < h < 0.11 and 0.2 < s < 0.75 and v > 0.6
+    return 0.0 <= h < 0.12 and 0.2 < s < 0.78 and v > 0.18
+
+
+def learn(face_frame):
+    """Sample the face: skin-like pixels in the front half of the head."""
+    global _palette
+    bb = face_frame.getchannel("A").getbbox()
+    top, h = bb[1], bb[3] - bb[1]
+    midx = (bb[0] + bb[2]) / 2
+    c = Counter()
+    for y in range(top, top + int(h * 0.22)):
+        for x in range(int(midx), bb[2]):
+            p = face_frame.getpixel((x, y))
+            if broad_skin(p):
+                c[p[:3]] += 1
+    _palette = [col for col, n in c.most_common(10) if n >= 2]
+
+
+def is_skin(p):
+    if _palette is None:
+        # default: light skin
+        r, g, b, a = p
+        if a < 200:
+            return False
+        h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+        return 0.015 < h < 0.11 and 0.2 < s < 0.75 and v > 0.6
+    if p[3] < 200:
+        return False
+    return min(abs(p[0] - c[0]) + abs(p[1] - c[1]) + abs(p[2] - c[2]) for c in _palette) <= 30
 
 
 def blobs(im, f):

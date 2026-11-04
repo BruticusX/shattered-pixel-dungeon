@@ -37,7 +37,7 @@ public class HeroHD {
 	public static final float HEIGHT = 20f; //art pixels the same size as floor items (ItemSprite.WORLD_SCALE)
 
 	public static boolean has( HeroClass cls ){
-		return cls == HeroClass.WARRIOR;
+		return layout(cls) != null;
 	}
 
 	private static String key( HeroClass cls ){
@@ -56,42 +56,58 @@ public class HeroHD {
 		return "sprites/hero_hd_" + key(cls) + "_hands.png";
 	}
 
-	// ---- layout (only the warrior so far) ----
-	public static final int FRAME = HeroHDWarrior.FRAME;
-	public static final int FRAMES = HeroHDWarrior.FRAMES;
+	// ---- per-class layouts (generated HeroHD<Class>.java files) ----
 
-	public static float scale( HeroClass cls ){
-		return HEIGHT / HeroHDWarrior.BODY_HEIGHT;
-	}
-
-	public static int[] range( String anim ){
-		switch (anim) {
-			case "idle":   return seq(HeroHDWarrior.IDLE_START, HeroHDWarrior.IDLE_COUNT);
-			case "run":    return seq(HeroHDWarrior.RUN_START, HeroHDWarrior.RUN_COUNT);
-			case "attack": return seq(HeroHDWarrior.ATTACK_START, HeroHDWarrior.ATTACK_COUNT);
-			case "death":  return seq(HeroHDWarrior.DEATH_START, HeroHDWarrior.DEATH_COUNT);
+	public static Layout layout( HeroClass cls ){
+		switch (cls) {
+			case WARRIOR:  return HeroHDWarrior.LAYOUT;
+			case MAGE:     return HeroHDMage.LAYOUT;
+			case ROGUE:    return HeroHDRogue.LAYOUT;
+			case HUNTRESS: return HeroHDHuntress.LAYOUT;
+			case DUELIST:  return HeroHDDuelist.LAYOUT;
+			case CLERIC:   return HeroHDCleric.LAYOUT;
 		}
-		return new int[]{0};
+		return null;
 	}
 
-	private static int[] seq( int start, int count ){
-		int[] r = new int[count];
-		for (int i = 0; i < count; i++) r[i] = start + i;
-		return r;
-	}
+	public static class Layout {
+		public final int frame, frames, bodyHeight;
+		public final int[] anims;   //idle, run, attack, death: start and count each
+		public final int[] avatar;
+		public final float[] handX, handY, angle;
+		public final boolean[] behind;
 
-	public static float handX( int f ){ return HeroHDWarrior.HAND_X[f]; }
-	public static float handY( int f ){ return HeroHDWarrior.HAND_Y[f]; }
-	public static float angle( int f ){ return HeroHDWarrior.ANGLE[f]; }
-	public static boolean behind( int f ){ return HeroHDWarrior.BEHIND[f]; }
+		public Layout( int frame, int frames, int bodyHeight, int[] anims, int[] avatar,
+		               float[] handX, float[] handY, float[] angle, boolean[] behind ){
+			this.frame = frame; this.frames = frames; this.bodyHeight = bodyHeight;
+			this.anims = anims; this.avatar = avatar;
+			this.handX = handX; this.handY = handY; this.angle = angle; this.behind = behind;
+		}
 
-	//the status pane portrait: head to knees of the first idle frame, sized like the old 12x15 avatar
-	public static Image avatar( String sheet, int tier ){
-		int[] a = HeroHDWarrior.AVATAR;
-		FitImage img = new FitImage( sheet );
-		img.frame( img.texture.uvRect( a[0], tier * FRAME + a[1], a[0] + a[2], tier * FRAME + a[1] + a[3] ) );
-		img.fit( 12, 15 );
-		return img;
+		public float scale(){
+			return HEIGHT / bodyHeight;
+		}
+
+		public int[] range( String anim ){
+			int i;
+			switch (anim) {
+				case "idle": i = 0; break;
+				case "run": i = 1; break;
+				case "attack": i = 2; break;
+				default: i = 3;
+			}
+			int[] r = new int[anims[i * 2 + 1]];
+			for (int k = 0; k < r.length; k++) r[k] = anims[i * 2] + k;
+			return r;
+		}
+
+		//the status pane portrait: head to knees of the first idle frame, sized like the old 12x15 avatar
+		public Image avatar( String sheet, int tier ){
+			FitImage img = new FitImage( sheet );
+			img.frame( img.texture.uvRect( avatar[0], tier * frame + avatar[1], avatar[0] + avatar[2], tier * frame + avatar[1] + avatar[3] ) );
+			img.fit( 12, 15 );
+			return img;
+		}
 	}
 
 	//an Image whose on-screen size can be set independently of its texture region

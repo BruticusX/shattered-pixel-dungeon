@@ -76,9 +76,9 @@ public class HeldWeapon {
 	//MOD: the redrawn heroes. The weapon is drawn at the hero's own pixel density, held at its grip
 	//(ItemSpriteSheetHD.grip) in the hand, then the hand is drawn again on top so the fingers close
 	//over the handle. hands == null draws only the weapon (when it goes behind the body).
-	public void drawHD( CharSprite owner, Item w, int f, float k, String hands ){
+	public void drawHD( CharSprite owner, Item w, int f, float k, String hands, HeroHD.Layout L ){
 		if (!(w instanceof MeleeWeapon) || !owner.visible) return;
-		float hx = HeroHD.handX(f), hy = HeroHD.handY(f);
+		float hx = L.handX[f], hy = L.handY[f];
 		if (hx < 0) return;
 
 		if (ws == null || w != shown || w.image() != shownImage
@@ -97,34 +97,39 @@ public class HeldWeapon {
 		//item sprites are 32px art shown at half size; on the hero, one art pixel = one hero pixel
 		float sc = 2f * k;
 		if (hold == Hold.FIST) sc *= 0.8f;
+		if (hold == Hold.SHIELD) sc *= 0.7f;   //strapped to the forearm, not as wide as the body
 		ws.scale.set(sc);
 		if (hold == Hold.DIAGONAL && g != null) {
 			ws.setFlipped(faceLeft);
 			float gx = g[0] / 2f, gy = g[1] / 2f;
 			ws.origin.set(faceLeft ? ws.width - gx : gx, gy);
-			float rot = HeroHD.angle(f) - g[2];
+			float rot = L.angle[f] - g[2];
 			ws.angle = faceLeft ? -rot : rot;
 		} else {
 			ws.setFlipped(faceLeft);
 			ws.origin.set(ws.width / 2f, ws.height / 2f);
 			ws.angle = 0;
 		}
-		float ax = (faceLeft ? HeroHD.FRAME - hx : hx) * k;
+		float ax = (faceLeft ? L.frame - hx : hx) * k;
+		//a shield sits on the forearm, a little above the fist
+		float lift = hold == Hold.SHIELD ? 4 * k : 0;
 		ws.x = owner.x + ax - ws.origin.x;
-		ws.y = owner.y + hy * k - ws.origin.y;
+		ws.y = owner.y + hy * k - lift - ws.origin.y;
 		ws.alpha(owner.alpha());
 		ws.camera = owner.camera();
 		ws.draw();
 
-		if (hands != null) {
+		//only gripped weapons get the fingers drawn over them: a shield hides the hand, and fist
+		//weapons are worn over it
+		if (hands != null && hold == Hold.DIAGONAL) {
 			if (handsImg == null || !hands.equals(handsTx)) {
 				handsImg = new HeroHD.FitImage(hands);
 				handsTx = hands;
-				handsFilm = new com.watabou.noosa.TextureFilm(handsImg.texture, HeroHD.FRAME, HeroHD.FRAME);
+				handsFilm = new com.watabou.noosa.TextureFilm(handsImg.texture, L.frame, L.frame);
 			}
 			handsImg.flipHorizontal = faceLeft;
 			handsImg.frame(handsFilm.get(f));
-			handsImg.fit(HeroHD.FRAME * k, HeroHD.FRAME * k);
+			handsImg.fit(L.frame * k, L.frame * k);
 			handsImg.x = owner.x;
 			handsImg.y = owner.y;
 			handsImg.alpha(owner.alpha());

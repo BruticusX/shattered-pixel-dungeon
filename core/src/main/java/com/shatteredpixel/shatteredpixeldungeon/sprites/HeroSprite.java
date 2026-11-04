@@ -129,19 +129,21 @@ public class HeroSprite extends CharSprite {
 	private float hdScale = 1f;
 	private int[] idleF, runF, attackF, deathF, operateF, flyF, readF;
 	private HeroClass hdClass;
+	private HeroHD.Layout L;
 
 	private void updateArmorHD( HeroClass cls ){
 		hdClass = cls;
-		hdScale = HeroHD.scale(cls);
+		L = HeroHD.layout(cls);
+		hdScale = L.scale();
 		hd = true;
 		texture( HeroHD.sheet( cls, Dungeon.hero.belongings.armor() ) );
-		TextureFilm film = new TextureFilm( texture, HeroHD.FRAME, HeroHD.FRAME );
-		int row = Dungeon.hero.tier() * HeroHD.FRAMES;
+		TextureFilm film = new TextureFilm( texture, L.frame, L.frame );
+		int row = Dungeon.hero.tier() * L.frames;
 
-		idleF = HeroHD.range("idle");
-		runF = HeroHD.range("run");
-		attackF = HeroHD.range("attack");
-		deathF = HeroHD.range("death");
+		idleF = L.range("idle");
+		runF = L.range("run");
+		attackF = L.range("attack");
+		deathF = L.range("death");
 		operateF = new int[]{idleF[0], idleF[2], idleF[0], idleF[2]};
 		flyF = new int[]{idleF[0]};
 		readF = new int[]{idleF[0], idleF[1], idleF[2], idleF[3], idleF[4], idleF[5], idleF[6], idleF[7], idleF[0], idleF[0]};
@@ -290,9 +292,9 @@ public class HeroSprite extends CharSprite {
 		if (hd) {
 			int f = shownFrameHD();
 			boolean show = Dungeon.hero != null && ch != null && ch.isAlive();
-			if (show && HeroHD.behind(f)) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null);
+			if (show && L.behind[f]) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null, L);
 			super.draw();
-			if (show && !HeroHD.behind(f)) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass));
+			if (show && !L.behind[f]) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass), L);
 			return;
 		}
 		super.draw();
@@ -320,12 +322,12 @@ public class HeroSprite extends CharSprite {
 
 	public static Image avatar( Hero hero ){
 		HeroClass cls = hero.buff(HeroDisguise.class) != null ? hero.buff(HeroDisguise.class).getDisguise() : hero.heroClass;
-		if (HeroHD.has(cls)) return HeroHD.avatar(HeroHD.sheet(cls, hero.belongings.armor()), hero.tier());
+		if (HeroHD.has(cls)) return HeroHD.layout(cls).avatar(HeroHD.sheet(cls, hero.belongings.armor()), hero.tier());
 		return avatar(sheetFor(cls, hero.belongings.armor()), hero.tier());
 	}
 	
 	public static Image avatar( HeroClass cl, int armorTier ) {
-		if (HeroHD.has(cl)) return HeroHD.avatar(HeroHD.sheet(cl, null), armorTier);
+		if (HeroHD.has(cl)) return HeroHD.layout(cl).avatar(HeroHD.sheet(cl, null), armorTier);
 		return avatar( cl.spritesheet(), armorTier );
 	}
 

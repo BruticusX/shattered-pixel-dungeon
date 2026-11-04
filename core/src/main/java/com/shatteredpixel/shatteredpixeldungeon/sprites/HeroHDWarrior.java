@@ -27,18 +27,12 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 //weapon hand is, the blade angle (degrees from up, + = forward) and whether the weapon goes behind.
 public class HeroHDWarrior {
 
-	public static final int FRAME = 62;
-	public static final int FRAMES = 38;
-	//the character stands 53 px tall in its frame
-	public static final int BODY_HEIGHT = 53;
-	public static final int IDLE_START = 0, IDLE_COUNT = 8;
-	public static final int RUN_START = 8, RUN_COUNT = 10;
-	public static final int ATTACK_START = 18, ATTACK_COUNT = 8;
-	public static final int DEATH_START = 26, DEATH_COUNT = 12;
-	public static final int[] AVATAR = {12, 9, 36, 45};
-
-	public static final float[] HAND_X = {39.0f, 40.0f, 41.0f, 42.3f, 42.0f, 40.9f, 39.8f, 39.0f, 42.1f, 40.6f, 37.4f, 35.1f, 39.2f, 37.7f, 33.1f, 39.5f, 40.4f, 42.0f, 39.0f, 41.4f, 41.6f, 40.4f, 55.0f, 51.3f, 41.5f, 42.0f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f};
-	public static final float[] HAND_Y = {39.5f, 39.5f, 38.7f, 38.5f, 39.5f, 39.2f, 39.2f, 39.5f, 31.9f, 34.1f, 35.2f, 31.1f, 28.9f, 33.1f, 25.1f, 32.5f, 29.9f, 29.9f, 39.5f, 36.2f, 32.9f, 32.7f, 28.0f, 29.8f, 34.0f, 37.5f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f};
-	public static final float[] ANGLE = {55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 25.0f, -100.0f, -105.0f, 92.0f, 96.0f, 80.0f, 60.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
-	public static final boolean[] BEHIND = {false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+	public static final HeroHD.Layout LAYOUT = new HeroHD.Layout(
+			62, 38, 53,
+			new int[]{0, 8, 8, 10, 18, 8, 26, 12},
+			new int[]{12, 9, 36, 45},
+			new float[]{39.0f, 40.0f, 40.9f, 42.3f, 41.8f, 40.8f, 39.7f, 39.0f, 42.4f, 40.6f, 37.5f, 34.3f, 39.1f, 37.3f, 32.9f, 39.2f, 40.1f, 42.3f, 39.0f, 41.5f, 41.5f, 40.7f, 55.0f, 52.1f, 41.8f, 41.8f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{39.5f, 39.5f, 38.7f, 38.5f, 39.5f, 39.3f, 39.3f, 39.5f, 31.8f, 34.0f, 35.0f, 31.1f, 28.9f, 33.2f, 25.0f, 32.4f, 29.9f, 29.8f, 39.5f, 36.2f, 32.5f, 32.5f, 28.0f, 29.1f, 34.0f, 37.4f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 25.0f, -100.0f, -105.0f, 92.0f, 96.0f, 80.0f, 60.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
 }
