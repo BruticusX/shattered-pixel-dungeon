@@ -69,6 +69,70 @@ public class HeldWeapon {
 		if (ws != null) ws.update();
 	}
 
+	private HeroHD.FitImage handsImg;
+	private String handsTx;
+	private com.watabou.noosa.TextureFilm handsFilm;
+
+	//MOD: the redrawn heroes. The weapon is drawn at the hero's own pixel density, held at its grip
+	//(ItemSpriteSheetHD.grip) in the hand, then the hand is drawn again on top so the fingers close
+	//over the handle. hands == null draws only the weapon (when it goes behind the body).
+	public void drawHD( CharSprite owner, Item w, int f, float k, String hands ){
+		if (!(w instanceof MeleeWeapon) || !owner.visible) return;
+		float hx = HeroHD.handX(f), hy = HeroHD.handY(f);
+		if (hx < 0) return;
+
+		if (ws == null || w != shown || w.image() != shownImage
+				|| !String.valueOf(w.spriteSheet()).equals(shownSheet) || w.glowing() != shownGlow) {
+			if (ws == null) ws = new ItemSprite();
+			ws.view(w);
+			shown = w;
+			shownImage = w.image();
+			shownSheet = String.valueOf(w.spriteSheet());
+			shownGlow = w.glowing();
+		}
+
+		boolean faceLeft = owner.flipHorizontal;
+		Hold hold = holdOf(w);
+		float[] g = ItemSpriteSheetHD.grip(w.image());
+		//item sprites are 32px art shown at half size; on the hero, one art pixel = one hero pixel
+		float sc = 2f * k;
+		if (hold == Hold.FIST) sc *= 0.8f;
+		ws.scale.set(sc);
+		if (hold == Hold.DIAGONAL && g != null) {
+			ws.setFlipped(faceLeft);
+			float gx = g[0] / 2f, gy = g[1] / 2f;
+			ws.origin.set(faceLeft ? ws.width - gx : gx, gy);
+			float rot = HeroHD.angle(f) - g[2];
+			ws.angle = faceLeft ? -rot : rot;
+		} else {
+			ws.setFlipped(faceLeft);
+			ws.origin.set(ws.width / 2f, ws.height / 2f);
+			ws.angle = 0;
+		}
+		float ax = (faceLeft ? HeroHD.FRAME - hx : hx) * k;
+		ws.x = owner.x + ax - ws.origin.x;
+		ws.y = owner.y + hy * k - ws.origin.y;
+		ws.alpha(owner.alpha());
+		ws.camera = owner.camera();
+		ws.draw();
+
+		if (hands != null) {
+			if (handsImg == null || !hands.equals(handsTx)) {
+				handsImg = new HeroHD.FitImage(hands);
+				handsTx = hands;
+				handsFilm = new com.watabou.noosa.TextureFilm(handsImg.texture, HeroHD.FRAME, HeroHD.FRAME);
+			}
+			handsImg.flipHorizontal = faceLeft;
+			handsImg.frame(handsFilm.get(f));
+			handsImg.fit(HeroHD.FRAME * k, HeroHD.FRAME * k);
+			handsImg.x = owner.x;
+			handsImg.y = owner.y;
+			handsImg.alpha(owner.alpha());
+			handsImg.camera = owner.camera();
+			handsImg.draw();
+		}
+	}
+
 	//draws `w` in `owner`'s hand for the given hero-sheet frame number (-1 = hidden)
 	public void draw( CharSprite owner, Item w, int heroFrame ){
 		if (!(w instanceof MeleeWeapon) || !owner.visible || heroFrame < 0 || heroFrame >= HOLD.length) return;

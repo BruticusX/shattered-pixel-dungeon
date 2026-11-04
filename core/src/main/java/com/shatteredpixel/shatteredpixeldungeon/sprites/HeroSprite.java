@@ -84,7 +84,13 @@ public class HeroSprite extends CharSprite {
 	
 	public void updateArmor() {
 
-		texture( sheetFor( sheetClass != null ? sheetClass : Dungeon.hero.heroClass, Dungeon.hero.belongings.armor() ) );
+		HeroClass cls = sheetClass != null ? sheetClass : Dungeon.hero.heroClass;
+		if (HeroHD.has(cls)) {
+			updateArmorHD(cls);
+			return;
+		}
+		hd = false;
+		texture( sheetFor( cls, Dungeon.hero.belongings.armor() ) );
 
 		TextureFilm film = new TextureFilm( tiers(), Dungeon.hero.tier(), FRAME_WIDTH, FRAME_HEIGHT );
 		
@@ -117,6 +123,81 @@ public class HeroSprite extends CharSprite {
 			die();
 	}
 	
+	// ---- MOD: the redrawn (HD) heroes ----
+
+	private boolean hd = false;
+	private float hdScale = 1f;
+	private int[] idleF, runF, attackF, deathF, operateF, flyF, readF;
+	private HeroClass hdClass;
+
+	private void updateArmorHD( HeroClass cls ){
+		hdClass = cls;
+		hdScale = HeroHD.scale(cls);
+		hd = true;
+		texture( HeroHD.sheet( cls, Dungeon.hero.belongings.armor() ) );
+		TextureFilm film = new TextureFilm( texture, HeroHD.FRAME, HeroHD.FRAME );
+		int row = Dungeon.hero.tier() * HeroHD.FRAMES;
+
+		idleF = HeroHD.range("idle");
+		runF = HeroHD.range("run");
+		attackF = HeroHD.range("attack");
+		deathF = HeroHD.range("death");
+		operateF = new int[]{idleF[0], idleF[2], idleF[0], idleF[2]};
+		flyF = new int[]{idleF[0]};
+		readF = new int[]{idleF[0], idleF[1], idleF[2], idleF[3], idleF[4], idleF[5], idleF[6], idleF[7], idleF[0], idleF[0]};
+
+		idle = new Animation( 6, true );
+		idle.frames( film, keys(idleF, row) );
+		run = new Animation( RUN_FRAMERATE, true );
+		run.frames( film, keys(runF, row) );
+		die = new Animation( 15, false );
+		die.frames( film, keys(deathF, row) );
+		attack = new Animation( 22, false );
+		attack.frames( film, keys(attackF, row) );
+		zap = attack.clone();
+		operate = new Animation( 8, false );
+		operate.frames( film, keys(operateF, row) );
+		fly = new Animation( 1, true );
+		fly.frames( film, keys(flyF, row) );
+		read = new Animation( 20, false );
+		read.frames( film, keys(readF, row) );
+
+		if (Dungeon.hero.isAlive())
+			idle();
+		else
+			die();
+	}
+
+	private static Object[] keys( int[] frames, int offset ){
+		Object[] k = new Object[frames.length];
+		for (int i = 0; i < frames.length; i++) k[i] = frames[i] + offset;
+		return k;
+	}
+
+	//HD frames are drawn small: the character stands HeroHD.HEIGHT pixels tall
+	@Override
+	public void frame( RectF frame ) {
+		super.frame( frame );
+		if (hd) {
+			width *= hdScale;
+			height *= hdScale;
+			updateVertices();
+		}
+	}
+
+	private int shownFrameHD(){
+		int[] f = null;
+		if (curAnim == idle) f = idleF;
+		else if (curAnim == run) f = runF;
+		else if (curAnim == die) f = deathF;
+		else if (curAnim == attack || curAnim == zap) f = attackF;
+		else if (curAnim == operate) f = operateF;
+		else if (curAnim == fly) f = flyF;
+		else if (curAnim == read) f = readF;
+		if (f == null) return idleF == null ? 0 : idleF[0];
+		return f[Math.max(0, Math.min(curFrame, f.length - 1))];
+	}
+
 	@Override
 	public void place( int p ) {
 		super.place( p );
@@ -206,6 +287,14 @@ public class HeroSprite extends CharSprite {
 
 	@Override
 	public void draw() {
+		if (hd) {
+			int f = shownFrameHD();
+			boolean show = Dungeon.hero != null && ch != null && ch.isAlive();
+			if (show && HeroHD.behind(f)) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null);
+			super.draw();
+			if (show && !HeroHD.behind(f)) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass));
+			return;
+		}
 		super.draw();
 		drawWeapon();
 	}
@@ -231,10 +320,12 @@ public class HeroSprite extends CharSprite {
 
 	public static Image avatar( Hero hero ){
 		HeroClass cls = hero.buff(HeroDisguise.class) != null ? hero.buff(HeroDisguise.class).getDisguise() : hero.heroClass;
+		if (HeroHD.has(cls)) return HeroHD.avatar(HeroHD.sheet(cls, hero.belongings.armor()), hero.tier());
 		return avatar(sheetFor(cls, hero.belongings.armor()), hero.tier());
 	}
 	
 	public static Image avatar( HeroClass cl, int armorTier ) {
+		if (HeroHD.has(cl)) return HeroHD.avatar(HeroHD.sheet(cl, null), armorTier);
 		return avatar( cl.spritesheet(), armorTier );
 	}
 
