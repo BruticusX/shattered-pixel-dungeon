@@ -44,7 +44,7 @@ public class ArmoredStatue extends Statue {
 		super();
 
 		//MOD: all statues are armored now, so they only get a small HP buff over the old plain statue
-		HP = HT = 18 + Dungeon.depth * 6;
+		HP = HT = 24 + Dungeon.depth * 8;   //MOD: formidable: they guard good gear
 	}
 
 	@Override
@@ -62,6 +62,7 @@ public class ArmoredStatue extends Statue {
 		if (armor != null && armor.materialKind() != null) {
 			armor.material = statueMaterial(armor.materialKind());
 		}
+		enhance(armor);
 	}
 
 	private static final String ARMOR	= "armor";

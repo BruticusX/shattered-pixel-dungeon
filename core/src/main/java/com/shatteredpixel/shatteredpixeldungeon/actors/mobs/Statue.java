@@ -57,7 +57,7 @@ public class Statue extends Mob {
 		super();
 		
 		HP = HT = 15 + Dungeon.depth * 5;
-		defenseSkill = 4 + Dungeon.depth;
+		defenseSkill = 6 + Dungeon.depth;   //MOD: a little harder to hit (was 4 + depth)
 	}
 
 	public void createWeapon( boolean useDecks ){
@@ -81,19 +81,28 @@ public class Statue extends Mob {
 			com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind kind) {
 		if (kind == null) return null;
 		float roll = Random.Float();
-		if (roll < 0.02f && kind == com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL) {
+		if (roll < 0.05f && kind == com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL) {
 			return com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN;
-		} else if (roll < 0.25f) {
+		} else if (roll < 0.40f) {
 			return com.shatteredpixel.shatteredpixeldungeon.items.Material.randomFor(kind, Dungeon.depth + 5, false);
 		} else {
-			return com.shatteredpixel.shatteredpixeldungeon.items.Material.randomFor(kind, Dungeon.depth, false);
+			return com.shatteredpixel.shatteredpixeldungeon.items.Material.randomFor(kind, Dungeon.depth + 2, false);
 		}
+	}
+
+	//MOD: statue gear is often enhanced: 35% +1, 15% +2, 5% +3. Statues fight with it, then drop it
+	public static void enhance( com.shatteredpixel.shatteredpixeldungeon.items.Item item ) {
+		if (item == null) return;
+		float roll = Random.Float();
+		int lvl = roll < 0.05f ? 3 : roll < 0.20f ? 2 : roll < 0.55f ? 1 : 0;
+		if (lvl > 0) item.level(lvl);
 	}
 
 	public void rollGearMaterials() {
 		if (weapon != null && weapon.fixedMaterial() == null && weapon.materialKind() != null) {
 			weapon.material = statueMaterial(weapon.materialKind());
 		}
+		enhance(weapon);
 	}
 	
 	private static final String WEAPON	= "weapon";
