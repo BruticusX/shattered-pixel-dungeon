@@ -302,6 +302,11 @@ public class MagesStaff extends MeleeWeapon {
 		}
 	}
 
+	//MOD: for staff skills
+	public Wand wandInside(){
+		return wand;
+	}
+
 	public Class<?extends Wand> wandClass(){
 		return wand != null ? wand.getClass() : null;
 	}
