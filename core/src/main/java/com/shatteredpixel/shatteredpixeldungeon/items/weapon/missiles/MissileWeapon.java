@@ -680,6 +680,7 @@ abstract public class MissileWeapon extends Weapon {
 
 		if (levelKnown) {
 			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
+			if (!materialInfo().equals("")) info += " " + materialInfo(); //MOD
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
