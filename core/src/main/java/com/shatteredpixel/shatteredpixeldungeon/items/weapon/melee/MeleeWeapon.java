@@ -406,8 +406,7 @@ public class MeleeWeapon extends Weapon {
 		if (!matInfo.equals("")) info += "\n\n" + matInfo;
 		WeaponStats ws = stats();
 		if (ws != null) {
-			info += " " + Messages.get(MeleeWeapon.class, "weight_info", Messages.decimalFormat("#.#", ws.kg),
-					Messages.decimalFormat("#.##", ws.delay));
+			info += " " + Messages.get(MeleeWeapon.class, "weight_info", Messages.decimalFormat("#.##", ws.delay));
 		}
 
 		String statsInfo = statsInfo();
