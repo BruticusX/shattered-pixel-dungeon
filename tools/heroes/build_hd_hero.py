@@ -32,7 +32,9 @@ POSE = {
     "idle":   [(55, False)] * 8,
     "run":    [(62, False), (56, False), (46, True), (42, False), (52, False),
                (62, False), (56, True), (46, False), (42, False), (52, False)],
-    "attack": [(55, False), (25, False), (-100, True), (-105, True), (92, False), (96, False), (80, False), (60, False)],
+    # the attack animations are punches: the weapon hand draws back and drives forward, so the blade
+    # is raised over the shoulder on the draw and swept down through the punch
+    "attack": [(55, False), (15, False), (-15, False), (-25, False), (75, False), (115, False), (95, False), (65, False)],
     "death":  [None] * 12,
 }
 TABARD = (52, 84, 168)   # class armor tabard colour (warrior blue)
@@ -170,6 +172,20 @@ def main():
         start = len(allframes)
         prev = None
         found = [hands.front_hand(im, f) for f in range(k)]
+        if name == "attack":
+            # a punching fist can be missed by the skin test (sleeves, shading): when the arm sticks out
+            # past the idle silhouette, the fist is its far end
+            ib = idle0.getchannel("A").getbbox()
+            ih = ib[3] - ib[1]
+            for f in range(k):
+                fr = im.crop((f * FS, 0, f * FS + FS, FS))
+                best = None
+                for y in range(ib[1] + int(ih * 0.28), ib[1] + int(ih * 0.6)):
+                    xs = [x for x in range(FS) if fr.getpixel((x, y))[3] >= 200]
+                    if xs and (best is None or xs[-1] > best[0]):
+                        best = (xs[-1], y)
+                if best and best[0] > ib[2] + 4 and (found[f] is None or best[0] - 3 > found[f][0] + 2):
+                    found[f] = (best[0] - 3, best[1], [])
         for f in range(k):
             fr = im.crop((f * FS, 0, f * FS + FS, FS))
             pose = POSE[name][f]
@@ -178,8 +194,10 @@ def main():
                 # the hand is behind the body in these frames: no finger overlay, keep the position
                 h = (h[0], h[1], [])
             if pose is not None and (h is None or h[1] < 20):
-                a, b = found[f - 1], found[(f + 1) % k]
-                h = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, [])
+                # borrow from the nearest frames on either side that did find a hand
+                near = [found[(f + d) % k] for d in (-1, 1, -2, 2, -3, 3) if found[(f + d) % k] is not None]
+                near = [q for q in near if q[1] >= 20][:2] or [handinfo[-1][0]]
+                h = (sum(q[0] for q in near) / len(near), sum(q[1] for q in near) / len(near), [])
             allframes.append(fr)
             handinfo.append((h, pose))
         anim_ranges.append((name, start, k))

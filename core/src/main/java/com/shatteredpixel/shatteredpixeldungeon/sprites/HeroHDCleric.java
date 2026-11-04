@@ -31,8 +31,8 @@ public class HeroHDCleric {
 			120, 38, 108,
 			new int[]{0, 8, 8, 10, 18, 8, 26, 12},
 			new int[]{24, 12, 73, 92},
-			new float[]{60.4f, 60.2f, 60.1f, 60.0f, 60.0f, 60.1f, 60.5f, 60.3f, 85.5f, 81.6f, 74.8f, 77.0f, 72.3f, 78.3f, 73.7f, 79.1f, 84.6f, 85.8f, 60.2f, 60.0f, 62.0f, 60.7f, 61.5f, 72.0f, 66.5f, 62.7f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{87.2f, 69.2f, 70.3f, 70.4f, 69.4f, 68.2f, 68.8f, 87.1f, 48.8f, 56.1f, 73.2f, 65.7f, 64.0f, 84.6f, 84.3f, 56.6f, 51.1f, 46.8f, 86.0f, 67.2f, 66.6f, 66.2f, 85.3f, 47.5f, 49.9f, 88.9f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 25.0f, -100.0f, -105.0f, 92.0f, 96.0f, 80.0f, 60.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
-			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
+			new float[]{72.5f, 74.9f, 77.5f, 77.7f, 76.5f, 75.4f, 73.5f, 72.2f, 85.4f, 82.0f, 65.3f, 74.7f, 76.6f, 72.9f, 64.6f, 79.4f, 85.3f, 86.4f, 72.6f, 84.0f, 86.0f, 88.0f, 89.0f, 112.0f, 85.0f, 84.0f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{73.9f, 71.0f, 71.1f, 71.2f, 71.3f, 70.8f, 73.6f, 73.9f, 45.7f, 55.0f, 57.8f, 48.3f, 41.5f, 50.5f, 59.7f, 55.3f, 49.3f, 44.1f, 73.2f, 66.0f, 60.0f, 54.0f, 56.0f, 42.0f, 56.0f, 58.0f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
 }

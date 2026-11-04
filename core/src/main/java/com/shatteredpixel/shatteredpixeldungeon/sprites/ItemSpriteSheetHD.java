@@ -48,6 +48,7 @@ public class ItemSpriteSheetHD {
 		int y = (item / WIDTH) * SIZE;
 		film.add( item, x, y, x+width, y+height );
 		HAS[item] = true;
+		DIM[item] = Math.max( width, height );
 	}
 
 	//gear: where it is held (in 32px sprite pixels) and the angle of its pommel->tip axis
@@ -61,6 +62,19 @@ public class ItemSpriteSheetHD {
 	//{x, y, axis degrees} or null
 	public static float[] grip( int image ){
 		return image >= 0 && image < GRIP.length ? GRIP[image] : null;
+	}
+
+	//longest side of each sprite, in 32px sprite pixels
+	private static final int[] DIM = new int[WIDTH * (TX_HEIGHT / SIZE)];
+
+	//how big a weapon is drawn in the hand, relative to its size on the floor. Sprites squeeze real
+	//lengths into 24..32px so small things stay readable on the floor; in a hand that makes a dagger
+	//look nearly as long as a sword, so this undoes most of the squeeze and shrinks everything a bit.
+	public static float handScale( int image ){
+		if (image < 0 || image >= DIM.length || DIM[image] == 0) return 0.8f;
+		float px = DIM[image];
+		float len = 20f + (px - 24f) * 1.5f;   //inverse of build_hd_items.size_for
+		return 0.8f * (float)Math.pow( Math.max( 8f, len ) / 32f, 1.5f ) / (px / 32f);
 	}
 
 	static {
