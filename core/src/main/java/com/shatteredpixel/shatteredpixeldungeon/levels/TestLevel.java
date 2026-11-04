@@ -18,6 +18,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -37,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfArsenal;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.watabou.utils.Reflection;
 
@@ -46,7 +49,7 @@ import com.watabou.utils.Reflection;
 //on its own tile, identified and grouped by category, next to an alchemy pot.
 public class TestLevel extends Level {
 
-	private static final int W = 36, H = 34;
+	private static final int W = 40, H = 46;
 
 	{
 		color1 = 0x48763c;
@@ -127,45 +130,67 @@ public class TestLevel extends Level {
 	protected void createItems() {
 		Dungeon.energy = Math.max(Dungeon.energy, 200);
 
-		//every weapon and armor type, in iron/hide/linen so they're comparable
-		for (Generator.Category cat : new Generator.Category[]{Generator.Category.WEP_T1, Generator.Category.WEP_T2,
-				Generator.Category.WEP_T3, Generator.Category.WEP_T4, Generator.Category.WEP_T5}) {
-			for (Class<?> c : cat.classes) {
-				Weapon w = (Weapon) Reflection.newInstance(c);
-				if (w.materialKind() == Material.Kind.METAL) w.material = Material.IRON;
-				place(w);
-			}
-		}
-		newRow();
-		for (Generator.Category cat : new Generator.Category[]{Generator.Category.MIS_T1, Generator.Category.MIS_T2,
-				Generator.Category.MIS_T3, Generator.Category.MIS_T4, Generator.Category.MIS_T5}) {
-			for (Class<?> c : cat.classes) {
-				Weapon w = (Weapon) Reflection.newInstance(c);
-				if (w.materialKind() == Material.Kind.METAL) w.material = Material.IRON;
-				place(w);
-			}
-		}
-		newRow();
-		placeAll(Generator.Category.ARMOR.classes);
-		newRow();
+		Generator.Category[] melee = {Generator.Category.WEP_T1, Generator.Category.WEP_T2,
+				Generator.Category.WEP_T3, Generator.Category.WEP_T4, Generator.Category.WEP_T5};
+		Generator.Category[] thrown = {Generator.Category.MIS_T1, Generator.Category.MIS_T2,
+				Generator.Category.MIS_T3, Generator.Category.MIS_T4, Generator.Category.MIS_T5};
 
-		//one item in every material, to compare stats, durability and looks
+		//one row per metal: every metal melee weapon type, weakest metal first
 		for (Material m : Material.values()) {
 			if (m.kind != Material.Kind.METAL) continue;
-			Sword s = new Sword(); s.material = m; place(s);
+			for (Generator.Category cat : melee) {
+				for (Class<?> c : cat.classes) {
+					Weapon w = (Weapon) Reflection.newInstance(c);
+					if (w.materialKind() != Material.Kind.METAL) continue;
+					w.material = m;
+					place(w);
+				}
+			}
+			newRow();
 		}
+
+		//one row per metal: every metal thrown weapon, then mail, scale and plate armor
 		for (Material m : Material.values()) {
 			if (m.kind != Material.Kind.METAL) continue;
-			PlateArmor a = new PlateArmor(); a.material = m; place(a);
+			for (Generator.Category cat : thrown) {
+				for (Class<?> c : cat.classes) {
+					Weapon w = (Weapon) Reflection.newInstance(c);
+					if (w.materialKind() != Material.Kind.METAL) continue;
+					w.material = m;
+					place(w);
+				}
+			}
+			cx++;
+			for (Class<?> c : new Class<?>[]{MailArmor.class, ScaleArmor.class, PlateArmor.class}) {
+				Armor a = (Armor) Reflection.newInstance(c);
+				a.material = m;
+				place(a);
+			}
+			newRow();
 		}
+
+		//cloth and leather in every material, leather whips, non-metal thrown weapons
 		for (Material m : Material.values()) {
 			if (m.kind == Material.Kind.CLOTH)   { ClothArmor a = new ClothArmor(); a.material = m; place(a); }
+		}
+		cx++;
+		for (Material m : Material.values()) {
 			if (m.kind == Material.Kind.LEATHER) { LeatherArmor a = new LeatherArmor(); a.material = m; place(a); }
 		}
+		cx++;
 		for (Material m : Material.values()) {
-			if (m.kind != Material.Kind.METAL) continue;
-			Javelin j = new Javelin(); j.material = m; place(j);
+			if (m.kind == Material.Kind.LEATHER) { Whip wh = new Whip(); wh.material = m; place(wh); }
 		}
+		cx++;
+		for (Generator.Category cat : thrown) {
+			for (Class<?> c : cat.classes) {
+				Weapon w = (Weapon) Reflection.newInstance(c);
+				if (w.materialKind() == null) place(w);
+			}
+		}
+		place(new MagesStaff());
+		newRow();
+
 		//a worn-out sword and armor to test durability and repair kits
 		Sword worn = new Sword(); worn.material = Material.IRON; worn.condition = 8; place(worn);
 		PlateArmor broken = new PlateArmor(); broken.material = Material.IRON; broken.condition = 0; place(broken);

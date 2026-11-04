@@ -63,5 +63,20 @@
     "asset_id": "21a366ac-e133-43a4-959e-3f3082d8f535",
     "sha12": null,
     "label": "ui_boss_hp (not used yet)"
+  },
+  {
+    "asset_id": "8851723f-1f16-4f5e-b9b2-bb4f3d203325",
+    "sha12": "95322d0b3634",
+    "label": "furnace"
+  },
+  {
+    "asset_id": "284b8e48-1ba4-4572-a7d5-e1582e2af8f7",
+    "sha12": "cced1d70ec6e",
+    "label": "anvil"
+  },
+  {
+    "asset_id": "427e736d-848d-4538-964c-a7ae7f27e682",
+    "sha12": "60dd1e31e7e7",
+    "label": "furnace_anim (6 frames 16x16)"
   }
 ]
