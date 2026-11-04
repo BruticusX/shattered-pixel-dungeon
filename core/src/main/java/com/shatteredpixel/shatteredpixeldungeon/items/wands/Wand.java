@@ -426,7 +426,7 @@ public abstract class Wand extends Item {
 	}
 
 	public void updateLevel() {
-		maxCharges = Math.min( initialCharges() + level(), 10 );
+		maxCharges = Math.min( initialCharges() + level() + com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.bonusCharges(), 10 ); //MOD: attunement
 		curCharges = Math.min( curCharges, maxCharges );
 	}
 	
@@ -487,6 +487,7 @@ public abstract class Wand extends Item {
 		}
 		
 		curCharges -= cursed ? 1 : chargesPerCast();
+		if (curUser == Dungeon.hero) com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.afterWandUsed(this); //MOD
 
 		//remove magic charge at a higher priority, if we are benefiting from it are and not the
 		//wand that just applied it
@@ -767,6 +768,7 @@ public abstract class Wand extends Item {
 						curWand.fx(shot, new Callback() {
 							public void call() {
 								curWand.onZap(shot);
+								if (curUser == Dungeon.hero) com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.afterZap(curWand, shot); //MOD: spell fusion
 								if (Random.Float() < WondrousResin.extraCurseEffectChance()){
 									WondrousResin.forcePositive = true;
 									CursedWand.cursedZap(curWand,
@@ -848,7 +850,8 @@ public abstract class Wand extends Item {
 					+ (SCALING_CHARGE_ADDITION * Math.pow(scalingFactor, missingCharges)));
 
 			if (Regeneration.regenOn())
-				partialCharge += (1f/turnsToCharge) * RingOfEnergy.wandChargeMultiplier(target);
+				partialCharge += (1f/turnsToCharge) * RingOfEnergy.wandChargeMultiplier(target)
+						* com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.rechargeFactor(target); //MOD
 
 			for (Recharging bonus : target.buffs(Recharging.class)){
 				if (bonus != null && bonus.remainder() > 0f) {

@@ -574,6 +574,7 @@ public class Hero extends Char {
 			//MOD: accuracy depends on your proficiency with the weapon's family (see Proficiency)
 			accuracy *= Proficiency.accuracyFactor( this, wep );
 			accuracy *= SkillEffects.accuracyFactor( this );
+			accuracy *= SkillEffects.accuracyFactor2( this );
 			return Math.max(1, Math.round(attackSkill * accuracy * wep.accuracyFactor( this, target )));
 		} else {
 			return Math.max(1, Math.round(attackSkill * accuracy));
@@ -614,6 +615,8 @@ public class Hero extends Char {
 			evasion /= 2;
 		}
 
+		evasion *= SkillEffects.evasionFactor( this ); //MOD: footwork
+
 		if (belongings.armor() != null) {
 			evasion = belongings.armor().evasionFactor(this, evasion);
 
@@ -628,6 +631,7 @@ public class Hero extends Char {
 
 	@Override
 	public String defenseVerb() {
+		SkillEffects.onHeroDodge( this ); //MOD: footwork
 		Combo.ParryTracker parry = buff(Combo.ParryTracker.class);
 		if (parry != null){
 			parry.parried = true;
@@ -672,6 +676,9 @@ public class Hero extends Char {
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
 			}
 			if (wepDr > 0) dr += wepDr;
+			//MOD: bulwark, steadfast and deflection
+			int extra = SkillEffects.bonusBlock( this, belongings.weapon().defenseFactor( this ) );
+			if (extra > 0) dr += Random.NormalIntRange( 0, extra );
 		}
 
 		if (buff(HoldFast.class) != null){
@@ -1634,6 +1641,8 @@ public class Hero extends Char {
 			}
 		}
 
+		SkillEffects.onHeroHitBy( this, enemy ); //MOD: thorns
+
 		WandOfLivingEarth.RockArmor rockArmor = buff(WandOfLivingEarth.RockArmor.class);
 		if (rockArmor != null) {
 			damage = rockArmor.absorb(damage);
@@ -1661,6 +1670,8 @@ public class Hero extends Char {
 				|| buff(TimeStasis.class) != null) {
 			return;
 		}
+
+		dmg = SkillEffects.onHeroDamaged( this, dmg, src ); //MOD: aegis
 
 		//regular damage interrupt, triggers on any damage except specific mild DOT effects
 		// unless the player recently hit 'continue moving', in which case this is ignored

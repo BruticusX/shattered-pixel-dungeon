@@ -848,6 +848,11 @@ public abstract class Char extends Actor {
 	}
 	
 	public void damage( int dmg, Object src ) {
+		//MOD: wand skills and wand proficiency
+		if (src instanceof com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand && !(this instanceof Hero)) {
+			dmg = com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.modifyWandDamage(this, dmg, (com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) src);
+		}
+
 		
 		if (!isAlive() || dmg < 0) {
 			return;
@@ -966,6 +971,12 @@ public abstract class Char extends Actor {
 			//MOD: cloth and leather armor resist magic damage
 			if (this instanceof Hero && ((Hero) this).belongings.armor() != null){
 				dmg = Math.round(dmg * (1f - ((Hero) this).belongings.armor().magicResist()));
+			}
+			//MOD: deflection while warded
+			if (this instanceof Hero && buff(com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.Ward.class) != null) {
+				int df = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.rank(((Hero) this).heroClass,
+						com.shatteredpixel.shatteredpixeldungeon.actors.hero.Skill.DEFLECTION);
+				if (df > 0) dmg = Math.round(dmg * (0.95f - 0.05f * df));
 			}
 			dmg -= AntiMagic.drRoll(this, glyphLevel(AntiMagic.class));
 			if (buff(ArcaneArmor.class) != null) {
@@ -1350,6 +1361,7 @@ public abstract class Char extends Actor {
 		} else {
 			previousPos = -1;
 		}
+		int movedFrom = pos;
 		pos = step;
 		
 		if (this != Dungeon.hero) {
@@ -1357,6 +1369,11 @@ public abstract class Char extends Actor {
 		}
 		
 		Dungeon.level.occupyCell(this );
+
+		//MOD: hold the line / reaping storm
+		if (this instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob) {
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.onMobMoved(this, movedFrom);
+		}
 	}
 	
 	public int distance( Char other ) {

@@ -57,53 +57,53 @@ public enum Skill {
 	EARTHSHAKER      (Family.BLUNT,    Kind.ULTIMATE, true, 100),
 
 	//polearms
-	IMPALE           (Family.POLEARMS, Kind.ACTIVE,   false, 18, 16, 14),
-	SWEEP            (Family.POLEARMS, Kind.ACTIVE,   false, 22, 20, 18),
-	HOLD_THE_LINE    (Family.POLEARMS, Kind.PASSIVE,  false),
-	LONG_REACH       (Family.POLEARMS, Kind.PASSIVE,  false),
-	REAPING_STORM    (Family.POLEARMS, Kind.ULTIMATE, false, 85),
+	IMPALE           (Family.POLEARMS, Kind.ACTIVE,   true, 18, 16, 14),
+	SWEEP            (Family.POLEARMS, Kind.ACTIVE,   true, 22, 20, 18),
+	HOLD_THE_LINE    (Family.POLEARMS, Kind.PASSIVE,  true),
+	LONG_REACH       (Family.POLEARMS, Kind.PASSIVE,  true),
+	REAPING_STORM    (Family.POLEARMS, Kind.ULTIMATE, true, 85),
 
 	//staves
-	ARCANE_STRIKE    (Family.STAVES,   Kind.ACTIVE,   false, 15, 13, 11),
-	WARD             (Family.STAVES,   Kind.ACTIVE,   false, 30, 27, 24),
-	CHANNELING       (Family.STAVES,   Kind.PASSIVE,  false),
-	DEFLECTION       (Family.STAVES,   Kind.PASSIVE,  false),
-	ARCANE_OVERLOAD  (Family.STAVES,   Kind.ULTIMATE, false, 90),
+	ARCANE_STRIKE    (Family.STAVES,   Kind.ACTIVE,   true, 15, 13, 11),
+	WARD             (Family.STAVES,   Kind.ACTIVE,   true, 30, 27, 24),
+	CHANNELING       (Family.STAVES,   Kind.PASSIVE,  true),
+	DEFLECTION       (Family.STAVES,   Kind.PASSIVE,  true),
+	ARCANE_OVERLOAD  (Family.STAVES,   Kind.ULTIMATE, true, 90),
 
 	//fist
-	FLURRY           (Family.FIST,     Kind.ACTIVE,   false, 12, 10, 8),
-	UPPERCUT         (Family.FIST,     Kind.ACTIVE,   false, 20, 18, 16),
-	COMBO_COUNTER    (Family.FIST,     Kind.PASSIVE,  false),
-	FOOTWORK         (Family.FIST,     Kind.PASSIVE,  false),
-	HUNDRED_FISTS    (Family.FIST,     Kind.ULTIMATE, false, 60),
+	FLURRY           (Family.FIST,     Kind.ACTIVE,   true, 12, 10, 8),
+	UPPERCUT         (Family.FIST,     Kind.ACTIVE,   true, 20, 18, 16),
+	COMBO_COUNTER    (Family.FIST,     Kind.PASSIVE,  true),
+	FOOTWORK         (Family.FIST,     Kind.PASSIVE,  true),
+	HUNDRED_FISTS    (Family.FIST,     Kind.ULTIMATE, true, 60),
 
 	//shields
-	SHIELD_BASH      (Family.SHIELDS,  Kind.ACTIVE,   false, 16, 14, 12),
-	BULWARK          (Family.SHIELDS,  Kind.ACTIVE,   false, 30, 27, 24),
-	THORNS           (Family.SHIELDS,  Kind.PASSIVE,  false),
-	STEADFAST        (Family.SHIELDS,  Kind.PASSIVE,  false),
-	AEGIS            (Family.SHIELDS,  Kind.ULTIMATE, false, 100),
+	SHIELD_BASH      (Family.SHIELDS,  Kind.ACTIVE,   true, 16, 14, 12),
+	BULWARK          (Family.SHIELDS,  Kind.ACTIVE,   true, 30, 27, 24),
+	THORNS           (Family.SHIELDS,  Kind.PASSIVE,  true),
+	STEADFAST        (Family.SHIELDS,  Kind.PASSIVE,  true),
+	AEGIS            (Family.SHIELDS,  Kind.ULTIMATE, true, 100),
 
 	//flexible
-	LASH_PULL        (Family.FLEXIBLE, Kind.ACTIVE,   false, 18, 16, 14),
-	CHAIN_SPIN       (Family.FLEXIBLE, Kind.ACTIVE,   false, 24, 21, 18),
-	ENTANGLE         (Family.FLEXIBLE, Kind.PASSIVE,  false),
-	WILD_SWING       (Family.FLEXIBLE, Kind.PASSIVE,  false),
-	GRAND_LASSO      (Family.FLEXIBLE, Kind.ULTIMATE, false, 90),
+	LASH_PULL        (Family.FLEXIBLE, Kind.ACTIVE,   true, 18, 16, 14),
+	CHAIN_SPIN       (Family.FLEXIBLE, Kind.ACTIVE,   true, 24, 21, 18),
+	ENTANGLE         (Family.FLEXIBLE, Kind.PASSIVE,  true),
+	WILD_SWING       (Family.FLEXIBLE, Kind.PASSIVE,  true),
+	GRAND_LASSO      (Family.FLEXIBLE, Kind.ULTIMATE, true, 90),
 
 	//ranged
-	PIERCING_SHOT    (Family.RANGED,   Kind.ACTIVE,   false, 16, 14, 12),
-	VOLLEY           (Family.RANGED,   Kind.ACTIVE,   false, 26, 23, 20),
-	STEADY_AIM       (Family.RANGED,   Kind.PASSIVE,  false),
-	RECOVERY         (Family.RANGED,   Kind.PASSIVE,  false),
-	RAIN_OF_ARROWS   (Family.RANGED,   Kind.ULTIMATE, false, 85),
+	PIERCING_SHOT    (Family.RANGED,   Kind.ACTIVE,   true, 16, 14, 12),
+	VOLLEY           (Family.RANGED,   Kind.ACTIVE,   true, 26, 23, 20),
+	STEADY_AIM       (Family.RANGED,   Kind.PASSIVE,  true),
+	RECOVERY         (Family.RANGED,   Kind.PASSIVE,  true),
+	RAIN_OF_ARROWS   (Family.RANGED,   Kind.ULTIMATE, true, 85),
 
 	//wands
-	OVERCHARGE       (Family.WANDS,    Kind.ACTIVE,   false, 20, 17, 14),
-	ELEMENTAL_INFUSION(Family.WANDS,   Kind.ACTIVE,   false, 30, 27, 24),
-	ATTUNEMENT       (Family.WANDS,    Kind.PASSIVE,  false),
-	RESONANCE        (Family.WANDS,    Kind.PASSIVE,  false),
-	SPELL_FUSION     (Family.WANDS,    Kind.ULTIMATE, false, 60);
+	OVERCHARGE       (Family.WANDS,    Kind.ACTIVE,   true, 20, 17, 14),
+	ELEMENTAL_INFUSION(Family.WANDS,   Kind.ACTIVE,   true, 30, 27, 24),
+	ATTUNEMENT       (Family.WANDS,    Kind.PASSIVE,  true),
+	RESONANCE        (Family.WANDS,    Kind.PASSIVE,  true),
+	SPELL_FUSION     (Family.WANDS,    Kind.ULTIMATE, true, 60);
 
 	public enum Kind { ACTIVE, PASSIVE, ULTIMATE }
 

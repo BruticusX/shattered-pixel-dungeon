@@ -245,6 +245,7 @@ public class Proficiency {
 
 	public static boolean canLearn(HeroClass cls, Skill s) {
 		if (!s.implemented) return false;
+		if (s == Skill.SPELL_FUSION && cls != HeroClass.MAGE) return false; //mage only
 		if (rank(cls, s) >= s.maxRank()) return false;
 		if (pointsAvailable(cls, s.family) <= 0) return false;
 		if (s.kind == Skill.Kind.ULTIMATE && level(cls, s.family) < Skill.ULTIMATE_LEVEL) return false;
@@ -257,6 +258,12 @@ public class Proficiency {
 		data.put(pre(cls) + "_skill_" + s.name(), rank(cls, s) + 1);
 		saveNeeded = true;
 		save();
+		//attunement changes every wand's max charges
+		if (s == Skill.ATTUNEMENT && Dungeon.hero != null) {
+			for (com.shatteredpixel.shatteredpixeldungeon.items.Item i : Dungeon.hero.belongings) {
+				if (i instanceof com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) ((com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) i).updateLevel();
+			}
+		}
 	}
 
 	//respec: refunds every point in one family (used by the tome of unlearning)
