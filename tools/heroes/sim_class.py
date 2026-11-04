@@ -17,7 +17,9 @@ v = slots.load()
 def wep(n):
     w, h, gx, gy, ax = G[n]; c, r = n % 16, n // 16
     BODY = int(re.search(r'Layout\(\s*\d+,\s*\d+,\s*(\d+)', J).group(1))
-    f = 0.375 * BODY / 20  # held weapons share the floor-item pixel size (0.375 logical px per art px)
+    px = max(w, h); L = 20 + (px - 24) * 1.5
+    hs = 0.8 * (max(8, L) / 32) ** 1.5 / (px / 32)  # ItemSpriteSheetHD.handScale
+    f = 0.375 * BODY / 20 * hs
     im = items.crop((c * 32, r * 32, c * 32 + w, r * 32 + h))
     return im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.NEAREST), gx * f, gy * f, ax
 def render(f, tier, n):

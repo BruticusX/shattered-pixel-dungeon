@@ -97,6 +97,7 @@ public class HeldWeapon {
 		//item sprites are 32px art shown at half size; held weapons use the same pixel size as
 		//items on the floor, whatever resolution the hero's own art was drawn at
 		float sc = 2f * ItemSprite.WORLD_SCALE * 0.5f;
+		if (hold != Hold.SHIELD) sc *= ItemSpriteSheetHD.handScale(w.image());
 		if (hold == Hold.FIST) sc *= 0.8f;
 		if (hold == Hold.SHIELD) sc *= 0.7f;   //strapped to the forearm, not as wide as the body
 		ws.scale.set(sc);

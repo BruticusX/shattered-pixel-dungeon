@@ -32,7 +32,9 @@ POSE = {
     "idle":   [(55, False)] * 8,
     "run":    [(62, False), (56, False), (46, True), (42, False), (52, False),
                (62, False), (56, True), (46, False), (42, False), (52, False)],
-    "attack": [(55, False), (25, False), (-100, True), (-105, True), (92, False), (96, False), (80, False), (60, False)],
+    # the attack animations are punches: the weapon hand draws back and drives forward, so the blade
+    # is raised over the shoulder on the draw and swept down through the punch
+    "attack": [(55, False), (15, False), (-15, False), (-25, False), (75, False), (115, False), (95, False), (65, False)],
     "death":  [None] * 12,
 }
 TABARD = (52, 84, 168)   # class armor tabard colour (warrior blue)

@@ -33,6 +33,6 @@ public class HeroHDRogue {
 			new int[]{9, 4, 31, 39},
 			new float[]{26.3f, 26.9f, 32.2f, 26.5f, 26.3f, 26.2f, 31.6f, 26.3f, 26.5f, 24.7f, 26.1f, 23.2f, 28.6f, 26.7f, 25.2f, 25.3f, 32.2f, 32.7f, 24.4f, 24.7f, 33.5f, 34.6f, 30.0f, 30.4f, 28.4f, 28.2f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
 			new float[]{30.2f, 33.0f, 30.2f, 31.0f, 30.2f, 30.2f, 26.8f, 30.3f, 32.8f, 25.9f, 25.9f, 30.9f, 25.3f, 22.0f, 20.8f, 22.4f, 26.4f, 20.8f, 35.5f, 34.9f, 26.0f, 23.5f, 34.4f, 21.9f, 32.6f, 32.9f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 25.0f, -100.0f, -105.0f, 92.0f, 96.0f, 80.0f, 60.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
-			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
+			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
 }
