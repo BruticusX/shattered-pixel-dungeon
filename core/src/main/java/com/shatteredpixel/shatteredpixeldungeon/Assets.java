@@ -83,6 +83,7 @@ public class Assets {
 		public static final String CHROME   = "interfaces/chrome.png";
 		//MOD: refreshed window/button art used only inside the dungeon (main menu keeps chrome.png)
 		public static final String CHROME_GAME = "interfaces/chrome_game.png";
+		public static final String SKILL_ICONS = "interfaces/skill_icons.png"; //MOD: 18x18, 5 per row, in Skill order
 		public static final String ICONS    = "interfaces/icons.png";
 		public static final String STATUS   = "interfaces/status_pane.png";
 		public static final String MENU     = "interfaces/menu_pane.png";

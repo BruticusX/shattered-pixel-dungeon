@@ -142,6 +142,15 @@ public enum Skill {
 		return Messages.get(Skill.class, name().toLowerCase() + ".desc");
 	}
 
+	//this skill's 18x18 icon from interfaces/skill_icons.png (one row of 5 per family, in enum order)
+	public static final int ICON_SIZE = 18;
+
+	public com.watabou.noosa.Image icon() {
+		int i = ordinal();
+		return new com.watabou.noosa.Image(com.shatteredpixel.shatteredpixeldungeon.Assets.Interfaces.SKILL_ICONS,
+				(i % 5) * ICON_SIZE, (i / 5) * ICON_SIZE, ICON_SIZE, ICON_SIZE);
+	}
+
 	public static ArrayList<Skill> of(Family f) {
 		ArrayList<Skill> list = new ArrayList<>();
 		for (Skill s : values()) if (s.family == f) list.add(s);

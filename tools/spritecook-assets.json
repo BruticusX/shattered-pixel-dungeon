@@ -78,5 +78,60 @@
     "asset_id": "427e736d-848d-4538-964c-a7ae7f27e682",
     "sha12": "60dd1e31e7e7",
     "label": "furnace_anim (6 frames 16x16)"
+  },
+  {
+    "asset_id": "540bfa5b-36a4-4912-b63c-7a0967eea922",
+    "sha12": "d2e0a64a1025",
+    "label": "skill icons: swords"
+  },
+  {
+    "asset_id": "795a3997-4d5a-42ad-a96b-e6653206fb17",
+    "sha12": "ab383f915914",
+    "label": "skill icons: daggers"
+  },
+  {
+    "asset_id": "cd2fbf7c-0691-4e7e-af5d-eb1485fb9602",
+    "sha12": "a07a1c9cdcef",
+    "label": "skill icons: axes"
+  },
+  {
+    "asset_id": "3c5a71c5-d629-456a-aaf1-eb3523a13293",
+    "sha12": "455ab352679e",
+    "label": "skill icons: blunt"
+  },
+  {
+    "asset_id": "e2432597-5002-4671-8dd9-aca8818d267f",
+    "sha12": "f3e600f4fec8",
+    "label": "skill icons: polearms"
+  },
+  {
+    "asset_id": "13be765a-0c00-484f-a31e-7df0f33e5716",
+    "sha12": "6a46108126fb",
+    "label": "skill icons: staves"
+  },
+  {
+    "asset_id": "2e551325-daee-42c5-96f3-e52272896cab",
+    "sha12": "6e7b144c4992",
+    "label": "skill icons: fist"
+  },
+  {
+    "asset_id": "618079cc-6afc-462a-9761-1169b394ef06",
+    "sha12": "e0c1a8caa97b",
+    "label": "skill icons: shields"
+  },
+  {
+    "asset_id": "cb624753-2588-4043-a0e5-a02e97c0e764",
+    "sha12": "d6fc63cedae1",
+    "label": "skill icons: flexible"
+  },
+  {
+    "asset_id": "54d97c9b-32be-4b15-b6ce-d68abc2feccb",
+    "sha12": "33f2e1845196",
+    "label": "skill icons: ranged"
+  },
+  {
+    "asset_id": "1f2cfcea-283d-4dfd-ac89-a80b3989da9b",
+    "sha12": "bea4326baa6e",
+    "label": "skill icons: wands"
   }
 ]

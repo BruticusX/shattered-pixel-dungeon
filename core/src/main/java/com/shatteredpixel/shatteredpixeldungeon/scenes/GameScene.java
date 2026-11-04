@@ -1055,11 +1055,12 @@ public class GameScene extends PixelScene {
 			scene.resume.flip(tagsOnLeft);
 		}
 
-		//MOD: skill buttons sit on the side opposite the tags, just above the toolbar
+		//MOD: skill buttons sit on the right, just inside the column of tags, above the toolbar
 		if (scene.skillBar != null) {
 			float h = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.MAX_SLOTS
 					* (com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE + 2);
-			float sx = tagsOnLeft ? uiCamera.width - insets.right - com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE - 2 : insets.left + 2;
+			float size = com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE;
+			float sx = tagsOnLeft ? uiCamera.width - insets.right - size - 2 : tagLeft - size - 2;
 			scene.skillBar.setRect(sx, scene.toolbar.top() - 2 - h, com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE, h);
 			scene.skillBar.refresh();
 		}
