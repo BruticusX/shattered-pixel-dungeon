@@ -62,4 +62,10 @@ public class Bloodletter extends Sword {
 
 		return damage;
 	}
+
+	//MOD: a unique weapon, always made of obsidian whatever it looks like
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material fixedMaterial() {
+		return com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN;
+	}
 }

@@ -93,4 +93,10 @@ public class AssassinsBlade extends MeleeWeapon {
 		return Integer.toString(2+level);
 	}
 
+
+	//MOD: a unique weapon, always made of obsidian whatever it looks like
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.items.Material fixedMaterial() {
+		return com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN;
+	}
 }

@@ -97,8 +97,13 @@ public class Forge {
 		Item.updateQuickslot();
 	}
 
+	//unique weapons are always their one material
+	public static boolean canReforge(Item item) {
+		return isGear(item) && !(item instanceof Weapon && ((Weapon) item).fixedMaterial() != null);
+	}
+
 	public static boolean reforge(Hero hero, Item item, Material to) {
-		if (!isGear(item) || to.kind != kind(item) || to == material(item)) return false;
+		if (!canReforge(item) || to.kind != kind(item) || to == material(item)) return false;
 		if (!MaterialItem.spend(hero, to, cost(item))) return false;
 		setMaterial(item, to);
 		effects(hero);

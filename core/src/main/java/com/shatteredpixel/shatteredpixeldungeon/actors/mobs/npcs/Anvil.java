@@ -73,12 +73,12 @@ public class Anvil extends ForgeStation {
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return Forge.isGear(item);
+			return Forge.canReforge(item);
 		}
 
 		@Override
 		public void onSelect(Item item) {
-			if (item == null || !Forge.isGear(item)) return;
+			if (item == null || !Forge.canReforge(item)) return;
 			Hero hero = Dungeon.hero;
 			int cost = Forge.cost(item);
 			ArrayList<Material> options = new ArrayList<>();
