@@ -29,7 +29,7 @@ public class ItemSpriteSheet {
 	public static final int SIZE = 16;
 
 	private static final int TX_WIDTH = 256;
-	private static final int TX_HEIGHT = 512;
+	private static final int TX_HEIGHT = 544; //MOD: two extra rows (33-34) for the Phase 4 gear
 
 	private static final int WIDTH = TX_WIDTH / SIZE;
 
@@ -383,6 +383,10 @@ public class ItemSpriteSheet {
 	public static final int ARMOR_HUNTRESS  = ARMOR+8;
 	public static final int ARMOR_DUELIST   = ARMOR+9;
 	public static final int ARMOR_CLERIC    = ARMOR+10;
+	public static final int ARMOR_GAMBESON  = ARMOR+11; //MOD
+	public static final int ARMOR_STUDDED   = ARMOR+12; //MOD
+	public static final int ARMOR_BRIGANDINE= ARMOR+13; //MOD
+	public static final int ARMOR_HALF_PLATE= ARMOR+14; //MOD
 	static{
 		assignItemRect(ARMOR_CLOTH,     15, 12);
 		assignItemRect(ARMOR_LEATHER,   14, 13);
@@ -395,6 +399,10 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_HUNTRESS,  13, 15);
 		assignItemRect(ARMOR_DUELIST,   12, 13);
 		assignItemRect(ARMOR_CLERIC,    13, 14);
+		assignItemRect(ARMOR_GAMBESON,  16, 16);
+		assignItemRect(ARMOR_STUDDED,   16, 16);
+		assignItemRect(ARMOR_BRIGANDINE,16, 16);
+		assignItemRect(ARMOR_HALF_PLATE,16, 16);
 	}
 
 	//MOD: new items from the Sure Shot mod (row 13)
@@ -838,6 +846,46 @@ public class ItemSpriteSheet {
 		assignItemRect(CAVES_PAGE,  10, 11);
 		assignItemRect(CITY_PAGE,   10, 11);
 		assignItemRect(HALLS_PAGE,  10, 11);
+	}
+
+	//MOD: Phase 4 melee weapons and the throwing axe
+	private static final int MOD_WEAPONS    =                               xy(1, 33);  //16 slots
+	public static final int STILETTO        = MOD_WEAPONS+0;
+	public static final int KRIS            = MOD_WEAPONS+1;
+	public static final int KHOPESH         = MOD_WEAPONS+2;
+	public static final int FALCHION        = MOD_WEAPONS+3;
+	public static final int BEARDED_AXE     = MOD_WEAPONS+4;
+	public static final int MORNING_STAR    = MOD_WEAPONS+5;
+	public static final int MAUL            = MOD_WEAPONS+6;
+	public static final int HALBERD         = MOD_WEAPONS+7;
+	public static final int PIKE            = MOD_WEAPONS+8;
+	public static final int IRONSHOD_STAFF  = MOD_WEAPONS+9;
+	public static final int KATAR           = MOD_WEAPONS+10;
+	public static final int TIGER_CLAWS     = MOD_WEAPONS+11;
+	public static final int BUCKLER         = MOD_WEAPONS+12;
+	public static final int KITE_SHIELD     = MOD_WEAPONS+13;
+	public static final int KUSARIGAMA      = MOD_WEAPONS+14;
+	public static final int METEOR_HAMMER   = MOD_WEAPONS+15;
+	private static final int MOD_WEAPONS2   =                               xy(1, 34);  //16 slots
+	public static final int THROWING_AXE    = MOD_WEAPONS2+0;
+	static{
+		assignItemRect(STILETTO, 16, 16);
+		assignItemRect(KRIS, 16, 16);
+		assignItemRect(KHOPESH, 16, 16);
+		assignItemRect(FALCHION, 16, 16);
+		assignItemRect(BEARDED_AXE, 16, 16);
+		assignItemRect(MORNING_STAR, 16, 16);
+		assignItemRect(MAUL, 16, 16);
+		assignItemRect(HALBERD, 16, 16);
+		assignItemRect(PIKE, 16, 16);
+		assignItemRect(IRONSHOD_STAFF, 16, 16);
+		assignItemRect(KATAR, 16, 16);
+		assignItemRect(TIGER_CLAWS, 16, 16);
+		assignItemRect(BUCKLER, 16, 16);
+		assignItemRect(KITE_SHIELD, 16, 16);
+		assignItemRect(KUSARIGAMA, 16, 16);
+		assignItemRect(METEOR_HAMMER, 16, 16);
+		assignItemRect(THROWING_AXE, 16, 16);
 	}
 
 	//for smaller 8x8 icons that often accompany an item sprite

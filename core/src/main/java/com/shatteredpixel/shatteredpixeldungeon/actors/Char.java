@@ -378,8 +378,13 @@ public abstract class Char extends Actor {
 
 		//MOD: a peaceful elite parries the first attack against it and counters
 		if (this instanceof Hero && com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.isPassive(enemy)) {
-			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.parryAndCounter(enemy, this);
-			return false;
+			//a khopesh hooks the elite's guard aside: no parry, though the elite is still provoked
+			if (com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponPerks.ignoresParry(this)) {
+				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.provoke(enemy);
+			} else {
+				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.parryAndCounter(enemy, this);
+				return false;
+			}
 		}
 		//MOD: the hero's riposte stance parries melee attacks and counters
 		if (!(this instanceof Hero) && com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.tryRiposte(this, enemy)) {
@@ -977,6 +982,10 @@ public abstract class Char extends Actor {
 				int df = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.rank(((Hero) this).heroClass,
 						com.shatteredpixel.shatteredpixeldungeon.actors.hero.Skill.DEFLECTION);
 				if (df > 0) dmg = Math.round(dmg * (0.95f - 0.05f * df));
+			}
+			//MOD: a kite shield also blocks magic
+			if (this instanceof Hero && ((Hero) this).belongings.weapon() instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KiteShield) {
+				dmg -= Random.NormalIntRange(0, ((com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KiteShield) ((Hero) this).belongings.weapon()).DRMax() / 2);
 			}
 			dmg -= AntiMagic.drRoll(this, glyphLevel(AntiMagic.class));
 			if (buff(ArcaneArmor.class) != null) {

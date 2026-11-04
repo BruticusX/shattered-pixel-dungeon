@@ -53,6 +53,8 @@ public class MirrorSprite extends MobSprite {
 	}
 
 	public void updateArmor(){
+		//MOD: mirror images wear the hero's armor colours too
+		if (Dungeon.hero != null) texture( HeroSprite.sheetFor( Dungeon.hero.heroClass, Dungeon.hero.belongings.armor() ) );
 		updateArmor( ((MirrorImage)ch).armTier );
 	}
 	

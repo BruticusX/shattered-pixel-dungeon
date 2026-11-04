@@ -49,10 +49,13 @@ public class HeroSprite extends CharSprite {
 	private Animation fly;
 	private Animation read;
 
+	//MOD: the class whose sheet is drawn (the hero's own, or a disguise)
+	private HeroClass sheetClass;
+
 	public HeroSprite() {
 		super();
 		
-		texture( Dungeon.hero.heroClass.spritesheet() );
+		sheetClass = Dungeon.hero.heroClass;
 		updateArmor();
 		
 		link( Dungeon.hero );
@@ -64,11 +67,24 @@ public class HeroSprite extends CharSprite {
 	}
 
 	public void disguise(HeroClass cls){
-		texture( cls.spritesheet() );
+		sheetClass = cls;
 		updateArmor();
+	}
+
+	//MOD: the hero's sheet with the worn armor tinted by its material (tools/recolor_hero_armor.py)
+	public static String sheetFor( HeroClass cls, com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor armor ){
+		if (armor == null || armor instanceof com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor
+				|| armor.materialKind() == null) {
+			return cls.spritesheet();
+		}
+		com.shatteredpixel.shatteredpixeldungeon.items.Material m = armor.material();
+		if (m == null) return cls.spritesheet();
+		return "sprites/hero_" + cls.name().toLowerCase(java.util.Locale.ENGLISH) + "_" + m.name().toLowerCase(java.util.Locale.ENGLISH) + ".png";
 	}
 	
 	public void updateArmor() {
+
+		texture( sheetFor( sheetClass != null ? sheetClass : Dungeon.hero.heroClass, Dungeon.hero.belongings.armor() ) );
 
 		TextureFilm film = new TextureFilm( tiers(), Dungeon.hero.tier(), FRAME_WIDTH, FRAME_HEIGHT );
 		
@@ -175,17 +191,18 @@ public class HeroSprite extends CharSprite {
 	}
 
 	public static Image avatar( Hero hero ){
-		if (hero.buff(HeroDisguise.class) != null){
-			return avatar(hero.buff(HeroDisguise.class).getDisguise(), hero.tier());
-		} else {
-			return avatar(hero.heroClass, hero.tier());
-		}
+		HeroClass cls = hero.buff(HeroDisguise.class) != null ? hero.buff(HeroDisguise.class).getDisguise() : hero.heroClass;
+		return avatar(sheetFor(cls, hero.belongings.armor()), hero.tier());
 	}
 	
 	public static Image avatar( HeroClass cl, int armorTier ) {
+		return avatar( cl.spritesheet(), armorTier );
+	}
+
+	public static Image avatar( String sheet, int armorTier ) {
 		
 		RectF patch = tiers().get( armorTier );
-		Image avatar = new Image( cl.spritesheet() );
+		Image avatar = new Image( sheet );
 		RectF frame = avatar.texture.uvRect( 1, 0, FRAME_WIDTH, FRAME_HEIGHT );
 		frame.shift( patch.left, patch.top );
 		avatar.frame( frame );

@@ -594,6 +594,15 @@ public class Hero extends Char {
 		if (buff(RoundShield.GuardTracker.class) != null){
 			return INFINITE_EVASION;
 		}
+
+		//MOD: a buckler perfectly parries the first attack from each enemy
+		if (enemy instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob
+				&& belongings.weapon() instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler
+				&& enemy.buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler.Parried.class) == null){
+			Buff.affect(enemy, com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler.Parried.class);
+			Buff.affect(this, com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler.ParryTracker.class, 1f);
+			return INFINITE_EVASION;
+		}
 		
 		float evasion = defenseSkill;
 		
@@ -638,6 +647,12 @@ public class Hero extends Char {
 			if (buff(Combo.class) == null || buff(Combo.class).getComboCount() < 9 || pointsInTalent(Talent.ENHANCED_COMBO) < 2){
 				parry.detach();
 			}
+			return Messages.get(Monk.class, "parried");
+		}
+
+		if (buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler.ParryTracker.class) != null){
+			buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler.ParryTracker.class).detach();
+			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			return Messages.get(Monk.class, "parried");
 		}
 

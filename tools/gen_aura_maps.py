@@ -14,7 +14,7 @@ SHEET = f"{ROOT}/assets/sprites/items.png"
 MASK = f"{ROOT}/assets/sprites/items_mask.png"
 OUT = f"{ROOT}/java/com/shatteredpixel/shatteredpixeldungeon/effects/AuraMaps.java"
 SIZE, COLS = 16, 16
-BLADE_ROWS = [7, 8, 9, 10, 11]
+BLADE_ROWS = [7, 8, 9, 10, 11, 33, 34]
 ARMOR_ROWS = [12]
 
 
@@ -64,8 +64,8 @@ def main():
             for c in range(COLS):
                 idx = (row - 1) * COLS + c
                 pts = fn(slot(im, idx))
-                #MOD: glyph particles on mail, scale and plate come off the metal plates only
-                if row in ARMOR_ROWS and c in (2, 3, 4):
+                #MOD: glyph particles on metal armor come off the metal plates only
+                if row in ARMOR_ROWS and c in (2, 3, 4, 13, 14):  # mail, scale, plate, brigandine, half plate
                     mp = slot(mask, idx)
                     metal = [y * SIZE + x for y in range(SIZE) for x in range(SIZE) if mp[x, y][3] > 0]
                     if len(metal) >= 5:

@@ -624,8 +624,9 @@ public enum Talent {
 		}
 		if (hero.hasTalent(FOCUSED_MEAL)){
 			if (hero.heroClass == HeroClass.DUELIST){
-				//0.67/1 charge for the duelist
-				Buff.affect( hero, MeleeWeapon.Charger.class ).gainCharge((hero.pointsInTalent(FOCUSED_MEAL)+1)/3f);
+				//MOD: eating takes 5/8 turns off every weapon skill cooldown
+				SkillEffects.Cooldowns.reduceAll( hero, 2 + 3*hero.pointsInTalent(FOCUSED_MEAL) );
+				GameScene.updateSkillBar();
 				ScrollOfRecharging.charge( hero );
 			} else {
 				// lvl/3 / lvl/2 bonus dmg on next hit for other classes

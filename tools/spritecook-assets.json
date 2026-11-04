@@ -133,5 +133,17 @@
     "asset_id": "1f2cfcea-283d-4dfd-ac89-a80b3989da9b",
     "sha12": "bea4326baa6e",
     "label": "skill icons: wands"
+  },
+  {
+    "asset_id": "dd95b6f3-c18e-47de-83a8-d4dc655e29bc",
+    "label": "proposal: melee sheet"
+  },
+  {
+    "asset_id": "c8bf5f35-3701-4d64-a8fe-4bcfb4cdf524",
+    "label": "proposal: armor sheet"
+  },
+  {
+    "asset_id": "3c2f013e-ba32-4b5b-87a2-21ed6334a920",
+    "label": "proposal: thrown sheet"
   }
 ]

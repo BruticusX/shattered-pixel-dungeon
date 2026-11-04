@@ -14,11 +14,14 @@ from PIL import Image
 
 SRC = "core/src/main/assets/sprites/items.png"
 OUT = "core/src/main/assets/sprites/items_mask.png"
+HD_SRC = "core/src/main/assets/sprites/items_hd.png"
+HD_OUT = "core/src/main/assets/sprites/items_hd_mask.png"
 SIZE, COLS = 16, 16
-GEAR_ROWS = [7, 8, 9, 10, 11, 12, 13]
+GEAR_ROWS = [7, 8, 9, 10, 11, 12, 13, 33, 34]
 ARMOR_ROW = 12
-CLOTH, LEATHER = 0, 1           # columns of cloth and leather armor in the armor row
-WHIP = (9, 5)                   # row 9 (tier 3 weapons), column 5
+CLOTH_COLS = {0, 11}            # cloth armor and gambeson, in the armor row
+LEATHER_COLS = {1, 12}          # leather and studded leather
+WHIP = (8, 5)                   # row 8 (tier 3 weapons), column 5
 SIGIL = [                       # a rune, centred on the cloth armor's chest
     "..#..",
     ".###.",
@@ -32,7 +35,7 @@ def neutral(r, g, b, spread=22):
     return max(r, g, b) - min(r, g, b) <= spread
 
 
-GOLD_SLOTS = {129, 179}          # war hammer head, scale armor: gold-toned metal
+GOLD_SLOTS = set()               # (the old gold-toned war hammer head and scale armor; redrawn art is grey)
 
 
 def is_gold(r, g, b):
@@ -46,19 +49,24 @@ def is_brown(r, g, b):
 
 
 def main():
-    src = Image.open(SRC).convert("RGBA")
+    make(SRC, OUT, 16, 1)
+    make(HD_SRC, HD_OUT, 32, 2)
+
+
+def make(src_path, out_path, SIZE, sig):
+    src = Image.open(src_path).convert("RGBA")
     out = Image.new("RGBA", src.size, (0, 0, 0, 0))
     sp, op = src.load(), out.load()
     for row in GEAR_ROWS:
         for col in range(COLS):
             x0, y0 = col * SIZE, (row - 1) * SIZE
-            leather = (row == ARMOR_ROW and col == LEATHER) or (row, col) == WHIP
-            cloth = row == ARMOR_ROW and col == CLOTH
+            leather = (row == ARMOR_ROW and col in LEATHER_COLS) or (row, col) == WHIP
+            cloth = row == ARMOR_ROW and col in CLOTH_COLS
             body = []
             for y in range(y0, y0 + SIZE):
                 for x in range(x0, x0 + SIZE):
                     r, g, b, a = sp[x, y]
-                    if a < 255 or max(r, g, b) < 24:
+                    if a < 255 or max(r, g, b) < 24 or (r, g, b) == (22, 18, 24):
                         continue
                     body.append((x, y))
                     if cloth:
@@ -73,11 +81,16 @@ def main():
                 solid = set(body)
                 for dy, line in enumerate(SIGIL):
                     for dx, ch in enumerate(line):
-                        px, py = cx - 2 + dx, cy - 2 + dy
-                        if ch == "#" and (px, py) in solid:
-                            op[px, py] = (255, 255, 255, 255)
-    out.save(OUT, optimize=True)
-    print("wrote", OUT)
+                        if ch != "#":
+                            continue
+                        for sy in range(sig):
+                            for sx in range(sig):
+                                px = cx - 2 * sig + dx * sig + sx
+                                py = cy - 2 * sig + dy * sig + sy
+                                if (px, py) in solid:
+                                    op[px, py] = (255, 255, 255, 255)
+    out.save(out_path, optimize=True)
+    print("wrote", out_path)
 
 
 if __name__ == "__main__":
