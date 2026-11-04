@@ -43,7 +43,7 @@ public class ThrowingKnife extends MissileWeapon {
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  6 * tier +                      //6 base, up from 5
 				(tier == 1 ? 2*lvl : tier*lvl); //scaling unchanged
 	}
@@ -59,7 +59,7 @@ public class ThrowingKnife extends MissileWeapon {
 				int damage = augment.damageFactor(Hero.heroDamageIntRange(
 						min() + Math.round(diff*0.75f),
 						max()));
-				int exStr = hero.STR() - STRReq();
+				int exStr = 0 /*MOD: no strength*/;
 				if (exStr > 0) {
 					damage += Hero.heroDamageIntRange(0, exStr);
 				}

@@ -499,6 +499,11 @@ public class Item implements Bundlable {
 	public String name() {
 		return trueName();
 	}
+
+	//MOD: which item sprite sheet this item is drawn from (materials use recoloured sheets)
+	public String spriteSheet() {
+		return com.shatteredpixel.shatteredpixeldungeon.Assets.Sprites.ITEMS;
+	}
 	
 	public final String trueName() {
 		return Messages.get(this, "name");

@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.Material;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -246,24 +247,74 @@ public class MeleeWeapon extends Weapon {
 
 	public int tier;
 
-	@Override
-	public int min(int lvl) {
+	//MOD: each weapon type's formula is its base profile at its own tier;
+	// the material then scales it (see Weapon.materialScale)
+	public int baseMin(int lvl) {
 		return  tier +  //base
 				lvl;    //level scaling
 	}
 
-	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  5*(tier+1) +    //base
 				lvl*(tier+1);   //level scaling
 	}
 
+	@Override
+	public final int min(int lvl) {
+		return Math.max(0, Math.round(baseMin(lvl) * materialScale()));
+	}
+
+	@Override
+	public final int max(int lvl) {
+		return Math.max(min(lvl), Math.round(baseMax(lvl) * materialScale()));
+	}
+
+	@Override
+	public Material.Kind materialKind() {
+		return Material.Kind.METAL;
+	}
+
+	@Override
+	protected int typeTier() {
+		return tier;
+	}
+
+	@Override
+	public boolean usesCondition() {
+		return material() != null;
+	}
+
+	//MOD: weight classes replace strength: light types (old tiers 1-2) are faster but softer,
+	// heavy types (old tiers 4-5) hit harder but swing slower
+	@Override
+	public float weightFactor() {
+		if (material() == null) return 1f;
+		if (tier <= 2) return 0.85f;
+		if (tier >= 4) return 1.15f;
+		return 1f;
+	}
+
+	@Override
+	protected float baseDelay(Char owner) {
+		return super.baseDelay(owner) * weightFactor();
+	}
+
+	@Override
+	public Item random() {
+		super.random();
+		rollMaterial();
+		return this;
+	}
+
+	@Override
+	public int proc(Char attacker, Char defender, int damage) {
+		damage = super.proc(attacker, defender, damage);
+		if (attacker instanceof Hero) wear(material() != null ? material().wearPerUse() : 0);
+		return damage;
+	}
+
 	public int STRReq(int lvl){
-		int req = STRReq(tier, lvl);
-		if (masteryPotionBonus){
-			req -= 2;
-		}
-		return req;
+		return 0; //MOD: strength requirements removed
 	}
 
 	private static boolean evaluatingTwinUpgrades = false;
@@ -292,10 +343,11 @@ public class MeleeWeapon extends Weapon {
 
 	@Override
 	public int damageRoll(Char owner) {
+		if (broken()) return 1; //MOD: a broken weapon barely hurts
 		int damage = augment.damageFactor(super.damageRoll( owner ));
 
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = 0 /*MOD: no strength*/;
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
@@ -313,7 +365,7 @@ public class MeleeWeapon extends Weapon {
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
-				} else if (Dungeon.hero.STR() > STRReq()) {
+				} else if (false) { //MOD: no excess strength
 					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 				}
 			}
@@ -323,6 +375,11 @@ public class MeleeWeapon extends Weapon {
 				info += " " + Messages.get(MeleeWeapon.class, "probably_too_heavy");
 			}
 		}
+
+		String matInfo = materialInfo();
+		if (!matInfo.equals("")) info += "\n\n" + matInfo;
+		if (weightFactor() < 1f)      info += " " + Messages.get(MeleeWeapon.class, "weight_light");
+		else if (weightFactor() > 1f) info += " " + Messages.get(MeleeWeapon.class, "weight_heavy");
 
 		String statsInfo = statsInfo();
 		if (!statsInfo.equals("")) info += "\n\n" + statsInfo;

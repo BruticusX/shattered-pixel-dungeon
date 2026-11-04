@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
@@ -70,6 +72,7 @@ public class TitleScene extends PixelScene {
 
 	private StyledButton btnPlay;
 	private StyledButton btnSupport;
+	private StyledButton btnTestRoom; //MOD
 	private StyledButton btnRankings;
 	private StyledButton btnJournal;
 	private StyledButton btnNews;
@@ -174,6 +177,24 @@ public class TitleScene extends PixelScene {
 		btnSupport = new SupportButton(GREY_TR, Messages.get(this, "support"));
 		add(btnSupport);
 
+		//MOD: sandbox room with every item, for testing. Always starts fresh in its own save slot.
+		btnTestRoom = new StyledButton(GREY_TR, Messages.get(this, "test_room")){
+			@Override
+			protected void onClick() {
+				Dungeon.deleteGame(Dungeon.TEST_ROOM_SLOT, true);
+				GamesInProgress.curSlot = Dungeon.TEST_ROOM_SLOT;
+				if (GamesInProgress.selectedClass == null) GamesInProgress.selectedClass = HeroClass.WARRIOR;
+				Dungeon.hero = null;
+				Dungeon.daily = Dungeon.dailyReplay = false;
+				Dungeon.initSeed();
+				Dungeon.startTestRoom = true;
+				ActionIndicator.clearAction();
+				InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+				Game.switchScene( InterlevelScene.class );
+			}
+		};
+		add(btnTestRoom);
+
 		btnRankings = new StyledButton(GREY_TR,Messages.get(this, "rankings")){
 			@Override
 			protected void onClick() {
@@ -223,7 +244,8 @@ public class TitleScene extends PixelScene {
 		if (landscape()) {
 			btnPlay.setRect(btnAreaLeft, insets.top + topRegion+GAP, (buttonAreaWidth/2)-1, BTN_HEIGHT);
 			align(btnPlay);
-			btnSupport.setRect(btnPlay.right()+2, btnPlay.top(), btnPlay.width(), BTN_HEIGHT);
+			btnSupport.setRect(btnPlay.right()+2, btnPlay.top(), (btnPlay.width()/2)-1, BTN_HEIGHT);
+			btnTestRoom.setRect(btnSupport.right()+2, btnPlay.top(), btnSupport.width(), BTN_HEIGHT);
 			btnRankings.setRect(btnPlay.left(), btnPlay.bottom()+ GAP, (float) (Math.floor(buttonAreaWidth/3f)-1), BTN_HEIGHT);
 			btnJournal.setRect(btnRankings.right()+2, btnRankings.top(), btnRankings.width(), BTN_HEIGHT);
 			btnNews.setRect(btnJournal.right()+2, btnJournal.top(), btnRankings.width(), BTN_HEIGHT);
@@ -233,7 +255,8 @@ public class TitleScene extends PixelScene {
 		} else {
 			btnPlay.setRect(btnAreaLeft, insets.top + topRegion+GAP, buttonAreaWidth, BTN_HEIGHT);
 			align(btnPlay);
-			btnSupport.setRect(btnPlay.left(), btnPlay.bottom()+ GAP, btnPlay.width(), BTN_HEIGHT);
+			btnSupport.setRect(btnPlay.left(), btnPlay.bottom()+ GAP, (btnPlay.width()/2)-1, BTN_HEIGHT);
+			btnTestRoom.setRect(btnSupport.right()+2, btnSupport.top(), btnSupport.width(), BTN_HEIGHT);
 			btnRankings.setRect(btnPlay.left(), btnSupport.bottom()+ GAP, (btnPlay.width()/2)-1, BTN_HEIGHT);
 			btnJournal.setRect(btnRankings.right()+2, btnRankings.top(), btnRankings.width(), BTN_HEIGHT);
 			btnNews.setRect(btnRankings.left(), btnRankings.bottom()+ GAP, btnRankings.width(), BTN_HEIGHT);
@@ -316,6 +339,7 @@ public class TitleScene extends PixelScene {
 
 		btnPlay.enable(alpha != 0);
 		btnSupport.enable(alpha != 0);
+		btnTestRoom.enable(alpha != 0);
 		btnRankings.enable(alpha != 0);
 		btnJournal.enable(alpha != 0);
 		btnNews.enable(alpha != 0);
@@ -325,6 +349,7 @@ public class TitleScene extends PixelScene {
 
 		btnPlay.alpha(alpha);
 		btnSupport.alpha(alpha);
+		btnTestRoom.alpha(alpha);
 		btnRankings.alpha(alpha);
 		btnJournal.alpha(alpha);
 		btnNews.alpha(alpha);

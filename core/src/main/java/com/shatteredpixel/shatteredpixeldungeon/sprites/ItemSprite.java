@@ -198,8 +198,24 @@ public class ItemSprite extends MovieClip {
 		}
 	}
 
+	//MOD: items made of a material are drawn from that material's recoloured sheet
+	private String sheet = Assets.Sprites.ITEMS;
+
+	private void useSheet( String s ){
+		if (s == null) s = Assets.Sprites.ITEMS;
+		if (!s.equals(sheet)){
+			sheet = s;
+			texture( s );
+		}
+	}
+
 	public ItemSprite view( Item item ){
 		view(item.image(), item.glowing());
+		String itemSheet = item.spriteSheet();
+		if (itemSheet != null && !itemSheet.equals(Assets.Sprites.ITEMS)){
+			useSheet( itemSheet );
+			frame( item.image() );
+		}
 		Emitter emitter = item.emitter();
 		if (emitter != null && parent != null) {
 			emitter.pos( this );
@@ -241,6 +257,7 @@ public class ItemSprite extends MovieClip {
 	public ItemSprite view( int image, Glowing glowing ) {
 		if (this.emitter != null) this.emitter.killAndErase();
 		emitter = null;
+		useSheet( Assets.Sprites.ITEMS );
 		frame( image );
 		glow( glowing );
 		return this;

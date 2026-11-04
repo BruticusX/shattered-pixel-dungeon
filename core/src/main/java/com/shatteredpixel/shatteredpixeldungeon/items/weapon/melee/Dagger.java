@@ -53,7 +53,7 @@ public class Dagger extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  4*(tier+1) +    //8 base, down from 10
 				lvl*(tier+1);   //scaling unchanged
 	}
@@ -69,7 +69,7 @@ public class Dagger extends MeleeWeapon {
 				int damage = augment.damageFactor(Hero.heroDamageIntRange(
 						min() + Math.round(diff*0.75f),
 						max()));
-				int exStr = hero.STR() - STRReq();
+				int exStr = 0 /*MOD: no strength*/;
 				if (exStr > 0) {
 					damage += Hero.heroDamageIntRange(0, exStr);
 				}

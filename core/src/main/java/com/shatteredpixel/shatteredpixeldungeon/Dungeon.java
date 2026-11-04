@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
+import com.shatteredpixel.shatteredpixeldungeon.levels.TestLevel;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
@@ -198,6 +199,11 @@ public class Dungeon {
 
 	public static int gold;
 	public static int energy;
+
+	//MOD: sandbox test room started from the main menu
+	public static boolean testRoom = false;
+	public static boolean startTestRoom = false;
+	public static final int TEST_ROOM_SLOT = GamesInProgress.MAX_SLOTS + 1;
 	
 	public static HashSet<Integer> chapters;
 
@@ -266,6 +272,8 @@ public class Dungeon {
 
 		gold = 0;
 		energy = 0;
+		testRoom = startTestRoom;
+		startTestRoom = false;
 
 		droppedItems = new SparseArray<>();
 
@@ -300,7 +308,9 @@ public class Dungeon {
 		Actor.clear();
 		
 		Level level;
-		if (branch == 0) {
+		if (testRoom) {
+			level = new TestLevel();
+		} else if (branch == 0) {
 			switch (depth) {
 				case 1:
 				case 2:
@@ -640,6 +650,7 @@ public class Dungeon {
 
 			bundle.put( GOLD, gold );
 			bundle.put( ENERGY, energy );
+			bundle.put( "test_room", testRoom );
 
 			for (int d : droppedItems.keyArray()) {
 				bundle.put(Messages.format(DROPPED, d), droppedItems.get(d));
@@ -817,6 +828,7 @@ public class Dungeon {
 
 		gold = bundle.getInt( GOLD );
 		energy = bundle.getInt( ENERGY );
+		testRoom = bundle.getBoolean( "test_room" );
 
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );

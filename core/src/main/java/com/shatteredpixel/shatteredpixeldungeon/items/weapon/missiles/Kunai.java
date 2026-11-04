@@ -41,7 +41,7 @@ public class Kunai extends MissileWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  4 * tier +                      //12 base, down from 15
 				tier*lvl;                       //scaling unchanged
 	}
@@ -57,7 +57,7 @@ public class Kunai extends MissileWeapon {
 				int damage = augment.damageFactor(Hero.heroDamageIntRange(
 						min() + Math.round(diff*0.6f),
 						max()));
-				int exStr = hero.STR() - STRReq();
+				int exStr = 0 /*MOD: no strength*/;
 				if (exStr > 0) {
 					damage += Hero.heroDamageIntRange(0, exStr);
 				}

@@ -39,7 +39,7 @@ public class AssassinsBlade extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  4*(tier+1) +    //20 base, down from 25
 				lvl*(tier+1);   //scaling unchanged
 	}
@@ -55,7 +55,7 @@ public class AssassinsBlade extends MeleeWeapon {
 				int damage = augment.damageFactor(Hero.heroDamageIntRange(
 						min() + Math.round(diff*0.50f),
 						max()));
-				int exStr = hero.STR() - STRReq();
+				int exStr = 0 /*MOD: no strength*/;
 				if (exStr > 0) {
 					damage += Hero.heroDamageIntRange(0, exStr);
 				}

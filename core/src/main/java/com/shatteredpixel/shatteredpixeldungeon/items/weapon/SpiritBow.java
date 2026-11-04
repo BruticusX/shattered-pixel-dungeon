@@ -145,7 +145,7 @@ public class SpiritBow extends Weapon {
 		
 		if (STRReq() > Dungeon.hero.STR()) {
 			info += " " + Messages.get(Weapon.class, "too_heavy");
-		} else if (Dungeon.hero.STR() > STRReq()){
+		} else if (false) { //MOD: no excess strength
 			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 		}
 		
@@ -182,7 +182,7 @@ public class SpiritBow extends Weapon {
 	
 	@Override
 	public int STRReq(int lvl) {
-		return STRReq(1, lvl); //tier 1
+		return 0; //MOD: strength requirements removed
 	}
 	
 	@Override
@@ -213,7 +213,7 @@ public class SpiritBow extends Weapon {
 		int damage = augment.damageFactor(super.damageRoll(owner));
 		
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = 0 /*MOD: no strength*/;
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}

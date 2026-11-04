@@ -45,18 +45,14 @@ public class Greataxe extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public int baseMax(int lvl) {
 		return  5*(tier+4) +    //45 base, up from 30
 				lvl*(tier+1);   //scaling unchanged
 	}
 
 	@Override
 	public int STRReq(int lvl) {
-		int req = STRReq(tier+1, lvl); //20 base strength req, up from 18
-		if (masteryPotionBonus){
-			req -= 2;
-		}
-		return req;
+		return 0; //MOD: strength requirements removed
 	}
 
 	@Override

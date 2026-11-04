@@ -662,7 +662,7 @@ public class DriedRose extends Artifact {
 			if (weapon() != null){
 				dmg += weapon().damageRoll(this);
 				if (rose != null){
-					int excessStr = rose.ghostStrength()-weapon().STRReq();
+					int excessStr = 0 /*MOD: no strength*/;
 					if (excessStr > 0){
 						dmg += Random.NormalIntRange(0, excessStr);
 					}

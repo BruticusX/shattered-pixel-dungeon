@@ -943,6 +943,10 @@ public abstract class Char extends Actor {
 		
 		//TODO improve this when I have proper damage source logic
 		if (AntiMagic.RESISTS.contains(src.getClass())){
+			//MOD: cloth and leather armor resist magic damage
+			if (this instanceof Hero && ((Hero) this).belongings.armor() != null){
+				dmg = Math.round(dmg * (1f - ((Hero) this).belongings.armor().magicResist()));
+			}
 			dmg -= AntiMagic.drRoll(this, glyphLevel(AntiMagic.class));
 			if (buff(ArcaneArmor.class) != null) {
 				dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
@@ -1286,6 +1290,11 @@ public abstract class Char extends Actor {
 
 		stealth += Obfuscation.stealthBoost(this, glyphLevel(Obfuscation.class));
 
+		//MOD: heavy metal armor is noisy
+		if (this instanceof Hero && ((Hero) this).belongings.armor() != null){
+			stealth -= 2.5f * ((Hero) this).belongings.armor().weightPenalty();
+		}
+
 		return stealth;
 	}
 
@@ -1371,6 +1380,10 @@ public abstract class Char extends Actor {
 			if (c.isAssignableFrom(effect)){
 				result *= 0.5f;
 			}
+		}
+		//MOD: cloth and leather armor shorten magical debuffs
+		if (this instanceof Hero && ((Hero) this).belongings.armor() != null && AntiMagic.RESISTS.contains(effect)){
+			result *= 1f - ((Hero) this).belongings.armor().magicResist();
 		}
 		return result * RingOfElements.resist(this, effect);
 	}

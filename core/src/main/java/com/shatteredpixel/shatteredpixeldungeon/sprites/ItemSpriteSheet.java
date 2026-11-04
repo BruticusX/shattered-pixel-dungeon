@@ -397,6 +397,13 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_CLERIC,    13, 14);
 	}
 
+	//MOD: new items from the Sure Shot mod (row 13)
+	private static final int MOD_ITEMS      =                               xy(1, 13);  //16 slots
+	public static final int REPAIR_KIT      = MOD_ITEMS+0;
+	static{
+		assignItemRect(REPAIR_KIT, 16, 16);
+	}
+
 	                                                                                    //16 free slots
 
 	private static final int WANDS              =                           xy(1, 14);  //16 slots

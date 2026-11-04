@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 public class PotionOfStrength extends Potion {
 
+	public static final int HP_BONUS = 10; //MOD
+
 	{
 		icon = ItemSpriteSheet.Icons.POTION_STRENGTH;
 
@@ -43,10 +45,12 @@ public class PotionOfStrength extends Potion {
 	public void apply( Hero hero ) {
 		identify();
 
-		hero.STR++;
-		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
+		//MOD: strength no longer exists as a requirement, so this potion raises max HP instead
+		hero.HTBoost += HP_BONUS;
+		hero.updateHT( true );
+		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(HP_BONUS), FloatingText.HEALING);
 
-		GLog.p( Messages.get(this, "msg", hero.STR()) );
+		GLog.p( Messages.get(this, "msg", HP_BONUS, hero.HT) );
 		
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();
