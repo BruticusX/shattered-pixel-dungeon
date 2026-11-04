@@ -210,6 +210,21 @@ public class WndHero extends WndTabbed {
 			}
 
 			pos += GAP;
+
+			//MOD: opens the weapon proficiency list
+			com.shatteredpixel.shatteredpixeldungeon.ui.RedButton prof = new com.shatteredpixel.shatteredpixeldungeon.ui.RedButton(Messages.get(this, "proficiency")){
+				@Override
+				protected void onClick() {
+					if (ShatteredPixelDungeon.scene() instanceof GameScene){
+						GameScene.show(new WndProficiency(hero.heroClass));
+					} else {
+						ShatteredPixelDungeon.scene().addToFront(new WndProficiency(hero.heroClass));
+					}
+				}
+			};
+			prof.setRect(0, pos, WIDTH, 16);
+			add(prof);
+			pos = prof.bottom() + GAP;
 		}
 
 		private void statSlot( String label, String value ) {
