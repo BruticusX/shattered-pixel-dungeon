@@ -89,6 +89,7 @@ public class SkillEffects {
 			return;
 		}
 		final int rank = Proficiency.rank(hero.heroClass, s);
+		markSkillStrike(hero);
 		switch (s) {
 			case CLEAVE:
 				cleave(hero, rank);
@@ -436,6 +437,7 @@ public class SkillEffects {
 	private static void withAdjacentTarget(final Hero hero, final Skill s, final int rank, final TargetAction action) {
 		Char only = soleAdjacentEnemy(hero);
 		if (only != null) {
+			markSkillStrike(hero);
 			action.run(only);
 			finish(hero, s, rank, hero.attackDelay());
 			return;
@@ -449,6 +451,7 @@ public class SkillEffects {
 					GLog.w(Messages.get(SkillEffects.class, "need_adjacent"));
 					return;
 				}
+				markSkillStrike(hero);
 				action.run(ch);
 				finish(hero, s, rank, hero.attackDelay());
 			}
@@ -467,6 +470,7 @@ public class SkillEffects {
 					GLog.w(Messages.get(SkillEffects.class, "need_visible"));
 					return;
 				}
+				markSkillStrike(hero);
 				action.run(ch);
 				finish(hero, s, rank, time);
 			}
@@ -914,11 +918,56 @@ public class SkillEffects {
 		}
 		Rampage r = hero.buff(Rampage.class);
 		if (r != null) r.extend(2f);
+		//lethal haste (duelist): a killing blow from a skill grants haste
+		if (skillStrike(hero) && hero.heroClass == HeroClass.DUELIST && hero.hasTalent(Talent.LETHAL_HASTE)
+				&& hero.buff(Talent.LethalHasteCooldown.class) == null) {
+			Buff.affect(hero, Talent.LethalHasteCooldown.class, 100f);
+			Buff.affect(hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste.class).set(2 + 2 * hero.pointsInTalent(Talent.LETHAL_HASTE));
+		}
 		GameScene.updateSkillBar();
 	}
 
+	//MOD: marks hits as coming from a skill for this turn (duelist talents)
+	public static class SkillStrike extends FlavourBuff {}
+
+	private static void markSkillStrike(Hero hero) {
+		Buff.affect(hero, SkillStrike.class, 0f);
+	}
+
+	public static boolean skillStrike(Hero hero) {
+		return hero.buff(SkillStrike.class) != null;
+	}
+
+	public static class LastSkillFamily extends Buff {
+		public String family = "";
+		@Override public void storeInBundle(Bundle b) { super.storeInBundle(b); b.put("family", family); }
+		@Override public void restoreFromBundle(Bundle b) { super.restoreFromBundle(b); family = b.getString("family"); }
+	}
+
 	private static void finish(Hero hero, Skill s, int rank, float time) {
-		Cooldowns.start(hero, s, s.cooldown(rank));
+		int cd = s.cooldown(rank);
+		//varied charge (champion): switching skill families shortens the cooldown by 15/30/45%
+		LastSkillFamily last = Buff.affect(hero, LastSkillFamily.class);
+		if (hero.hasTalent(Talent.VARIED_CHARGE) && !last.family.isEmpty() && !last.family.equals(s.family.name())) {
+			cd = Math.round(cd * (1f - 0.15f * hero.pointsInTalent(Talent.VARIED_CHARGE)));
+		}
+		last.family = s.family.name();
+		//aggressive barrier: shielding when using a skill at half health or less
+		if (hero.hasTalent(Talent.AGGRESSIVE_BARRIER) && hero.HP <= hero.HT / 2) {
+			int shield = 1 + 2 * hero.pointsInTalent(Talent.AGGRESSIVE_BARRIER);
+			Buff.affect(hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier.class).setShield(shield);
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText.SHIELDING);
+		}
+		//precise assault: the next attack after a skill is far more accurate
+		if (hero.hasTalent(Talent.PRECISE_ASSAULT)) {
+			Buff.affect(hero, Talent.PreciseAssaultTracker.class, hero.cooldown() + time + 1f);
+		}
+		//combined energy (monk): skills give monk energy
+		if (hero.hasTalent(Talent.COMBINED_ENERGY)) {
+			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy me = hero.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy.class);
+			if (me != null) me.energy = Math.min(me.energyCap(), me.energy + hero.pointsInTalent(Talent.COMBINED_ENERGY));
+		}
+		Cooldowns.start(hero, s, cd);
 		hero.sprite.operate(hero.pos);
 		hero.spendAndNext(time);
 		GameScene.updateSkillBar();
@@ -1006,6 +1055,12 @@ public class SkillEffects {
 
 	//momentum: each hit in a row on the same target adds +4/6/8% damage, up to 5 stacks
 	public static int onHeroHit(Hero hero, Char enemy, int damage) {
+		//combined lethality (champion): skill hits finish off non-boss enemies below 5/10/15% health
+		if (skillStrike(hero) && hero.hasTalent(Talent.COMBINED_LETHALITY)
+				&& !enemy.properties().contains(Char.Property.BOSS) && !enemy.properties().contains(Char.Property.MINIBOSS)
+				&& enemy.HP - damage <= enemy.HT * 0.05f * hero.pointsInTalent(Talent.COMBINED_LETHALITY)) {
+			damage = Math.max(damage, enemy.HP);
+		}
 		float mult = 1f;
 		//death mark: +50% damage from you
 		if (enemy.buff(DeathMarked.class) != null) mult += 0.5f;
@@ -1107,6 +1162,12 @@ public class SkillEffects {
 			return v == null ? 0 : v;
 		}
 
+		public static void reduceAll(Hero hero, int turns) {
+			Cooldowns c = hero.buff(Cooldowns.class);
+			if (c == null) return;
+			for (Skill s : new ArrayList<>(c.left.keySet())) reduce(hero, s, turns);
+		}
+
 		public static void clear(Hero hero, Skill s) {
 			Cooldowns c = hero.buff(Cooldowns.class);
 			if (c != null) c.left.remove(s);
@@ -1127,8 +1188,17 @@ public class SkillEffects {
 		@Override
 		public boolean act() {
 			boolean changed = false;
+			//weapon recharging (duelist): while recharging, cooldowns sometimes tick twice
+			int tick = 1;
+			if (target instanceof Hero && ((Hero) target).heroClass == HeroClass.DUELIST
+					&& ((Hero) target).hasTalent(Talent.WEAPON_RECHARGING)
+					&& (target.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging.class) != null
+					|| target.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge.class) != null)
+					&& com.watabou.utils.Random.Float() < 0.5f * ((Hero) target).pointsInTalent(Talent.WEAPON_RECHARGING)) {
+				tick = 2;
+			}
 			for (Skill s : new ArrayList<>(left.keySet())) {
-				int v = left.get(s) - 1;
+				int v = left.get(s) - tick;
 				if (v <= 0) left.remove(s); else left.put(s, v);
 				changed = true;
 			}
