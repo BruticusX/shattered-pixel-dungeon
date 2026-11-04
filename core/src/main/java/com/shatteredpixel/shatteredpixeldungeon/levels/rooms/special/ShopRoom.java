@@ -358,8 +358,13 @@ public class ShopRoom extends SpecialRoom {
 			Random.shuffle(itemsToSpawn);
 		Random.popGenerator();
 
-		//MOD: shops stock repair kits, and their gear comes in a material suited to the depth
+		//MOD: shops stock repair kits; their gear is the base material like everything else
 		itemsToSpawn.add( new RepairKit().quantity(2) );
+		//...and a few crafting materials for the anvil
+		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth).quantity(3) );
+		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth + 3).quantity(2) );
+		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.CLOTH, Dungeon.depth).quantity(2) );
+		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.LEATHER, Dungeon.depth).quantity(2) );
 		for (Item i : itemsToSpawn){
 			if (i instanceof Weapon) ((Weapon) i).rollMaterial();
 			if (i instanceof Armor)  ((Armor) i).rollMaterial();

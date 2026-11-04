@@ -42,6 +42,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScrol
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem;
 import com.watabou.utils.Reflection;
 
 
@@ -80,7 +86,7 @@ public class TestLevel extends Level {
 			}
 		}
 
-		//alchemy pot (the enchanting cauldron) at the top; furnace and anvil will join it
+		//alchemy pot (the enchanting cauldron) at the top; a furnace and anvil are placed beside it
 		map[cell(W / 2, 1)] = Terrain.ALCHEMY;
 
 		int entrance = cell(W / 2, H - 2);
@@ -94,8 +100,16 @@ public class TestLevel extends Level {
 		return null;
 	}
 
+	//a few elite enemies to test: they wander and stay peaceful until hit
 	@Override
 	protected void createMobs() {
+		Mob[] elites = {new Rat(), new Gnoll(), new Crab()};
+		int[] xs = {6, W / 2 - 6, W - 7};
+		for (int i = 0; i < elites.length; i++) {
+			elites[i].pos = cell(xs[i], H - 3);
+			Elite.make(elites[i]);
+			mobs.add(elites[i]);
+		}
 	}
 
 	public Actor addRespawner() {
@@ -129,6 +143,15 @@ public class TestLevel extends Level {
 	@Override
 	protected void createItems() {
 		Dungeon.energy = Math.max(Dungeon.energy, 200);
+
+		//one chest beside the forge with every crafting material (10 of each) and some ore
+		int chest = cell(W / 2 + 3, 1);
+		for (Material m : Material.values()) {
+			drop(new MaterialItem(m).quantity(10), chest).type = Heap.Type.CHEST;
+		}
+		for (Material m : Material.values()) {
+			if (m.kind == Material.Kind.METAL) drop(new MaterialItem(m, true).quantity(3), chest);
+		}
 
 		Generator.Category[] melee = {Generator.Category.WEP_T1, Generator.Category.WEP_T2,
 				Generator.Category.WEP_T3, Generator.Category.WEP_T4, Generator.Category.WEP_T5};

@@ -158,7 +158,8 @@ public class Armor extends EquipableItem {
 	}
 
 	public void rollMaterial() {
-		if (materialKind() != null) material = Material.randomFor(materialKind());
+		//MOD (1b): all found gear is the base material; better materials come from the anvil
+		if (materialKind() != null) material = Material.lowest(materialKind());
 	}
 
 	//heavier metal armor types block more for the same metal

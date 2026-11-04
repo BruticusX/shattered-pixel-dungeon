@@ -246,7 +246,8 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	public void rollMaterial() {
-		if (materialKind() != null) material = Material.randomFor(materialKind());
+		//MOD (1b): all found gear is the base material; better materials come from the anvil
+		if (materialKind() != null) material = Material.lowest(materialKind());
 	}
 
 	//light weapons hit a bit softer but faster, heavy ones harder but slower (see baseDelay)

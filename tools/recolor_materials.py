@@ -18,7 +18,7 @@ from PIL import Image
 SRC = "core/src/main/assets/sprites/items.png"
 OUT = "core/src/main/assets/sprites/items_{}.png"
 SIZE = 16
-GEAR_ROWS = [7, 8, 9, 10, 11, 12]      # 1-based sheet rows holding weapons and armor
+GEAR_ROWS = [7, 8, 9, 10, 11, 12, 13]     # 1-based sheet rows holding weapons and armor
 GOLD_HEAD_SLOTS = {129}                 # war hammer: its head is gold, recolour it with the metal
 
 METAL = {

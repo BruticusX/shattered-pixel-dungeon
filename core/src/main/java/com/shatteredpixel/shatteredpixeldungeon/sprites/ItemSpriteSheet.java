@@ -400,8 +400,16 @@ public class ItemSpriteSheet {
 	//MOD: new items from the Sure Shot mod (row 13)
 	private static final int MOD_ITEMS      =                               xy(1, 13);  //16 slots
 	public static final int REPAIR_KIT      = MOD_ITEMS+0;
+	public static final int INGOT           = MOD_ITEMS+1;
+	public static final int CLOTH_BOLT      = MOD_ITEMS+2;
+	public static final int LEATHER_PIECE   = MOD_ITEMS+3;
+	public static final int METAL_ORE       = MOD_ITEMS+4;
 	static{
 		assignItemRect(REPAIR_KIT, 16, 16);
+		assignItemRect(INGOT, 16, 16);
+		assignItemRect(CLOTH_BOLT, 16, 16);
+		assignItemRect(LEATHER_PIECE, 16, 16);
+		assignItemRect(METAL_ORE, 16, 16);
 	}
 
 	                                                                                    //16 free slots
