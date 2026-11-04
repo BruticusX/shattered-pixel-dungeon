@@ -53,6 +53,23 @@ public class ShatteredPixelDungeon extends Game {
 				com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey.class,
 				"com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey" );
 
+		//MOD: weapon types removed in Phase 4 turn into their nearest replacement in old saves
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingClub" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpear" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingHammer.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube" );
+
 	}
 	
 	@Override

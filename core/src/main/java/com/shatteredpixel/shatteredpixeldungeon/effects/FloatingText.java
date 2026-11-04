@@ -46,7 +46,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.FerretTuft;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -367,7 +366,6 @@ public class FloatingText extends RenderedTextBlock {
 		}
 		if (blessBoost > 1f) hitReasons.put(HIT_BLS, blessBoost);
 		if (RingOfAccuracy.accuracyMultiplier(attacker) > 1)    hitReasons.put(HIT_ACC, RingOfAccuracy.accuracyMultiplier(attacker));
-		if (attacker.buff(Scimitar.SwordDance.class) != null)   hitReasons.put(HIT_DANCE, 1.5f);
 		if (!(wep instanceof MissileWeapon)) {
 			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.PRECISE_ASSAULT) && ((Hero) attacker).heroClass != HeroClass.DUELIST){
 				hitReasons.put(HIT_PRES, 0.1f * Dungeon.hero.pointsInTalent(Talent.PRECISE_ASSAULT));
