@@ -143,8 +143,11 @@ public class ItemSlot extends Button {
 		}
 		
 		if (extra != null) {
-			extra.x = x + (width - extra.width()) - margin.right;
-			extra.y = y + margin.top;
+			//MOD: the durability readout is small and sits inside the slot's bevel
+			boolean durability = extra.text() != null && extra.text().endsWith("%");
+			extra.scale.set(durability ? PixelScene.align(0.6f) : 1f);
+			extra.x = x + (width - extra.width()) - margin.right - (durability ? 1 : 0);
+			extra.y = y + margin.top + (durability ? 1 : 0);
 			PixelScene.align(extra);
 
 			if ((status.width() + extra.width()) > width){

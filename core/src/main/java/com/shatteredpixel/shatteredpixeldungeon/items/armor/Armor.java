@@ -183,6 +183,15 @@ public class Armor extends EquipableItem {
 		return 0f;
 	}
 
+	public String weightLabel() {
+		if (material() == null) return Messages.get(Armor.class, "tier_label", tier);
+		float p = weightPenalty();
+		if (p <= 0)    return Messages.get(Armor.class, "label_light");
+		if (p <= 0.1f) return Messages.get(Armor.class, "label_medium");
+		if (p <= 0.2f) return Messages.get(Armor.class, "label_heavy");
+		return Messages.get(Armor.class, "label_very_heavy");
+	}
+
 	public float magicResist() {
 		Material m = material();
 		return (m == null || broken()) ? 0f : m.magicResist;
@@ -688,7 +697,7 @@ public class Armor extends EquipableItem {
 		
 		if (levelKnown) {
 
-			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", tier, DRMin(), DRMax(), STRReq());
+			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", weightLabel(), DRMin(), DRMax(), STRReq());
 			if (material() != null) {
 				info += "\n\n" + Messages.get(Armor.class, "material_info", material().title()) + " "
 						+ (broken() ? Messages.get(Armor.class, "condition_broken") : Messages.get(Armor.class, "condition_info", (int)Math.ceil(condition)));
@@ -700,7 +709,7 @@ public class Armor extends EquipableItem {
 				info += " " + Messages.get(Armor.class, "too_heavy");
 			}
 		} else {
-			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", tier, DRMin(0), DRMax(0), STRReq(0));
+			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", weightLabel(), DRMin(0), DRMax(0), STRReq(0));
 
 			if (Dungeon.hero != null && STRReq(0) > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "probably_too_heavy");
