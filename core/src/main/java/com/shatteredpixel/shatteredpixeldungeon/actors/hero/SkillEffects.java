@@ -301,6 +301,7 @@ public class SkillEffects {
 		@Override public int icon() { return BuffIndicator.FURY; }
 		@Override public void tintIcon(com.watabou.noosa.Image icon) { icon.hardlight(1f, 0.3f, 0.1f); }
 		@Override public String desc() { return Messages.get(this, "desc", dispTurns()); }
+		public void extend(float turns) { spend(turns); }
 	}
 
 	// ---------------- blunt ----------------
@@ -336,7 +337,7 @@ public class SkillEffects {
 			Cooldowns.reduce(hero, Skill.SUNDER, 3);
 		}
 		Rampage r = hero.buff(Rampage.class);
-		if (r != null) r.spend(2f);
+		if (r != null) r.extend(2f);
 		GameScene.updateSkillBar();
 	}
 
