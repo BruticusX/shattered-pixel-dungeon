@@ -129,7 +129,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	@Override
-	protected int typeTier() {
+	public int typeTier() {
 		return tier;
 	}
 	

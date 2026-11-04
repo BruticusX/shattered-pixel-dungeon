@@ -275,7 +275,7 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	protected int typeTier() {
+	public int typeTier() {
 		return tier;
 	}
 
@@ -292,6 +292,14 @@ public class MeleeWeapon extends Weapon {
 		if (tier <= 2) return 0.85f;
 		if (tier >= 4) return 1.15f;
 		return 1f;
+	}
+
+	//MOD: replaces "tier-N" in item info now that materials decide power
+	public String weightLabel() {
+		if (material() == null) return Messages.get(MeleeWeapon.class, "tier_label", tier);
+		if (weightFactor() < 1f) return Messages.get(MeleeWeapon.class, "label_light");
+		if (weightFactor() > 1f) return Messages.get(MeleeWeapon.class, "label_heavy");
+		return Messages.get(MeleeWeapon.class, "label_medium");
 	}
 
 	@Override
@@ -361,7 +369,7 @@ public class MeleeWeapon extends Weapon {
 		String info = super.info();
 
 		if (levelKnown) {
-			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
+			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", weightLabel(), augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
@@ -370,7 +378,7 @@ public class MeleeWeapon extends Weapon {
 				}
 			}
 		} else {
-			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq(0));
+			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", weightLabel(), min(0), max(0), STRReq(0));
 			if (Dungeon.hero != null && STRReq(0) > Dungeon.hero.STR()) {
 				info += " " + Messages.get(MeleeWeapon.class, "probably_too_heavy");
 			}

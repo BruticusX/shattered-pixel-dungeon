@@ -1362,6 +1362,15 @@ public class Hero extends Char {
 							Sample.INSTANCE.play( Assets.Sounds.MINE );
 							Level.set( action.dst, Terrain.EMPTY_DECO );
 
+							//MOD: the mines' walls hold veins of metal ore, smelted at a furnace
+							if (Random.Int(6) == 0) {
+								com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem ore = new com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem(
+										com.shatteredpixel.shatteredpixeldungeon.items.Material.randomFor(
+												com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth + Random.Int(4), false), true);
+								Dungeon.level.drop( ore, action.dst ).sprite.drop();
+								GLog.i( Messages.get(com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.class, "found_ore", ore.name()) );
+							}
+
 						//1 hunger spent total
 						} else if (Dungeon.level.map[action.dst] == Terrain.MINE_CRYSTAL){
 							Splash.at(action.dst, 0xFFFFFF, 5);

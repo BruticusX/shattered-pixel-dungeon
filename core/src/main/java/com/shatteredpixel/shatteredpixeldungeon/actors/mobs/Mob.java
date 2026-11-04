@@ -356,6 +356,11 @@ public abstract class Mob extends Char {
 	
 	protected Char chooseEnemy() {
 
+		//MOD: elites leave everyone alone until something hurts them
+		if (com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.isPassive(this)) {
+			return null;
+		}
+
 		Dread dread = buff( Dread.class );
 		if (dread != null) {
 			Char source = (Char)Actor.findById( dread.object );
@@ -939,6 +944,7 @@ public abstract class Mob extends Char {
 	public void damage( int dmg, Object src ) {
 
 		if (!isInvulnerable(src.getClass())) {
+			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.provoke(this);
 			if (state == SLEEPING) {
 				state = WANDERING;
 			}
@@ -986,6 +992,8 @@ public abstract class Mob extends Char {
 				AscensionChallenge.processEnemyKill(this);
 				
 				int exp = Dungeon.hero.lvl <= maxLvl ? EXP : 0;
+				//MOD: elites give double experience
+				if (buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.class) != null) exp *= 2;
 
 				//during ascent, under-levelled enemies grant 10 xp each until level 30
 				// after this enemy kills which reduce the amulet curse still grant 10 effective xp
@@ -1034,6 +1042,12 @@ public abstract class Mob extends Char {
 			}
 
 			rollToDropLoot();
+			if (buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.class) != null) {
+				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.dropLoot(this);
+			}
+			if (properties.contains(Property.BOSS) && !(this instanceof YogFist)) {
+				com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.dropBossLoot(pos);
+			}
 
 			if (cause == Dungeon.hero || cause instanceof Weapon || cause instanceof Weapon.Enchantment){
 				if (Dungeon.hero.hasTalent(Talent.LETHAL_MOMENTUM)

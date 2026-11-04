@@ -240,7 +240,8 @@ public abstract class Level implements Bundlable {
 				//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
 				//or give a random scroll (from a separate RNG) instead of every 2nd SOU
 				if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count%2 != 0){
-					addItemToSpawn(new ScrollOfUpgrade());
+					//MOD: scrolls of upgrade are gone; obsidian ingots take their place
+					addItemToSpawn(com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.obsidian());
 				}
 			}
 			if (Dungeon.asNeeded()) {
@@ -324,6 +325,8 @@ public abstract class Level implements Bundlable {
 		
 		createMobs();
 		createItems();
+		//MOD: a furnace and an anvil stand beside every alchemy pot
+		com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ForgeStation.placeAll(this);
 
 		Random.popGenerator();
 	}
@@ -544,6 +547,7 @@ public abstract class Level implements Bundlable {
 
 		Mob m = Reflection.newInstance(mobsToSpawn.remove(0));
 		ChampionEnemy.rollForChampion(m);
+		com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.rollForElite(m);
 		return m;
 	}
 
@@ -786,7 +790,7 @@ public abstract class Level implements Bundlable {
 
 		if (Dungeon.hero.isAlive() && mob.pos != -1 && PathFinder.distance[mob.pos] >= disLimit) {
 			GameScene.add( mob );
-			if (!mob.buffs(ChampionEnemy.class).isEmpty()){
+			if (!mob.buffs(ChampionEnemy.class).isEmpty() && mob.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.class) == null){
 				GLog.w(Messages.get(ChampionEnemy.class, "warn"));
 			}
 			return true;

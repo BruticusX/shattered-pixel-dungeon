@@ -89,10 +89,16 @@ public enum Material {
 	//a random material of this kind suited to the given depth; the middle of a material's
 	//range is the most likely, so finds shift smoothly as you go deeper
 	public static Material randomFor(Kind kind, int depth) {
+		return randomFor(kind, depth, true);
+	}
+
+	//obsidian is the rare metal: it only comes from where scrolls of upgrade used to be
+	public static Material randomFor(Kind kind, int depth, boolean allowObsidian) {
 		ArrayList<Material> options = new ArrayList<>();
 		ArrayList<Float> weights = new ArrayList<>();
 		for (Material m : values()) {
 			if (m.kind != kind || depth < m.minDepth || depth > m.maxDepth) continue;
+			if (m == OBSIDIAN && !allowObsidian) continue;
 			float mid = (m.minDepth + m.maxDepth) / 2f;
 			float half = Math.max(1f, (m.maxDepth - m.minDepth) / 2f);
 			options.add(m);
@@ -101,7 +107,7 @@ public enum Material {
 		if (options.isEmpty()) {
 			//past the deepest range: strongest of the kind
 			Material best = lowest(kind);
-			for (Material m : values()) if (m.kind == kind && m.maxDepth >= best.maxDepth) best = m;
+			for (Material m : values()) if (m.kind == kind && m.maxDepth >= best.maxDepth && (allowObsidian || m != OBSIDIAN)) best = m;
 			return best;
 		}
 		float[] w = new float[weights.size()];

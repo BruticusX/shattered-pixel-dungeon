@@ -226,7 +226,7 @@ public abstract class Char extends Actor {
 	}
 
 	public String name(){
-		return Messages.get(this, "name");
+		return com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.prefix(this, Messages.get(this, "name"));
 	}
 
 	public boolean canInteract(Char c){

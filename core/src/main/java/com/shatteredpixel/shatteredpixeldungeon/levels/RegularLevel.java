@@ -447,6 +447,16 @@ public abstract class RegularLevel extends Level {
 			
 		}
 
+		//MOD: chests hold crafting materials for the anvil (1-2, locked chests 2-3)
+		for (com.shatteredpixel.shatteredpixeldungeon.items.Heap h : heaps.valueList()) {
+			int n = 0;
+			if (h.type == Heap.Type.CHEST)        n = 1 + Random.Int(2);
+			if (h.type == Heap.Type.LOCKED_CHEST) n = 2 + Random.Int(2);
+			for (int k = 0; k < n; k++) {
+				h.drop(com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomAny(Dungeon.depth));
+			}
+		}
+
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();
 			if (item instanceof TrinketCatalyst){
