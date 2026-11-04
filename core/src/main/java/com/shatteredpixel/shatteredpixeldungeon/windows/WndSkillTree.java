@@ -51,6 +51,9 @@ public class WndSkillTree extends Window {
 		add(pts);
 
 		Component content = new Component();
+		//buttons inside a scroll pane don't get taps directly; the pane hands them over (see below)
+		final java.util.ArrayList<RedButton> buttons = new java.util.ArrayList<>();
+		final java.util.ArrayList<Skill> buttonSkills = new java.util.ArrayList<>();
 		float pos = 0;
 		for (final Skill s : Skill.of(f)) {
 			int rank = Proficiency.rank(cls, s);
@@ -88,6 +91,8 @@ public class WndSkillTree extends Window {
 				learn.enable(Proficiency.canLearn(cls, s));
 				learn.setRect(0, pos, WIDTH, 14);
 				content.add(learn);
+				buttons.add(learn);
+				buttonSkills.add(s);
 				pos = learn.bottom() + 6;
 			} else {
 				pos += 4;
@@ -99,7 +104,24 @@ public class WndSkillTree extends Window {
 		int h = (int) Math.min(MAX_HEIGHT, top + pos);
 		resize(WIDTH, h);
 
-		ScrollPane pane = new ScrollPane(content);
+		ScrollPane pane = new ScrollPane(content) {
+			@Override
+			public void onClick(float x, float y) {
+				for (int i = 0; i < buttons.size(); i++) {
+					if (buttons.get(i).inside(x, y)) {
+						Skill s = buttonSkills.get(i);
+						if (Proficiency.canLearn(cls, s)) {
+							Proficiency.learn(cls, s);
+							com.watabou.noosa.audio.Sample.INSTANCE.play(com.shatteredpixel.shatteredpixeldungeon.Assets.Sounds.LEVELUP);
+							WndSkillTree.this.hide();
+							reopen(cls, f);
+							GameScene.updateSkillBar();
+						}
+						return;
+					}
+				}
+			}
+		};
 		add(pane);
 		pane.setRect(0, top, WIDTH, h - top);
 	}
