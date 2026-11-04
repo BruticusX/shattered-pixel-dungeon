@@ -74,7 +74,9 @@ public class ItemSpriteSheetHD {
 		if (image < 0 || image >= DIM.length || DIM[image] == 0) return 0.8f;
 		float px = DIM[image];
 		float len = 20f + (px - 24f) * 1.5f;   //inverse of build_hd_items.size_for
-		return 0.8f * (float)Math.pow( Math.max( 8f, len ) / 32f, 1.5f ) / (px / 32f);
+		//held length runs from 12px for the smallest knives up to 32px (full size) for the longest weapons
+		float held = 12f + (Math.max( 14f, len ) - 20f) * (20f / 12f);
+		return Math.min( held, 34f ) / px;
 	}
 
 	static {
