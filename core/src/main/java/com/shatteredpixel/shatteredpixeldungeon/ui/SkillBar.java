@@ -27,7 +27,6 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndSkillSlot;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.ui.Component;
@@ -51,13 +50,17 @@ public class SkillBar extends Component {
 
 	@Override
 	protected void layout() {
-		float y = this.y + height;
+		float y = this.y + height - 2;
 		for (SkillSlot s : slots) {
 			if (!s.visible) continue;
 			y -= SIZE;
 			s.setRect(x, y, SIZE, SIZE);
 			y -= 2;
 		}
+	}
+
+	public int visibleSlots() {
+		return Dungeon.hero == null ? 0 : Proficiency.slotsUnlocked(Dungeon.hero);
 	}
 
 	public void refresh() {
@@ -160,7 +163,10 @@ public class SkillBar extends Component {
 			if (hero == null) return;
 			Skill s = skill();
 			if (s == null) {
-				GameScene.show(new WndSkillSlot(index));
+				//like a quickslot: open the skill tree of the weapon in hand and tap a skill to slot it
+				Proficiency.Family f = Proficiency.familyOf(hero.belongings.attackingWeapon());
+				if (f != null) GameScene.show(new com.shatteredpixel.shatteredpixeldungeon.windows.WndSkillTree(hero.heroClass, f, index));
+				else GameScene.show(new com.shatteredpixel.shatteredpixeldungeon.windows.WndProficiency(hero.heroClass, index));
 			} else {
 				SkillEffects.use(hero, s);
 			}
