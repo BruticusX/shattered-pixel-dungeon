@@ -282,6 +282,13 @@ public class QuickRecipe extends Component {
 			case 1:
 				Recipe r = new Scroll.ScrollToStone();
 				for (Class<?> cls : Generator.Category.SCROLL.classes){
+					//MOD: scrolls of upgrade are gone; obsidian makes the scroll of enchantment
+					if (cls == com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade.class) {
+						result.add(new QuickRecipe(new com.shatteredpixel.shatteredpixeldungeon.items.ObsidianRecipe.ToEnchantment(),
+								new ArrayList<>(Arrays.asList((Item) com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.obsidian())),
+								new com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment()));
+						continue;
+					}
 					Scroll scroll = (Scroll) Reflection.newInstance(cls);
 					if (!scroll.isKnown()) scroll.anonymize();
 					ArrayList<Item> in = new ArrayList<Item>(Arrays.asList(scroll));
@@ -376,7 +383,8 @@ public class QuickRecipe extends Component {
 				result.add(null);
 				result.add(new QuickRecipe(new Alchemize.Recipe(), new ArrayList<>(Arrays.asList(new Plant.Seed.PlaceHolder(), new Runestone.PlaceHolder())), new Alchemize().quantity(8)));
 				result.add(new QuickRecipe(new CurseInfusion.Recipe()));
-				result.add(new QuickRecipe(new MagicalInfusion.Recipe()));
+				result.add(new QuickRecipe(new com.shatteredpixel.shatteredpixeldungeon.items.ObsidianRecipe.ToInfusion(),
+						new ArrayList<>(Arrays.asList((Item) com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.obsidian())), new MagicalInfusion()));
 				result.add(new QuickRecipe(new Recycle.Recipe()));
 				if (!PixelScene.landscape()) result.add(null);
 				result.add(null);

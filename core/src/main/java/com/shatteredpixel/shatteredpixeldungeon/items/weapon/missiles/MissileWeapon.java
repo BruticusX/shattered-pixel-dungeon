@@ -492,6 +492,7 @@ abstract public class MissileWeapon extends Weapon {
 
 		//MOD: harder metals survive more throws (iron = the old baseline), brittle obsidian far fewer
 		if (material() != null) usages *= material().hits / 400f;
+		if (masteryPotionBonus) usages *= 2f; //MOD: potion of mastery halves wear
 
 		//+50%/75% durability
 		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){

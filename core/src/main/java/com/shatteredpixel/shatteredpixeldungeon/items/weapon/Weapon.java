@@ -242,7 +242,9 @@ abstract public class Weapon extends KindOfWeapon {
 
 	//unique weapons are tougher than ordinary gear of their material: they wear 2x slower
 	public float wearFactor() {
-		return fixedMaterial() != null ? 0.5f : 1f;
+		float f = fixedMaterial() != null ? 0.5f : 1f;
+		if (masteryPotionBonus) f *= 0.5f; //MOD: potion of mastery halves wear
+		return f;
 	}
 
 	//unique weapons are always made of one material and keep their own look (see RunicBlade etc.)

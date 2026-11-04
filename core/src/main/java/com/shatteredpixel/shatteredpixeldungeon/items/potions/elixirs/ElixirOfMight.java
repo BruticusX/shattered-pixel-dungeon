@@ -60,6 +60,7 @@ public class ElixirOfMight extends Elixir {
 		hero.updateHT( true );
 		GLog.p( Messages.get(this, "msg", PotionOfStrength.HP_BONUS, hero.HT) );
 
+		hero.vitalityPotions++;
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();
 	}

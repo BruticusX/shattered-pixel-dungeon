@@ -186,7 +186,8 @@ public abstract class Recipe {
 		new ElixirOfToxicEssence.Recipe(),
 		new ElixirOfMight.Recipe(),
 		new ElixirOfFeatherFall.Recipe(),
-		new MagicalInfusion.Recipe(),
+		new ObsidianRecipe.ToInfusion(), //MOD: was MagicalInfusion.Recipe (scroll of upgrade)
+		new ObsidianRecipe.ToEnchantment(), //MOD: obsidian -> scroll of enchantment
 		new BeaconOfReturning.Recipe(),
 		new PhaseShift.Recipe(),
 		new Recycle.Recipe(),

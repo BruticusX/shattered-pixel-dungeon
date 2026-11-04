@@ -546,7 +546,9 @@ public class Armor extends EquipableItem {
 			
 			Momentum momentum = owner.buff(Momentum.class);
 			if (momentum != null){
-				evasion += momentum.evasionBonus(((Hero) owner).lvl, 0);
+				//MOD: evasive armor rewards light armor instead of excess strength
+				int lightness = material() == null ? 0 : Math.max(0, Math.round((25f - armorKg()) / 6f));
+				evasion += momentum.evasionBonus(((Hero) owner).lvl, lightness);
 			}
 		}
 		
@@ -681,7 +683,7 @@ public class Armor extends EquipableItem {
 			}
 		}
 		
-		if (defender instanceof Hero && material() != null) wear(material().wearPerUse()); //MOD
+		if (defender instanceof Hero && material() != null) wear(material().wearPerUse() * (masteryPotionBonus ? 0.5f : 1f)); //MOD
 		return damage;
 	}
 	
