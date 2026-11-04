@@ -110,6 +110,7 @@ public enum HeroClass {
 
 		new VelvetPouch().collect();
 		Dungeon.LimitedDrops.VELVET_POUCH.drop();
+		new com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel().collect(); //MOD
 
 		Waterskin waterskin = new Waterskin();
 		waterskin.collect();

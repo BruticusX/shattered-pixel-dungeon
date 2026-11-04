@@ -71,13 +71,13 @@ public enum Material {
 	public float damageMult() {
 		switch (this) {
 			case TIN: default: return 1.0f;
-			case COPPER:   return 1.3f;
-			case BRONZE:   return 1.5f;
-			case IRON:     return 1.8f;
-			case STEEL:    return 2.2f;
-			case TITANIUM: return 2.7f;
-			case TUNGSTEN: return 3.2f;
-			case OBSIDIAN: return 3.0f;
+			case COPPER:   return 1.4f;
+			case BRONZE:   return 2.0f;
+			case IRON:     return 2.5f;
+			case STEEL:    return 2.8f;
+			case TITANIUM: return 3.0f;
+			case TUNGSTEN: return 3.3f;
+			case OBSIDIAN: return 3.1f;
 		}
 	}
 
@@ -85,11 +85,10 @@ public enum Material {
 	public float armorMult() {
 		switch (this) {
 			case LINEN: case HIDE: return 1.0f;
-			case WOOL:  case BOILED_LEATHER: return 1.4f;
-			case SILK:        return 1.8f;
-			case WYVERN_HIDE: return 1.9f;
-			case SPIDER_SILK: return 2.3f;
-			case DRAGONHIDE:  return 2.5f;
+			case WOOL:  case BOILED_LEATHER: return 1.6f;
+			case SILK:  case WYVERN_HIDE:    return 2.2f;
+			case SPIDER_SILK: return 2.6f;
+			case DRAGONHIDE:  return 2.8f;
 			default: return damageMult(); //metals match their weapon multiplier
 		}
 	}

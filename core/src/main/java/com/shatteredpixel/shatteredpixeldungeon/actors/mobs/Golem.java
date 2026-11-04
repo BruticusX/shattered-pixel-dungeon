@@ -70,7 +70,7 @@ public class Golem extends Mob {
 	
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 12);
+		return super.drRoll() + Random.NormalIntRange(0, 9) /*MOD: was 0-12*/;
 	}
 
 	@Override

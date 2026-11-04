@@ -226,6 +226,11 @@ public abstract class Level implements Bundlable {
 
 			addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
+			//MOD: one extra crafting material per floor from the prison through the city
+			if (Dungeon.depth >= 6 && Dungeon.depth <= 19) {
+				addItemToSpawn( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomAny(Dungeon.depth) );
+			}
+
 			//MOD: roughly one repair kit every two floors
 			if (Random.Int(2) == 0) addItemToSpawn( new RepairKit() );
 

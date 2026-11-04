@@ -483,6 +483,10 @@ public class InventoryPane extends Component {
 			return Icons.get( Icons.WAND_HOLSTER );
 		} else if (bag instanceof PotionBandolier) {
 			return Icons.get( Icons.POTION_BANDOLIER );
+		} else if (bag instanceof com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel) {
+			//MOD: the forge satchel's tab shows an ingot
+			return new com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite(
+					com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet.INGOT);
 		} else {
 			return Icons.get( Icons.BACKPACK );
 		}
