@@ -116,7 +116,14 @@ public class Proficiency {
 		return cls.name() + "_" + f.name();
 	}
 
+	//the test room has its own sandbox profile with every family at level 10,
+	// so skills can be tried there without touching real progress
+	private static String pre(HeroClass cls) {
+		return (Dungeon.testRoom ? "TEST_" : "") + cls.name();
+	}
+
 	public static int xp(HeroClass cls, Family f) {
+		if (Dungeon.testRoom) return THRESHOLDS[MAX_LEVEL - 1];
 		load();
 		return data.contains(key(cls, f)) ? data.getInt(key(cls, f)) : 0;
 	}
@@ -218,7 +225,7 @@ public class Proficiency {
 
 	public static int rank(HeroClass cls, Skill s) {
 		load();
-		String k = cls.name() + "_skill_" + s.name();
+		String k = pre(cls) + "_skill_" + s.name();
 		return data.contains(k) ? data.getInt(k) : 0;
 	}
 
@@ -247,7 +254,7 @@ public class Proficiency {
 	public static void learn(HeroClass cls, Skill s) {
 		if (!canLearn(cls, s)) return;
 		load();
-		data.put(cls.name() + "_skill_" + s.name(), rank(cls, s) + 1);
+		data.put(pre(cls) + "_skill_" + s.name(), rank(cls, s) + 1);
 		saveNeeded = true;
 		save();
 	}
@@ -256,7 +263,7 @@ public class Proficiency {
 	public static void unlearn(HeroClass cls, Family f) {
 		load();
 		for (Skill s : Skill.of(f)) {
-			data.remove(cls.name() + "_skill_" + s.name());
+			data.remove(pre(cls) + "_skill_" + s.name());
 			for (int i = 0; i < MAX_SLOTS; i++) if (slot(cls, i) == s) setSlot(cls, i, null);
 		}
 		saveNeeded = true;
@@ -272,7 +279,7 @@ public class Proficiency {
 
 	public static Skill slot(HeroClass cls, int i) {
 		load();
-		String k = cls.name() + "_slot" + i;
+		String k = pre(cls) + "_slot" + i;
 		if (!data.contains(k)) return null;
 		try {
 			return Skill.valueOf(data.getString(k));
@@ -283,11 +290,11 @@ public class Proficiency {
 
 	public static void setSlot(HeroClass cls, int i, Skill s) {
 		load();
-		String k = cls.name() + "_slot" + i;
+		String k = pre(cls) + "_slot" + i;
 		if (s == null) data.remove(k);
 		else {
 			//a skill sits in one slot at a time
-			for (int j = 0; j < MAX_SLOTS; j++) if (j != i && slot(cls, j) == s) data.remove(cls.name() + "_slot" + j);
+			for (int j = 0; j < MAX_SLOTS; j++) if (j != i && slot(cls, j) == s) data.remove(pre(cls) + "_slot" + j);
 			data.put(k, s.name());
 		}
 		saveNeeded = true;
