@@ -181,16 +181,26 @@ public class TitleScene extends PixelScene {
 		btnTestRoom = new StyledButton(GREY_TR, Messages.get(this, "test_room")){
 			@Override
 			protected void onClick() {
-				Dungeon.deleteGame(Dungeon.TEST_ROOM_SLOT, true);
-				GamesInProgress.curSlot = Dungeon.TEST_ROOM_SLOT;
-				if (GamesInProgress.selectedClass == null) GamesInProgress.selectedClass = HeroClass.WARRIOR;
-				Dungeon.hero = null;
-				Dungeon.daily = Dungeon.dailyReplay = false;
-				Dungeon.initSeed();
-				Dungeon.startTestRoom = true;
-				ActionIndicator.clearAction();
-				InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-				Game.switchScene( InterlevelScene.class );
+				//MOD: pick any hero for the test room
+				final HeroClass[] classes = HeroClass.values();
+				String[] names = new String[classes.length];
+				for (int i = 0; i < classes.length; i++) names[i] = Messages.titleCase(classes[i].title());
+				ShatteredPixelDungeon.scene().addToFront(new com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions(
+						Messages.get(TitleScene.class, "test_room"), Messages.get(TitleScene.class, "test_room_pick"), names) {
+					@Override
+					protected void onSelect(int index) {
+						Dungeon.deleteGame(Dungeon.TEST_ROOM_SLOT, true);
+						GamesInProgress.curSlot = Dungeon.TEST_ROOM_SLOT;
+						GamesInProgress.selectedClass = classes[index];
+						Dungeon.hero = null;
+						Dungeon.daily = Dungeon.dailyReplay = false;
+						Dungeon.initSeed();
+						Dungeon.startTestRoom = true;
+						ActionIndicator.clearAction();
+						InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+						Game.switchScene( InterlevelScene.class );
+					}
+				});
 			}
 		};
 		add(btnTestRoom);
