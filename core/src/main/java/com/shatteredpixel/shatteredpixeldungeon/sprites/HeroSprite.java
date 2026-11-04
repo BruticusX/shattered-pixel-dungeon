@@ -175,6 +175,120 @@ public class HeroSprite extends CharSprite {
 		sleeping = ch.isAlive() && ((Hero)ch).resting;
 		
 		super.update();
+		if (weaponSprite != null) weaponSprite.update();
+	}
+
+	// ---- MOD: the equipped weapon drawn in the hero's hand ----
+
+	//the frame numbers each animation plays (matching updateArmor)
+	private static final int[] IDLE_F    = {0, 0, 0, 1, 0, 0, 1, 1};
+	private static final int[] RUN_F     = {2, 3, 4, 5, 6, 7};
+	private static final int[] DIE_F     = {8, 9, 10, 11, 12, 11};
+	private static final int[] ATTACK_F  = {13, 14, 15, 0};
+	private static final int[] OPERATE_F = {16, 17, 16, 17};
+	private static final int[] FLY_F     = {18};
+	private static final int[] READ_F    = {19, 20, 20, 20, 20, 20, 20, 20, 20, 19};
+
+	//per frame: the weapon hand (x, y in the 12x15 frame, facing right) and the blade's angle
+	// (0 = tip up and back, 90 = up and forward, 135 = straight forward). null = not shown
+	// (death, and the two-handed operate and read poses). All six classes share these poses.
+	private static final float[][] HOLD = new float[21][];
+	static {
+		float[] rest = {2.5f, 10.5f, 30};
+		HOLD[0] = rest; HOLD[1] = rest; HOLD[2] = rest; HOLD[3] = rest;
+		HOLD[4] = new float[]{3.5f, 11.5f, 30};   //the low step of the run
+		HOLD[5] = rest;
+		HOLD[6] = new float[]{1.5f, 10.5f, 35};
+		HOLD[7] = new float[]{1.5f, 10.5f, 35};
+		HOLD[13] = new float[]{1.5f, 10.5f, -15}; //wind up
+		HOLD[14] = new float[]{10.5f, 9.5f, 135}; //strike
+		HOLD[15] = new float[]{7.5f, 10.5f, 80};  //follow through
+		HOLD[18] = rest;
+	}
+
+	private enum Hold { DIAGONAL, SHIELD, FIST, COILED }
+
+	private ItemSprite weaponSprite;
+	private com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon shownWeapon;
+	private int shownImage = -1;
+	private String shownSheet;
+	private ItemSprite.Glowing shownGlow;
+
+	private static Hold holdOf( com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon w ){
+		if (com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.familyOf(w)
+				== com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.Family.SHIELDS) return Hold.SHIELD;
+		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves
+				|| w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gauntlet
+				|| w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.TigerClaws) return Hold.FIST;
+		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip) return Hold.COILED;
+		return Hold.DIAGONAL;
+	}
+
+	private int shownFrame(){
+		int[] f = null;
+		if (curAnim == idle) f = IDLE_F;
+		else if (curAnim == run) f = RUN_F;
+		else if (curAnim == die) f = DIE_F;
+		else if (curAnim == attack || curAnim == zap) f = ATTACK_F;
+		else if (curAnim == operate) f = OPERATE_F;
+		else if (curAnim == fly) f = FLY_F;
+		else if (curAnim == read) f = READ_F;
+		if (f == null) return 0;
+		return f[Math.max(0, Math.min(curFrame, f.length - 1))];
+	}
+
+	@Override
+	public void draw() {
+		super.draw();
+		drawWeapon();
+	}
+
+	private void drawWeapon(){
+		if (Dungeon.hero == null || ch == null || !ch.isAlive() || !visible) return;
+		com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon w = Dungeon.hero.belongings.weapon();
+		if (!(w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon)) return;
+
+		//rebuild the sprite when the weapon, its look or its glow changes
+		if (weaponSprite == null || w != shownWeapon || w.image() != shownImage
+				|| !String.valueOf(w.spriteSheet()).equals(shownSheet) || w.glowing() != shownGlow) {
+			if (weaponSprite == null) weaponSprite = new ItemSprite();
+			weaponSprite.view(w);
+			shownWeapon = w;
+			shownImage = w.image();
+			shownSheet = String.valueOf(w.spriteSheet());
+			shownGlow = w.glowing();
+		}
+
+		float[] h = HOLD[shownFrame()];
+		if (h == null) return;
+
+		boolean faceLeft = flipHorizontal;
+		Hold hold = holdOf(w);
+		ItemSprite ws = weaponSprite;
+		float sc;
+		switch (hold) {
+			case SHIELD: sc = 0.5f; break;
+			case FIST:   sc = 0.35f; break;
+			case COILED: sc = 0.45f; break;
+			default:     sc = 0.6f;
+		}
+		ws.scale.set(sc);
+		if (hold == Hold.DIAGONAL) {
+			//item sprites point up and to the right; mirror them so the tip points away from the body
+			ws.setFlipped(!faceLeft);
+			ws.origin.set(faceLeft ? ws.width * 0.18f : ws.width * 0.82f, ws.height * 0.82f);
+			ws.angle = faceLeft ? -h[2] : h[2];
+		} else {
+			ws.setFlipped(faceLeft);
+			ws.origin.set(ws.width / 2f, ws.height / 2f);
+			ws.angle = 0;
+		}
+		float ax = faceLeft ? FRAME_WIDTH - h[0] : h[0];
+		ws.x = x + ax - ws.origin.x;
+		ws.y = y + h[1] - ws.origin.y;
+		ws.alpha(alpha());
+		ws.camera = camera();
+		ws.draw();
 	}
 	
 	public void sprint( float speed ) {

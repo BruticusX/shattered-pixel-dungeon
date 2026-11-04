@@ -62,7 +62,7 @@ public class Proficiency {
 	static {
 		fam(Family.DAGGERS,  Dagger.class, Dirk.class, AssassinsBlade.class, Stiletto.class, Kris.class);
 		fam(Family.SWORDS,   WornShortsword.class, Shortsword.class, Sword.class, Longsword.class, Greatsword.class,
-				Scimitar.class, Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class);
+				Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class);
 		fam(Family.AXES,     HandAxe.class, BattleAxe.class, Greataxe.class, BeardedAxe.class);
 		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class);
 		fam(Family.POLEARMS, Spear.class, Glaive.class, Sickle.class, WarScythe.class, Halberd.class, Pike.class);

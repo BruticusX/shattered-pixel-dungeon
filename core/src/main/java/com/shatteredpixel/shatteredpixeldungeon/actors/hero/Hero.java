@@ -146,7 +146,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -566,10 +565,6 @@ public class Hero extends Char {
 			}
 		}
 
-		if (buff(Scimitar.SwordDance.class) != null){
-			accuracy *= 1.50f;
-		}
-		
 		if (!RingOfForce.fightingUnarmed(this)) {
 			//MOD: accuracy depends on your proficiency with the weapon's family (see Proficiency)
 			accuracy *= Proficiency.accuracyFactor( this, wep );
@@ -839,11 +834,6 @@ public class Hero extends Char {
 			//But there's going to be that one guy who gets a furor+force ring combo
 			//This is for that one guy, you shall get your fists of fury!
 			float speed = RingOfFuror.attackSpeedMultiplier(this);
-
-			//ditto for furor + sword dance!
-			if (buff(Scimitar.SwordDance.class) != null){
-				speed += 0.6f;
-			}
 
 			//and augments + brawler's stance! My goodness, so many options now compared to 2014!
 			if (RingOfForce.unarmedGetsWeaponAugment(this)){

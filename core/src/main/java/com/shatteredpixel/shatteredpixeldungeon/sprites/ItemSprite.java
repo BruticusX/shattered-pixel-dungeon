@@ -230,6 +230,14 @@ public class ItemSprite extends MovieClip {
 		return hd;
 	}
 
+	//mirrors the sprite in place (used for weapons drawn in the hero's hand)
+	public void setFlipped( boolean flip ){
+		if (flipHorizontal != flip){
+			flipHorizontal = flip;
+			updateFrame();
+		}
+	}
+
 	@Override
 	public void frame( RectF frame ) {
 		super.frame( frame );
@@ -374,6 +382,7 @@ public class ItemSprite extends MovieClip {
 				maskOverlay = new MaskImage(maskSheet);
 				maskOverlayTx = maskSheet;
 			}
+			maskOverlay.flipHorizontal = flipHorizontal;
 			maskOverlay.frame(frame);
 			maskOverlay.fit(width, height);
 			maskOverlay.x = x; maskOverlay.y = y;

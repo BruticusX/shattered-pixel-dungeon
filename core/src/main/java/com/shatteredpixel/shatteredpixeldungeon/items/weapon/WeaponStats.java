@@ -89,7 +89,6 @@ public class WeaponStats {
 		melee(Sword.class,          1.2f, 1.00f);
 		melee(Katana.class,         1.2f, 0.95f);
 		melee(Bloodletter.class,    1.2f, 0.85f);
-		melee(Scimitar.class,       1.3f, 1.00f); //cut from loot, kept for old saves
 		melee(RunicBlade.class,     1.3f, 0.85f);
 		melee(Mace.class,           1.5f, 0.95f);
 		melee(Longsword.class,      1.5f, 1.00f);
@@ -127,14 +126,12 @@ public class WeaponStats {
 
 		//thrown (metal ones; stones, clubs, bolas, darts and the force cube keep their own stats)
 		thrown(Shuriken.class,       0.10f, 1.00f);
-		thrown(ThrowingSpike.class,  0.15f, 1.00f);
 		thrown(ThrowingKnife.class,  0.20f, 1.00f);
 		thrown(Kunai.class,          0.30f, 1.00f);
 		thrown(Tomahawk.class,       0.80f, 1.00f);
 		thrown(FishingSpear.class,   1.00f, 0.95f);
 		thrown(HeavyBoomerang.class, 1.00f, 0.90f);
 		thrown(Javelin.class,        1.20f, 1.00f);
-		thrown(ThrowingSpear.class,  1.50f, 1.00f);
 		thrown(ThrowingHammer.class, 1.50f, 1.05f);
 		thrown(Trident.class,        2.50f, 1.00f);
 		thrown(ThrowingAxe.class,    1.10f, 1.00f);

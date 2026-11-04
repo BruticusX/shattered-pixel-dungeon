@@ -77,7 +77,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Venomo
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vorpal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -437,10 +436,6 @@ abstract public class Weapon extends KindOfWeapon {
 
 	protected float speedMultiplier(Char owner ){
 		float multi = RingOfFuror.attackSpeedMultiplier(owner);
-
-		if (owner.buff(Scimitar.SwordDance.class) != null){
-			multi += 0.6f;
-		}
 
 		return multi;
 	}
