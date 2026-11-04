@@ -390,7 +390,7 @@ public class Item implements Bundlable {
 	public static final int UMBRA_CAP = 5;
 	public int umbraLevel = 0;
 
-	public static final ItemSprite.Glowing UMBRA_GLOW = new ItemSprite.Glowing( 0x9933FF, 1.5f );
+	public static final ItemSprite.Glowing UMBRA_GLOW = new ItemSprite.Glowing( 0xAA44FF, 1.5f, true );
 
 	//the normal (yellow) level shown in titles and slots, without umbralite levels
 	public int visibleBaseLevel() {
