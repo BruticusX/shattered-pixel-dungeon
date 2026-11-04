@@ -30,7 +30,15 @@ def learn(face_frame):
             p = face_frame.getpixel((x, y))
             if broad_skin(p):
                 c[p[:3]] += 1
-    _palette = [col for col, n in c.most_common(10) if n >= 2]
+    # hair and beards are sampled too; drop any colour that also shows up on the trousers and boots
+    legs = Counter()
+    for y in range(bb[3] - int(h * 0.3), bb[3]):
+        for x in range(bb[0], bb[2]):
+            p = face_frame.getpixel((x, y))
+            if p[3] >= 200:
+                legs[p[:3]] += 1
+    _palette = [col for col, n in c.most_common(10) if n >= 2
+                and not any(legs[q] >= 3 and sum(abs(a - b) for a, b in zip(col, q)) <= 30 for q in legs)]
 
 
 def is_skin(p):
@@ -78,6 +86,10 @@ def front_hand(im, f):
         cy = sum(p[1] for p in comp) / len(comp)
         cx = sum(p[0] for p in comp) / len(comp)
         if not (top + h * 0.3 <= cy <= top + h * 0.75):
+            continue
+        # brown trousers and boots can match darker or warmer skin: a hand is a small patch, so
+        # drop big blobs, and middling ones sitting down at leg height
+        if len(comp) > 0.10 * FS * FS or (len(comp) > 0.04 * FS * FS and cy > top + h * 0.62):
             continue
         if best is None or cx > best[0]:
             best = (cx, cy, comp)

@@ -31,8 +31,8 @@ public class HeroHDMage {
 			54, 38, 48,
 			new int[]{0, 8, 8, 10, 18, 8, 26, 12},
 			new int[]{11, 6, 33, 41},
-			new float[]{35.0f, 36.2f, 37.5f, 38.5f, 37.4f, 37.0f, 35.5f, 35.0f, 39.3f, 37.1f, 24.8f, 30.2f, 36.4f, 35.5f, 31.2f, 25.4f, 35.7f, 37.1f, 35.0f, 38.8f, 39.5f, 40.5f, 41.8f, 43.2f, 38.2f, 35.6f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{35.7f, 34.2f, 33.2f, 32.3f, 34.3f, 34.0f, 35.2f, 35.7f, 25.1f, 29.6f, 29.7f, 25.5f, 29.4f, 27.3f, 26.9f, 32.9f, 29.1f, 24.1f, 35.7f, 30.9f, 27.5f, 24.8f, 24.3f, 23.8f, 24.8f, 35.2f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{34.6f, 36.0f, 37.5f, 38.5f, 37.3f, 37.1f, 35.4f, 34.6f, 15.2f, 18.0f, 24.6f, 30.2f, 35.9f, 35.7f, 31.2f, 25.1f, 35.5f, 36.8f, 34.6f, 39.0f, 39.7f, 40.5f, 41.8f, 43.1f, 38.2f, 35.2f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{35.8f, 34.0f, 33.0f, 32.2f, 33.9f, 33.9f, 34.8f, 35.8f, 28.5f, 32.0f, 29.4f, 25.9f, 28.9f, 27.0f, 27.0f, 32.3f, 28.5f, 23.8f, 35.8f, 30.8f, 27.6f, 24.4f, 23.9f, 23.4f, 24.3f, 35.3f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
 			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
 			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
 }
