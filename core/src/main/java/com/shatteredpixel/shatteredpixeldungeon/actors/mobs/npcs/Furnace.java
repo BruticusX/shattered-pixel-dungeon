@@ -37,7 +37,7 @@ public class Furnace extends ForgeStation {
 
 	@Override
 	protected void openMenu() {
-		GameScene.show(new WndOptions(sprite(), Messages.titleCase(name()),
+		GameScene.show(new WndOptions(new FurnaceSprite(), Messages.titleCase(name()),
 				Messages.get(this, "menu"),
 				Messages.get(this, "melt"), Messages.get(this, "smelt")) {
 			@Override
@@ -46,10 +46,6 @@ public class Furnace extends ForgeStation {
 				else if (index == 1) select(smeltSelector);
 			}
 		});
-	}
-
-	private com.watabou.noosa.Image sprite() {
-		return new FurnaceSprite();
 	}
 
 	private final WndBag.ItemSelector meltSelector = new WndBag.ItemSelector() {

@@ -275,7 +275,7 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	protected int typeTier() {
+	public int typeTier() {
 		return tier;
 	}
 

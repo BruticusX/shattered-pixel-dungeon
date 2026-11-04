@@ -236,7 +236,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	//the weapon type's own tier, which its stat formulas were designed around
-	protected int typeTier() {
+	public int typeTier() {
 		return 1;
 	}
 
