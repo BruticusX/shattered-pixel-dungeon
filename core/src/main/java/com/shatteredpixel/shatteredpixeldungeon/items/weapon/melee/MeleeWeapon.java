@@ -66,17 +66,29 @@ public class MeleeWeapon extends Weapon {
 
 	public static String AC_ABILITY = "ABILITY";
 
+	//MOD: the duelist's charge-based weapon abilities are folded into the weapon skill trees
+	// (she trains every weapon family 25% faster instead). Set to true to bring them back.
+	public static final boolean DUELIST_ABILITIES = false;
+
+	private static boolean duelist(Hero hero) {
+		return DUELIST_ABILITIES && hero != null && hero.heroClass == HeroClass.DUELIST;
+	}
+
 	@Override
 	public void activate(Char ch) {
 		super.activate(ch);
-		if (ch instanceof Hero && ((Hero) ch).heroClass == HeroClass.DUELIST){
+		if (ch instanceof Hero && duelist((Hero) ch)){
 			Buff.affect(ch, Charger.class);
+		} else if (ch instanceof Hero && ((Hero) ch).heroClass == HeroClass.DUELIST
+				&& ((Hero) ch).buff(Charger.class) != null && ch.buff(com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce.Force.class) == null){
+			//saves from before the change
+			Buff.detach(ch, Charger.class);
 		}
 	}
 
 	@Override
 	public String defaultAction() {
-		if (Dungeon.hero != null && (Dungeon.hero.heroClass == HeroClass.DUELIST
+		if (Dungeon.hero != null && (duelist(Dungeon.hero)
 			|| Dungeon.hero.hasTalent(Talent.SWIFT_EQUIP))){
 			return AC_ABILITY;
 		} else {
@@ -87,7 +99,7 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions(hero);
-		if (isEquipped(hero) && hero.heroClass == HeroClass.DUELIST){
+		if (isEquipped(hero) && duelist(hero)){
 			actions.add(AC_ABILITY);
 		}
 		return actions;
@@ -447,7 +459,7 @@ public class MeleeWeapon extends Weapon {
 		}
 
 		//the mage's staff has no ability as it can only be gained by the mage
-		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST && !(this instanceof MagesStaff)){
+		if (duelist(Dungeon.hero) && !(this instanceof MagesStaff)){
 			info += "\n\n" + abilityInfo();
 		}
 		

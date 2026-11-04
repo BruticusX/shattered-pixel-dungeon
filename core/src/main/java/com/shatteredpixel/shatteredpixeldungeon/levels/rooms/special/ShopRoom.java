@@ -364,6 +364,8 @@ public class ShopRoom extends SpecialRoom {
 		if (Dungeon.hero != null && Dungeon.hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel.class) == null) {
 			itemsToSpawn.add( new com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel() );
 		}
+		//...a tome of unlearning from the prison down
+		if (Dungeon.depth >= 6) itemsToSpawn.add( new com.shatteredpixel.shatteredpixeldungeon.items.TomeOfUnlearning() );
 		//...and a few crafting materials for the anvil
 		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth).quantity(3) );
 		itemsToSpawn.add( com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.randomFor(com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL, Dungeon.depth + 3).quantity(2) );

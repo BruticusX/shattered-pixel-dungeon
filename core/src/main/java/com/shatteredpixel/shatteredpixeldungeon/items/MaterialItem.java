@@ -80,6 +80,8 @@ public class MaterialItem extends Item {
 		loot.add(randomFor(Material.Kind.METAL, depth).quantity(2));
 		loot.add(randomFor(Material.Kind.METAL, depth));
 		loot.add(randomFor(Random.Int(2) == 0 ? Material.Kind.CLOTH : Material.Kind.LEATHER, depth).quantity(2));
+		//and sometimes a tome of unlearning
+		if (Random.Int(4) == 0) loot.add(new TomeOfUnlearning());
 		//bosses from the prison down also leave an umbralite ingot
 		if (com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth >= 10) loot.add(obsidian());
 		for (Item i : loot) {
