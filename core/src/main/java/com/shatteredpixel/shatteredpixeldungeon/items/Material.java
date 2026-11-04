@@ -81,6 +81,19 @@ public enum Material {
 		}
 	}
 
+	//how much an armor's base block is multiplied by when made of this material
+	public float armorMult() {
+		switch (this) {
+			case LINEN: case HIDE: return 1.0f;
+			case WOOL:  case BOILED_LEATHER: return 1.4f;
+			case SILK:        return 1.8f;
+			case WYVERN_HIDE: return 1.9f;
+			case SPIDER_SILK: return 2.3f;
+			case DRAGONHIDE:  return 2.5f;
+			default: return damageMult(); //metals match their weapon multiplier
+		}
+	}
+
 	//durability lost per use, in percentage points
 	public float wearPerUse() {
 		return 100f / hits;
