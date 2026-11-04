@@ -66,15 +66,17 @@ public class ItemSpriteSheetHD {
 
 	//longest side of each sprite, in 32px sprite pixels
 	private static final int[] DIM = new int[WIDTH * (TX_HEIGHT / SIZE)];
+	//real length class of each weapon (20 = small knife .. 32 = longest), 0 if unknown
+	private static final int[] LEN = new int[WIDTH * (TX_HEIGHT / SIZE)];
 
 	//how big a weapon is drawn in the hand, relative to its size on the floor. Sprites squeeze real
 	//lengths into 24..32px so small things stay readable on the floor; in a hand that makes a dagger
-	//look nearly as long as a sword, so this undoes most of the squeeze and shrinks everything a bit.
+	//look nearly as long as a sword, so this undoes the squeeze.
 	public static float handScale( int image ){
 		if (image < 0 || image >= DIM.length || DIM[image] == 0) return 0.8f;
 		float px = DIM[image];
-		float len = 20f + (px - 24f) * 1.5f;   //inverse of build_hd_items.size_for
-		//held length runs from 12px for the smallest knives up to 32px (full size) for the longest weapons
+		float len = LEN[image] > 0 ? LEN[image] : 20f + (px - 24f) * 1.5f;   //inverse of build_hd_items.size_for
+		//held length runs from 12px for the smallest knives up to 32px for the longest weapons
 		float held = 12f + (Math.max( 14f, len ) - 20f) * (20f / 12f);
 		return Math.min( held, 34f ) / px;
 	}
@@ -154,7 +156,7 @@ public class ItemSpriteSheetHD {
 		r(124, 26, 26, 2.8f, 20.2f, 45.0f);
 		r(125, 30, 28, 3.5f, 22.0f, 40.0f);
 		r(126, 30, 30, 3.2f, 23.8f, 45.0f);
-		r(128, 32, 32, 3.6f, 25.5f, 46.0f);
+		r(128, 32, 32, 3.5f, 24.6f, 46.0f);
 		r(129, 30, 30, 3.0f, 24.1f, 46.2f);
 		r(130, 30, 32, 3.2f, 25.5f, 43.0f);
 		r(131, 32, 30, 3.5f, 24.2f, 51.6f);
@@ -447,5 +449,88 @@ public class ItemSpriteSheetHD {
 		r(526, 28, 30, 2.8f, 20.5f, 47.6f);
 		r(527, 30, 26, 2.5f, 20.2f, 42.4f);
 		r(528, 26, 26, 2.9f, 20.8f, 53.1f);
+		LEN[96] = 24;
+		LEN[97] = 23;
+		LEN[98] = 20;
+		LEN[99] = 28;
+		LEN[100] = 20;
+		LEN[101] = 30;
+		LEN[104] = 24;
+		LEN[105] = 23;
+		LEN[106] = 30;
+		LEN[107] = 31;
+		LEN[108] = 23;
+		LEN[109] = 22;
+		LEN[112] = 27;
+		LEN[113] = 26;
+		LEN[115] = 25;
+		LEN[116] = 23;
+		LEN[117] = 25;
+		LEN[118] = 27;
+		LEN[120] = 30;
+		LEN[121] = 28;
+		LEN[122] = 27;
+		LEN[123] = 28;
+		LEN[124] = 23;
+		LEN[125] = 28;
+		LEN[126] = 29;
+		LEN[128] = 34;
+		LEN[129] = 29;
+		LEN[130] = 31;
+		LEN[131] = 31;
+		LEN[132] = 30;
+		LEN[133] = 22;
+		LEN[134] = 31;
+		LEN[144] = 30;
+		LEN[146] = 19;
+		LEN[147] = 17;
+		LEN[148] = 28;
+		LEN[149] = 16;
+		LEN[152] = 24;
+		LEN[153] = 20;
+		LEN[154] = 28;
+		LEN[155] = 22;
+		LEN[156] = 22;
+		LEN[157] = 30;
+		LEN[158] = 24;
+		LEN[176] = 28;
+		LEN[177] = 28;
+		LEN[178] = 29;
+		LEN[179] = 29;
+		LEN[180] = 31;
+		LEN[181] = 29;
+		LEN[182] = 29;
+		LEN[183] = 29;
+		LEN[184] = 29;
+		LEN[185] = 29;
+		LEN[186] = 29;
+		LEN[187] = 28;
+		LEN[188] = 29;
+		LEN[189] = 29;
+		LEN[190] = 30;
+		LEN[192] = 26;
+		LEN[193] = 24;
+		LEN[194] = 24;
+		LEN[195] = 24;
+		LEN[196] = 22;
+		LEN[197] = 24;
+		LEN[198] = 24;
+		LEN[512] = 20;
+		LEN[513] = 22;
+		LEN[514] = 26;
+		LEN[515] = 26;
+		LEN[516] = 26;
+		LEN[517] = 28;
+		LEN[518] = 32;
+		LEN[519] = 32;
+		LEN[520] = 32;
+		LEN[521] = 32;
+		LEN[522] = 21;
+		LEN[523] = 21;
+		LEN[524] = 21;
+		LEN[525] = 28;
+		LEN[526] = 28;
+		LEN[527] = 29;
+		LEN[528] = 23;
 	}
 }

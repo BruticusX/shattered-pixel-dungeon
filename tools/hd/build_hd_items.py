@@ -41,7 +41,7 @@ SRC = {
     # swords
     "WORN_SHORTSWORD": ("B", 0, 24), "SHORTSWORD": ("B", 1, 24), "SWORD": ("B", 2, 27),
     "RAPIER": ("B", 5, 28), "KATANA": ("B", 6, 29), "BLOODLETTER": ("C", 14, 27), "RUNIC_BLADE": ("C", 15, 28),
-    "KHOPESH": ("A", 2, 26), "FALCHION": ("A", 3, 26), "LONGSWORD": ("E", 2, 30), "GREATSWORD": ("E", 0, 32),
+    "KHOPESH": ("A", 2, 26), "FALCHION": ("A", 3, 26), "LONGSWORD": ("E", 2, 30), "GREATSWORD": ("E", 0, 34),
     # axes
     "HAND_AXE": ("C", 0, 23), "BEARDED_AXE": ("A", 4, 26), "BATTLE_AXE": ("C", 1, 28), "GREATAXE": ("C", 2, 31),
     # blunt
@@ -461,6 +461,8 @@ def main():
         if name in ORE_SLOTS:
             spr = warm_rock(spr)
         drawn[idx[name]] = spr
+    import greatsword
+    drawn[idx["GREATSWORD"]] = greatsword.draw()   # hand-drawn two-hander, see greatsword.py
     drawn.update(derived(old, idx))
     dart = shrink(cell("F", 0).rotate(180), size_for(DART_LEN))
     for name in DARTS:
@@ -531,6 +533,10 @@ def main():
             lines.append(f"\t\tr({n}, {w}, {h}, {gx:.1f}f, {gy:.1f}f, {ax:.1f}f);")
         else:
             lines.append(f"\t\tr({n}, {w}, {h});")
+    # real lengths (the SRC table), so held sizes don't depend on how much a sprite was squeezed
+    for name, (key, i, length) in sorted(SRC.items(), key=lambda kv: idx[kv[0]]):
+        if idx[name] in grips:
+            lines.append(f"\t\tLEN[{idx[name]}] = {length};")
     open(JAVA, "w").write(JAVA_TEMPLATE.replace("%RECTS%", "\n".join(lines)))
     print(f"built {len(drawn)} redrawn sprites, {len(rects)} HD slots")
     if "--preview" in sys.argv:
@@ -617,15 +623,17 @@ public class ItemSpriteSheetHD {
 
 	//longest side of each sprite, in 32px sprite pixels
 	private static final int[] DIM = new int[WIDTH * (TX_HEIGHT / SIZE)];
+	//real length class of each weapon (20 = small knife .. 32 = longest), 0 if unknown
+	private static final int[] LEN = new int[WIDTH * (TX_HEIGHT / SIZE)];
 
 	//how big a weapon is drawn in the hand, relative to its size on the floor. Sprites squeeze real
 	//lengths into 24..32px so small things stay readable on the floor; in a hand that makes a dagger
-	//look nearly as long as a sword, so this undoes most of the squeeze and shrinks everything a bit.
+	//look nearly as long as a sword, so this undoes the squeeze.
 	public static float handScale( int image ){
 		if (image < 0 || image >= DIM.length || DIM[image] == 0) return 0.8f;
 		float px = DIM[image];
-		float len = 20f + (px - 24f) * 1.5f;   //inverse of build_hd_items.size_for
-		//held length runs from 12px for the smallest knives up to 32px (full size) for the longest weapons
+		float len = LEN[image] > 0 ? LEN[image] : 20f + (px - 24f) * 1.5f;   //inverse of build_hd_items.size_for
+		//held length runs from 12px for the smallest knives up to 32px for the longest weapons
 		float held = 12f + (Math.max( 14f, len ) - 20f) * (20f / 12f);
 		return Math.min( held, 34f ) / px;
 	}
