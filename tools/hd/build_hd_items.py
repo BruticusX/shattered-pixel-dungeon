@@ -461,6 +461,11 @@ def main():
         if name in ORE_SLOTS:
             spr = warm_rock(spr)
         drawn[idx[name]] = spr
+    # edge clean-up on weapons, shields and armor (see smooth_edges.py)
+    import smooth_edges
+    for name, (key, i, longest) in SRC.items():
+        if key in ("A", "B", "C", "D", "E", "F", "R"):
+            drawn[idx[name]] = smooth_edges.smooth(drawn[idx[name]])
     import greatsword
     drawn[idx["GREATSWORD"]] = greatsword.draw()   # hand-drawn two-hander, see greatsword.py
     drawn.update(derived(old, idx))

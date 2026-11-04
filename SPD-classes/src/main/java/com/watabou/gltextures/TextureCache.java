@@ -100,6 +100,12 @@ public class TextureCache {
 		}
 	}
 	
+	//MOD: registers a texture made elsewhere (e.g. a linear-filtered twin of a sheet) so it is
+	//reloaded with the others after the GL context is lost
+	public synchronized static void add( Object key, SmartTexture tx ){
+		all.put( key, tx );
+	}
+
 	public synchronized static void remove( Object key ){
 		SmartTexture tx = all.get( key );
 		if (tx != null){

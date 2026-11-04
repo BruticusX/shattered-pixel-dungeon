@@ -85,6 +85,7 @@ public class HeldWeapon {
 				|| !String.valueOf(w.spriteSheet()).equals(shownSheet) || w.glowing() != shownGlow) {
 			if (ws == null) ws = new ItemSprite();
 			ws.view(w);
+			ws.useSmoothFiltering();
 			shown = w;
 			shownImage = w.image();
 			shownSheet = String.valueOf(w.spriteSheet());
