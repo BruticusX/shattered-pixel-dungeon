@@ -381,6 +381,10 @@ public abstract class Char extends Actor {
 			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.parryAndCounter(enemy, this);
 			return false;
 		}
+		//MOD: the hero's riposte stance parries melee attacks and counters
+		if (!(this instanceof Hero) && com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.tryRiposte(this, enemy)) {
+			return false;
+		}
 
 		if (enemy.isInvulnerable(getClass())) {
 

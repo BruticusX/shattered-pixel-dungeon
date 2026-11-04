@@ -32,7 +32,7 @@ public class WndProficiency extends Window {
 	private static final int WIDTH = 120;
 	private static final int BAR_H = 2;
 
-	public WndProficiency(HeroClass cls) {
+	public WndProficiency(final HeroClass cls) {
 		super();
 
 		RenderedTextBlock title = PixelScene.renderTextBlock(Messages.get(this, "title"), 9);
@@ -51,6 +51,7 @@ public class WndProficiency extends Window {
 		for (Proficiency.Family f : Proficiency.Family.values()) {
 			int lvl = Proficiency.level(cls, f);
 			int xp = Proficiency.xp(cls, f);
+			float rowTop = pos;
 
 			RenderedTextBlock name = PixelScene.renderTextBlock(Messages.titleCase(f.title()), 7);
 			name.setPos(0, pos);
@@ -80,6 +81,18 @@ public class WndProficiency extends Window {
 			ColorBlock fg = new ColorBlock(Math.max(0, WIDTH * Math.min(1f, progress)), BAR_H, 0xFFDDAA33);
 			fg.x = 0; fg.y = pos;
 			add(fg);
+
+			//tap a row to open that family's skill tree
+			final Proficiency.Family fam = f;
+			com.shatteredpixel.shatteredpixeldungeon.ui.Button row = new com.shatteredpixel.shatteredpixeldungeon.ui.Button() {
+				@Override
+				protected void onClick() {
+					com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene.show(new WndSkillTree(cls, fam));
+				}
+			};
+			row.setRect(0, rowTop, WIDTH, pos + BAR_H - rowTop);
+			add(row);
+			if (Proficiency.pointsAvailable(cls, f) > 0) name.hardlight(0x66FF66);
 
 			pos += BAR_H + 3;
 		}

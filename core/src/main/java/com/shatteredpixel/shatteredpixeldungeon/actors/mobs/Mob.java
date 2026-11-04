@@ -1055,6 +1055,12 @@ public abstract class Mob extends Char {
 				com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.dropBossLoot(pos);
 			}
 
+			//MOD: wand kills train wand proficiency
+			if (cause instanceof com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) {
+				com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.onKill(this,
+						com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.Family.WANDS);
+			}
+
 			if (cause == Dungeon.hero || cause instanceof Weapon || cause instanceof Weapon.Enchantment){
 				com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.onKill(this); //MOD
 				if (Dungeon.hero.hasTalent(Talent.LETHAL_MOMENTUM)

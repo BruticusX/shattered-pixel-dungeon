@@ -44,7 +44,7 @@ import java.util.HashMap;
 public class Proficiency {
 
 	public enum Family {
-		DAGGERS, SWORDS, AXES, BLUNT, POLEARMS, STAVES, FIST, SHIELDS, FLEXIBLE, RANGED;
+		DAGGERS, SWORDS, AXES, BLUNT, POLEARMS, STAVES, FIST, SHIELDS, FLEXIBLE, RANGED, WANDS;
 
 		public String title() {
 			return Messages.get(Proficiency.class, name().toLowerCase());
@@ -76,6 +76,7 @@ public class Proficiency {
 	public static Family familyOf(Object weapon) {
 		if (weapon == null) return null;
 		if (weapon instanceof MissileWeapon || weapon instanceof SpiritBow) return Family.RANGED;
+		if (weapon instanceof com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) return Family.WANDS;
 		Family f = FAMILIES.get(weapon.getClass());
 		if (f == null) {
 			//subclasses (e.g. modded variants) use their parent's family
@@ -170,13 +171,33 @@ public class Proficiency {
 
 	public static void onKill(Mob mob) {
 		Hero hero = Dungeon.hero;
+		if (hero == null) return;
+		onKill(mob, familyOf(hero.belongings.attackingWeapon()));
+	}
+
+	//each hero trains their specialties 50% faster; the duelist trains everything 25% faster
+	public static float classBonus(HeroClass cls, Family f) {
+		switch (cls) {
+			case WARRIOR:  return (f == Family.SWORDS || f == Family.AXES || f == Family.SHIELDS) ? 1.5f : 1f;
+			case MAGE:     return (f == Family.STAVES || f == Family.WANDS) ? 1.5f : 1f;
+			case ROGUE:    return (f == Family.DAGGERS || f == Family.FIST) ? 1.5f : 1f;
+			case HUNTRESS: return (f == Family.RANGED || f == Family.FLEXIBLE) ? 1.5f : 1f;
+			case CLERIC:   return (f == Family.BLUNT || f == Family.STAVES) ? 1.5f : 1f;
+			case DUELIST:  return 1.25f;
+			default:       return 1f;
+		}
+	}
+
+	public static void onKill(Mob mob, Family f) {
+		Hero hero = Dungeon.hero;
 		if (hero == null || Dungeon.testRoom) return; //the test room doesn't train you
-		KindOfWeapon wep = hero.belongings.attackingWeapon();
-		Family f = familyOf(wep);
 		if (f == null) return;
 
-		int gain = 1 + Math.max(0, mob.EXP) / 5;
-		if (mob.buff(Elite.class) != null) gain *= 2;
+		float base = 1 + Math.max(0, mob.EXP) / 5;
+		if (mob.buff(Elite.class) != null) base *= 2;
+		base *= classBonus(hero.heroClass, f);
+		//fractional xp is kept as a chance of an extra point
+		int gain = (int) base + (Random.Float() < base - (int) base ? 1 : 0);
 
 		int before = level(hero.heroClass, f);
 		load();
@@ -191,5 +212,93 @@ public class Proficiency {
 			}
 			save();
 		}
+	}
+
+	// ---- skills (ranks and active slots are saved per hero class, like proficiency) ----
+
+	public static int rank(HeroClass cls, Skill s) {
+		load();
+		String k = cls.name() + "_skill_" + s.name();
+		return data.contains(k) ? data.getInt(k) : 0;
+	}
+
+	public static int rank(Skill s) {
+		return Dungeon.hero == null ? 0 : rank(Dungeon.hero.heroClass, s);
+	}
+
+	public static int pointsSpent(HeroClass cls, Family f) {
+		int spent = 0;
+		for (Skill s : Skill.of(f)) spent += rank(cls, s);
+		return spent;
+	}
+
+	public static int pointsAvailable(HeroClass cls, Family f) {
+		return level(cls, f) - pointsSpent(cls, f);
+	}
+
+	public static boolean canLearn(HeroClass cls, Skill s) {
+		if (!s.implemented) return false;
+		if (rank(cls, s) >= s.maxRank()) return false;
+		if (pointsAvailable(cls, s.family) <= 0) return false;
+		if (s.kind == Skill.Kind.ULTIMATE && level(cls, s.family) < Skill.ULTIMATE_LEVEL) return false;
+		return true;
+	}
+
+	public static void learn(HeroClass cls, Skill s) {
+		if (!canLearn(cls, s)) return;
+		load();
+		data.put(cls.name() + "_skill_" + s.name(), rank(cls, s) + 1);
+		saveNeeded = true;
+		save();
+	}
+
+	//respec: refunds every point in one family (used by the tome of unlearning)
+	public static void unlearn(HeroClass cls, Family f) {
+		load();
+		for (Skill s : Skill.of(f)) {
+			data.remove(cls.name() + "_skill_" + s.name());
+			for (int i = 0; i < MAX_SLOTS; i++) if (slot(cls, i) == s) setSlot(cls, i, null);
+		}
+		saveNeeded = true;
+		save();
+	}
+
+	public static final int MAX_SLOTS = 3;
+
+	//2 active skill slots, a third at hero level 20
+	public static int slotsUnlocked(Hero hero) {
+		return hero.lvl >= 20 ? 3 : 2;
+	}
+
+	public static Skill slot(HeroClass cls, int i) {
+		load();
+		String k = cls.name() + "_slot" + i;
+		if (!data.contains(k)) return null;
+		try {
+			return Skill.valueOf(data.getString(k));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static void setSlot(HeroClass cls, int i, Skill s) {
+		load();
+		String k = cls.name() + "_slot" + i;
+		if (s == null) data.remove(k);
+		else {
+			//a skill sits in one slot at a time
+			for (int j = 0; j < MAX_SLOTS; j++) if (j != i && slot(cls, j) == s) data.remove(cls.name() + "_slot" + j);
+			data.put(k, s.name());
+		}
+		saveNeeded = true;
+		save();
+	}
+
+	//passive helpers: rank of a passive, but only while a weapon of its family is equipped
+	public static int activeRank(Hero hero, Skill s) {
+		if (hero == null) return 0;
+		int r = rank(hero.heroClass, s);
+		if (r == 0) return 0;
+		return familyOf(hero.belongings.attackingWeapon()) == s.family ? r : 0;
 	}
 }

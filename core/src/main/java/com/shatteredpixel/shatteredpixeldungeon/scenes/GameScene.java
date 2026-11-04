@@ -213,6 +213,7 @@ public class GameScene extends PixelScene {
 	private Toast prompt;
 
 	private AttackIndicator attack;
+	private com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar skillBar; //MOD
 	private LootIndicator loot;
 	private ActionIndicator action;
 	private ResumeIndicator resume;
@@ -525,6 +526,11 @@ public class GameScene extends PixelScene {
 		attack = new AttackIndicator();
 		attack.camera = uiCamera;
 		add( attack );
+
+		//MOD: active weapon skill buttons
+		skillBar = new com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar();
+		skillBar.camera = uiCamera;
+		add( skillBar );
 
 		log = new GameLog();
 		log.camera = uiCamera;
@@ -873,6 +879,7 @@ public class GameScene extends PixelScene {
 
 		if (updateItemDisplays){
 			updateItemDisplays = false;
+			if (skillBar != null) skillBar.refresh(); //MOD
 			QuickSlotButton.refresh();
 			InventoryPane.refresh();
 			if (ActionIndicator.action instanceof MeleeWeapon.Charger) {
@@ -1046,6 +1053,27 @@ public class GameScene extends PixelScene {
 		if (scene.tagResume) {
 			scene.resume.setRect( tagLeft, pos - Tag.SIZE, tagWidth, Tag.SIZE );
 			scene.resume.flip(tagsOnLeft);
+		}
+
+		//MOD: skill buttons sit on the side opposite the tags, just above the toolbar
+		if (scene.skillBar != null) {
+			float h = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.MAX_SLOTS
+					* (com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE + 2);
+			float sx = tagsOnLeft ? uiCamera.width - insets.right - com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE - 2 : insets.left + 2;
+			scene.skillBar.setRect(sx, scene.toolbar.top() - 2 - h, com.shatteredpixel.shatteredpixeldungeon.ui.SkillBar.SIZE, h);
+			scene.skillBar.refresh();
+		}
+	}
+
+	//MOD: refresh the skill buttons (cooldowns, slots, weapon changes)
+	public static void updateSkillBar() {
+		if (scene != null && scene.skillBar != null) {
+			com.watabou.noosa.Game.runOnRenderThread(new com.watabou.utils.Callback() {
+				@Override
+				public void call() {
+					if (scene != null && scene.skillBar != null) scene.skillBar.refresh();
+				}
+			});
 		}
 	}
 	

@@ -573,6 +573,7 @@ public class Hero extends Char {
 		if (!RingOfForce.fightingUnarmed(this)) {
 			//MOD: accuracy depends on your proficiency with the weapon's family (see Proficiency)
 			accuracy *= Proficiency.accuracyFactor( this, wep );
+			accuracy *= SkillEffects.accuracyFactor( this );
 			return Math.max(1, Math.round(attackSkill * accuracy * wep.accuracyFactor( this, target )));
 		} else {
 			return Math.max(1, Math.round(attackSkill * accuracy));
@@ -1561,6 +1562,7 @@ public class Hero extends Char {
 		}
 
 		damage = Talent.onAttackProc( this, enemy, damage );
+		damage = SkillEffects.onHeroHit( this, enemy, damage ); //MOD: weapon skill passives
 
 		if (wep != null) {
 			damage = wep.proc( this, enemy, damage );
