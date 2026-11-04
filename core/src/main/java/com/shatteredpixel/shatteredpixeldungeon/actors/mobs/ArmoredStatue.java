@@ -43,8 +43,8 @@ public class ArmoredStatue extends Statue {
 	public ArmoredStatue(){
 		super();
 
-		//double HP
-		HP = HT = 30 + Dungeon.depth * 10;
+		//MOD: all statues are armored now, so they only get a small HP buff over the old plain statue
+		HP = HT = 18 + Dungeon.depth * 6;
 	}
 
 	@Override
@@ -54,6 +54,14 @@ public class ArmoredStatue extends Statue {
 		armor = Generator.randomArmor();
 		armor.cursed = false;
 		armor.inscribe(Armor.Glyph.random());
+	}
+
+	@Override
+	public void rollGearMaterials() {
+		super.rollGearMaterials();
+		if (armor != null && armor.materialKind() != null) {
+			armor.material = statueMaterial(armor.materialKind());
+		}
 	}
 
 	private static final String ARMOR	= "armor";

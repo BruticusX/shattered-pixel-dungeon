@@ -74,6 +74,27 @@ public class Statue extends Mob {
 	public Weapon weapon(){
 		return weapon;
 	}
+
+	//MOD: a statue's gear can be any material: usually suited to the floor, sometimes much better,
+	// and very rarely umbralite
+	public static com.shatteredpixel.shatteredpixeldungeon.items.Material statueMaterial(
+			com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind kind) {
+		if (kind == null) return null;
+		float roll = Random.Float();
+		if (roll < 0.02f && kind == com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL) {
+			return com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN;
+		} else if (roll < 0.25f) {
+			return com.shatteredpixel.shatteredpixeldungeon.items.Material.randomFor(kind, Dungeon.depth + 5, false);
+		} else {
+			return com.shatteredpixel.shatteredpixeldungeon.items.Material.randomFor(kind, Dungeon.depth, false);
+		}
+	}
+
+	public void rollGearMaterials() {
+		if (weapon != null && weapon.fixedMaterial() == null && weapon.materialKind() != null) {
+			weapon.material = statueMaterial(weapon.materialKind());
+		}
+	}
 	
 	private static final String WEAPON	= "weapon";
 	
@@ -204,18 +225,12 @@ public class Statue extends Mob {
 	}
 
 	public static Statue random( boolean useDecks ){
-		Statue statue;
-		float altChance = 1/10f * RatSkull.exoticChanceMultiplier();
-		if (altChance > 0.1f) altChance = (altChance+0.1f)/2f; //rat skull is 1/2 as effective here
-		if (Random.Float() < altChance){
-			statue = new ArmoredStatue();
-		} else {
-			statue = new Statue();
-		}
+		//MOD: every statue now wears armor (see ArmoredStatue), and its gear can be made of anything
+		Statue statue = new ArmoredStatue();
 
-		//calls to RNG vary based on statue type, which is influenced by rat skull
 		Random.pushGenerator(Random.Long());
 			statue.createWeapon(useDecks);
+			statue.rollGearMaterials();
 		Random.popGenerator();
 
 		return statue;

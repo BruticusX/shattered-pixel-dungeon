@@ -545,7 +545,8 @@ abstract public class Weapon extends KindOfWeapon {
 				n++;
 			}
 		}
-		level(n);
+		//MOD: found gear is capped by region: +1 on floors 1-5, +2 on 6-10, +3 on 11-15...
+		level(Math.min(n, 1 + Math.max(0, Dungeon.depth - 1) / 5));
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen

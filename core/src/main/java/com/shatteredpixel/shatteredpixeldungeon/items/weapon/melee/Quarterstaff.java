@@ -47,7 +47,6 @@ public class Quarterstaff extends MeleeWeapon {
 	}
 
 	@Override
-	@Override
 	public String statsInfo() {
 		return Messages.get(this, "stats_desc", defenseFactor(null));
 	}

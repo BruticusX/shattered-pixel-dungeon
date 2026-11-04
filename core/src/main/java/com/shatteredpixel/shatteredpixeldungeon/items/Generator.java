@@ -614,7 +614,7 @@ public class Generator {
 	}
 
 	private static final float[][] floorSetTierProbs = new float[][] {
-			{0, 75, 20,  4,  1},
+			{0, 78, 21,  1,  0}, //MOD: heavy weapons are very rare in the sewers (was 75/20/4/1)
 			{0, 25, 50, 20,  5},
 			{0,  0, 40, 50, 10},
 			{0,  0, 20, 40, 40},
