@@ -81,7 +81,7 @@ public class WeaponStats {
 		melee(Sai.class,            0.6f, 0.90f);
 		melee(HandAxe.class,        0.8f, 0.95f);
 		//medium
-		melee(WornShortsword.class, 1.0f, 0.90f);
+		melee(WornShortsword.class, 1.0f, 1.00f); //same as a shortsword (shown with that name)
 		melee(Shortsword.class,     1.0f, 1.00f);
 		melee(Cudgel.class,         1.0f, 0.90f);
 		melee(Gauntlet.class,       1.0f, 0.95f);
