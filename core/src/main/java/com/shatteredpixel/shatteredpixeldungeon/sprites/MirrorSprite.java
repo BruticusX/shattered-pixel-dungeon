@@ -47,6 +47,28 @@ public class MirrorSprite extends MobSprite {
 		updateArmor();
 	}
 
+	//MOD: mirror images hold the hero's weapon too
+	private final HeldWeapon held = new HeldWeapon();
+
+	@Override
+	public void update() {
+		super.update();
+		held.update();
+	}
+
+	@Override
+	public void draw() {
+		super.draw();
+		if (Dungeon.hero == null || ch == null || !ch.isAlive()) return;
+		int f;
+		if (curAnim == idle) f = new int[]{0, 0, 0, 1, 0, 0, 1, 1}[Math.min(curFrame, 7)];
+		else if (curAnim == run) f = 2 + Math.min(curFrame, 5);
+		else if (curAnim == attack) f = new int[]{13, 14, 15, 0}[Math.min(curFrame, 3)];
+		else if (curAnim == die) f = -1;
+		else f = 0;
+		held.draw(this, Dungeon.hero.belongings.weapon(), f);
+	}
+
 	@Override
 	public void bloodBurstA(PointF from, int damage) {
 		//do nothing

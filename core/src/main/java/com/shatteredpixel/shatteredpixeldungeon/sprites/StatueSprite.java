@@ -65,6 +65,29 @@ public class StatueSprite extends MobSprite {
 
 	}
 
+	//MOD: statues hold the weapon they actually fight with
+	private final HeldWeapon held = new HeldWeapon();
+
+	@Override
+	public void update() {
+		super.update();
+		held.update();
+	}
+
+	@Override
+	public void draw() {
+		super.draw();
+		if (!(ch instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) || !ch.isAlive()) return;
+		int f;
+		//statue frames follow the hero's: idle 0-1, run 2-7, then its attack 8-10 = the hero's 13-15
+		if (curAnim == idle) f = new int[]{0, 0, 0, 0, 0, 1, 1}[Math.min(curFrame, 6)];
+		else if (curAnim == run) f = 2 + Math.min(curFrame, 5);
+		else if (curAnim == attack) f = 13 + Math.min(curFrame, 2);
+		else if (curAnim == die) f = -1;
+		else f = 0;
+		held.draw(this, ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) ch).weapon(), f);
+	}
+
 	@Override
 	public int blood() {
 		return 0xFFcdcdb7;
