@@ -313,6 +313,9 @@ public class Proficiency {
 		if (hero == null) return 0;
 		int r = rank(hero.heroClass, s);
 		if (r == 0) return 0;
-		return familyOf(hero.belongings.attackingWeapon()) == s.family ? r : 0;
+		if (familyOf(hero.belongings.attackingWeapon()) == s.family) return r;
+		//the duelist's passives work with any melee weapon (see SkillEffects.duelistFree)
+		if (hero.belongings.thrownWeapon == null && SkillEffects.duelistFree(hero, s)) return r;
+		return 0;
 	}
 }
