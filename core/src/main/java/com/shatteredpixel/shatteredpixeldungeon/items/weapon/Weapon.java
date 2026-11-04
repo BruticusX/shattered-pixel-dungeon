@@ -240,6 +240,11 @@ abstract public class Weapon extends KindOfWeapon {
 		return 1;
 	}
 
+	//unique weapons are tougher than ordinary gear of their material: they wear 3x slower
+	public float wearFactor() {
+		return fixedMaterial() != null ? 1f/3f : 1f;
+	}
+
 	//unique weapons are always made of one material and keep their own look (see RunicBlade etc.)
 	public Material fixedMaterial() {
 		return null;

@@ -67,6 +67,20 @@ public enum Material {
 		this.maxDepth = maxDepth;
 	}
 
+	//how much a weapon's base damage is multiplied by when made of this metal (see WeaponStats)
+	public float damageMult() {
+		switch (this) {
+			case TIN: default: return 1.0f;
+			case COPPER:   return 1.3f;
+			case BRONZE:   return 1.5f;
+			case IRON:     return 1.8f;
+			case STEEL:    return 2.2f;
+			case TITANIUM: return 2.7f;
+			case TUNGSTEN: return 3.2f;
+			case OBSIDIAN: return 3.0f;
+		}
+	}
+
 	//durability lost per use, in percentage points
 	public float wearPerUse() {
 		return 100f / hits;

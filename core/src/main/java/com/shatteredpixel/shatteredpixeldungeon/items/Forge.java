@@ -24,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -69,6 +70,8 @@ public class Forge {
 	public static int cost(Item item) {
 		if (item instanceof MissileWeapon) return 1;
 		if (item instanceof Weapon) {
+			WeaponStats s = WeaponStats.of(item);
+			if (s != null) return s.weight == WeaponStats.Weight.LIGHT ? 2 : (s.weight == WeaponStats.Weight.MEDIUM ? 3 : 4);
 			int t = ((Weapon) item).typeTier();
 			return t <= 2 ? 2 : (t == 3 ? 3 : 4);
 		}
