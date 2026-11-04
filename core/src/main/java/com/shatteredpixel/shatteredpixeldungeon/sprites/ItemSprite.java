@@ -238,6 +238,24 @@ public class ItemSprite extends MovieClip {
 		}
 	}
 
+	//MOD: swaps to a smoothly (linearly) filtered copy of the current sheet. Used for weapons in a
+	//hand, which are drawn rotated: nearest filtering leaves jagged stair steps along rotated edges.
+	public void useSmoothFiltering(){
+		if (texture == null || texture.fModeMin == com.watabou.glwrap.Texture.LINEAR) return;
+		String key = "linear:" + loaded;
+		com.watabou.gltextures.SmartTexture twin;
+		if (com.watabou.gltextures.TextureCache.contains( key )) {
+			twin = com.watabou.gltextures.TextureCache.get( key );
+		} else {
+			twin = new com.watabou.gltextures.SmartTexture( texture.bitmap,
+					com.watabou.glwrap.Texture.LINEAR, com.watabou.glwrap.Texture.CLAMP, false );
+			com.watabou.gltextures.TextureCache.add( key, twin );
+		}
+		com.watabou.utils.RectF f = frame();
+		texture( twin );
+		frame( f );
+	}
+
 	public boolean isHD(){
 		return hd;
 	}
