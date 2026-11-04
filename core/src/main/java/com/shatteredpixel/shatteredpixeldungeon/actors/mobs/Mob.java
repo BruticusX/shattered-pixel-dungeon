@@ -146,6 +146,12 @@ public abstract class Mob extends Char {
 			//modify health for ascension challenge if applicable, only on first add
 			float percent = HP / (float) HT;
 			HT = Math.round(HT * AscensionChallenge.statModifier(this));
+			//MOD: early enemies are tougher so they aren't one-shot as often
+			// (x1.5 on floors 1-5, x1.3 on 6-10, x1.15 on 11-15, normal deeper; bosses unchanged)
+			if (alignment == Alignment.ENEMY && !properties.contains(Property.BOSS)) {
+				float early = Dungeon.depth <= 5 ? 1.5f : Dungeon.depth <= 10 ? 1.3f : Dungeon.depth <= 15 ? 1.15f : 1f;
+				HT = Math.round(HT * early);
+			}
 			HP = Math.round(HT * percent);
 			firstAdded = false;
 		}
@@ -1047,6 +1053,12 @@ public abstract class Mob extends Char {
 			}
 			if (properties.contains(Property.BOSS) && !(this instanceof YogFist)) {
 				com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem.dropBossLoot(pos);
+			}
+
+			//MOD: wand kills train wand proficiency
+			if (cause instanceof com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) {
+				com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.onKill(this,
+						com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.Family.WANDS);
 			}
 
 			if (cause == Dungeon.hero || cause instanceof Weapon || cause instanceof Weapon.Enchantment){

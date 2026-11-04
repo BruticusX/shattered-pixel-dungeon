@@ -376,6 +376,16 @@ public abstract class Char extends Actor {
 		boolean visibleFight = Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[enemy.pos];
 		boolean glancing = false;
 
+		//MOD: a peaceful elite parries the first attack against it and counters
+		if (this instanceof Hero && com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.isPassive(enemy)) {
+			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Elite.parryAndCounter(enemy, this);
+			return false;
+		}
+		//MOD: the hero's riposte stance parries melee attacks and counters
+		if (!(this instanceof Hero) && com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.tryRiposte(this, enemy)) {
+			return false;
+		}
+
 		if (enemy.isInvulnerable(getClass())) {
 
 			if (visibleFight) {
