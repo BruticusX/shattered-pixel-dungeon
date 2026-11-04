@@ -626,6 +626,15 @@ abstract public class Weapon extends KindOfWeapon {
 		}
 	}
 
+	@Override
+	public ItemSprite.Glowing edgeGlow() {
+		if (enchantment != null && (cursedKnown || !enchantment.curse())) {
+			return enchantment.curse() ? CURSE_EDGE : enchantment.glowing();
+		}
+		return null;
+	}
+	public static final ItemSprite.Glowing CURSE_EDGE = new ItemSprite.Glowing( 0x7A2AA8 );
+
 	//MOD: enchantment aura along the blade (see effects/ItemAura)
 	@Override
 	public Emitter emitter() {

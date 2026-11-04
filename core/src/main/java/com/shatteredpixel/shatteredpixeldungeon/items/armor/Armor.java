@@ -786,6 +786,14 @@ public class Armor extends EquipableItem {
 	}
 
 	@Override
+	public ItemSprite.Glowing edgeGlow() {
+		if (glyph != null && (cursedKnown || !glyph.curse())) {
+			return glyph.curse() ? com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.CURSE_EDGE : glyph.glowing();
+		}
+		return null;
+	}
+
+	@Override
 	public Emitter emitter() {
 		//MOD: glyph aura around the armor outline (see effects/ItemAura)
 		if (seal == null) {

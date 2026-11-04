@@ -268,7 +268,10 @@ public class ItemSprite extends MovieClip {
 			useSheet( itemSheet );
 			frame( item.image() );
 		}
-		Emitter emitter = item.emitter();
+		//MOD: on the floor, enchanted gear pulses a glow around its edges instead of the particle aura
+		edgeGlow = inWorld ? item.edgeGlow() : null;
+		if (edgeGlow != null && edgeGlow.color == 0) edgeGlow = null; //a black glow wouldn't show
+		Emitter emitter = edgeGlow != null ? null : item.emitter();
 		if (emitter != null && parent != null) {
 			emitter.pos( this );
 			parent.add( emitter );
@@ -386,6 +389,23 @@ public class ItemSprite extends MovieClip {
 			script.drawQuad(buffer);
 		}
 
+		//MOD: edge glow, drawn as the sprite's silhouette nudged one art pixel each way, behind it
+		if (edgeGlow != null && visible && (heap == null || heap.type == Heap.Type.HEAP || heap.type == Heap.Type.FOR_SALE)) {
+			float px = hd ? (inWorld ? 0.5f * WORLD_SCALE : 0.5f) : 1f;
+			float ox = x, oy = y;
+			float srm = rm, sgm = gm, sbm = bm, sam = am, sra = ra, sga = ga, sba = ba, saa = aa;
+			rm = gm = bm = 0;
+			ra = edgeGlow.red; ga = edgeGlow.green; ba = edgeGlow.blue; aa = 0;
+			am = sam * edgeValue;
+			for (int[] d : EDGE_DIRS) {
+				x = ox + d[0] * px;
+				y = oy + d[1] * px;
+				super.draw();
+			}
+			x = ox; y = oy;
+			rm = srm; gm = sgm; bm = sbm; am = sam; ra = sra; ga = sga; ba = sba; aa = saa;
+		}
+
 		super.draw();
 
 		//MOD: masked glow overlay
@@ -424,6 +444,10 @@ public class ItemSprite extends MovieClip {
 		}
 	}
 	private float maskValue = 0.25f;
+
+	private Glowing edgeGlow;
+	private float edgeValue = 0.5f, edgePhase = 0;
+	private static final int[][] EDGE_DIRS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
 
 	@Override
 	public synchronized void update() {
@@ -466,6 +490,11 @@ public class ItemSprite extends MovieClip {
 					}
 				}
 			}
+		}
+
+		if (edgeGlow != null) {
+			edgePhase += Game.elapsed;
+			edgeValue = 0.3f + 0.6f * (0.5f + 0.5f * (float) Math.sin( edgePhase * Math.PI * 2 / 1.6f ));
 		}
 
 		if (visible && glowing != null) {
