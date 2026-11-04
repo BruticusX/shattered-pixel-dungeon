@@ -921,7 +921,8 @@ public class Armor extends EquipableItem {
 				&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || glyph == null)){
 			return HOLY;
 		} else {
-			//MOD: glyphs show as a particle aura around the armor instead of a colour pulse
+			//MOD: umbralite gear pulses purple; enchantments/glyphs show as particle auras instead
+			if (material() == com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN) return UMBRA_GLOW;
 			return null;
 		}
 	}

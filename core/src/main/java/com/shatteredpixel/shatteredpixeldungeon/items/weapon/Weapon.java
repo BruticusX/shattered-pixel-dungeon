@@ -624,7 +624,8 @@ abstract public class Weapon extends KindOfWeapon {
 				&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || enchantment == null)){
 			return HOLY;
 		} else {
-			//MOD: enchantments show as a particle aura on the blade instead of a colour pulse
+			//MOD: umbralite gear pulses purple; enchantments/glyphs show as particle auras instead
+			if (material() == com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN) return UMBRA_GLOW;
 			return null;
 		}
 	}

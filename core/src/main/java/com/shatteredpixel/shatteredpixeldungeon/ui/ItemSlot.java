@@ -59,6 +59,7 @@ public class ItemSlot extends Button {
 	protected BitmapText extra;
 	protected Image      itemIcon;
 	protected BitmapText level;
+	protected BitmapText umbra; //MOD: umbralite levels, purple
 	
 	private static final String TXT_STRENGTH	= ":%d";
 	private static final String TXT_TYPICAL_STR	= "%d?";
@@ -118,6 +119,10 @@ public class ItemSlot extends Button {
 		
 		level = new BitmapText( PixelScene.pixelFont);
 		add(level);
+
+		umbra = new BitmapText( PixelScene.pixelFont);
+		umbra.hardlight( 0xBB66FF );
+		add(umbra);
 	}
 	
 	@Override
@@ -175,6 +180,13 @@ public class ItemSlot extends Button {
 			PixelScene.align(level);
 		}
 
+		if (umbra != null) {
+			float right = (level != null && level.text() != null && !level.text().isEmpty()) ? level.x - 1 : x + width - margin.right;
+			umbra.x = right - umbra.width();
+			umbra.y = y + (height - umbra.baseLine() - 1) - margin.bottom;
+			PixelScene.align(umbra);
+		}
+
 	}
 
 	public void alpha( float value ){
@@ -184,6 +196,7 @@ public class ItemSlot extends Button {
 		if (status != null)     status.alpha(value);
 		if (itemIcon != null)   itemIcon.alpha(value);
 		if (level != null)      level.alpha(value);
+		if (umbra != null)      umbra.alpha(value);
 	}
 
 	public void clear(){
@@ -251,9 +264,11 @@ public class ItemSlot extends Button {
 
 		if (item == null){
 			status.visible = extra.visible = level.visible = false;
+			if (umbra != null) umbra.visible = false;
 			return;
 		} else {
 			status.visible = extra.visible = level.visible = true;
+			if (umbra != null) umbra.visible = true;
 		}
 
 		status.text( item.status() );
@@ -287,8 +302,17 @@ public class ItemSlot extends Button {
 
 		}
 
-		int trueLvl = item.visiblyUpgraded();
-		int buffedLvl = item.buffedVisiblyUpgraded();
+		//MOD: umbralite levels get their own purple label; the yellow one shows the rest
+		int umbraLvl = item.umbraLevel;
+		if (umbraLvl > 0) {
+			umbra.text( "+" + umbraLvl );
+			umbra.measure();
+		} else {
+			umbra.text( null );
+		}
+
+		int trueLvl = item.visiblyUpgraded() - item.umbraBonus();
+		int buffedLvl = item.buffedVisiblyUpgraded() - item.umbraBonus();
 
 		if (trueLvl != 0 || buffedLvl != 0) {
 			level.text( Messages.format( TXT_LEVEL, buffedLvl ) );
@@ -331,6 +355,7 @@ public class ItemSlot extends Button {
 		status.alpha( alpha );
 		extra.alpha( alpha );
 		level.alpha( alpha );
+		umbra.alpha( alpha );
 		if (itemIcon != null) itemIcon.alpha( alpha );
 	}
 
@@ -349,10 +374,12 @@ public class ItemSlot extends Button {
 			add(status);
 			add(extra);
 			add(level);
+			add(umbra);
 		} else {
 			remove(status);
 			remove(extra);
 			remove(level);
+			remove(umbra);
 		}
 	}
 
