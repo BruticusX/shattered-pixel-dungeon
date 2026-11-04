@@ -508,7 +508,29 @@ def main():
         cur.paste(half, box[:2])
     cur.save(SHEET16, optimize=True)
 
-    lines = [f"\t\tr({n}, {w}, {h});" for n, (w, h) in sorted(rects.items())]
+    # where each weapon is held: a point 12% of the way from the pommel (bottom-left end) to the tip,
+    # and the angle of that pommel->tip axis (degrees from straight up, + = right)
+    grips = {}
+    for n in rects:
+        if (n // COLS + 1) not in GEAR_ROWS:
+            continue
+        col, row = n % COLS, n // COLS
+        cellim = hd.crop((col * 32, row * 32, col * 32 + 32, row * 32 + 32))
+        pts = [(x, y) for y in range(32) for x in range(32) if cellim.getpixel((x, y))[3] > 0]
+        if not pts:
+            continue
+        p0 = min(pts, key=lambda p: p[0] - p[1]); p1 = max(pts, key=lambda p: p[0] - p[1])
+        gx = p0[0] + 0.12 * (p1[0] - p0[0]); gy = p0[1] + 0.12 * (p1[1] - p0[1])
+        import math as _m
+        axis = _m.degrees(_m.atan2(p1[0] - p0[0], -(p1[1] - p0[1])))
+        grips[n] = (gx, gy, axis)
+    lines = []
+    for n, (w, h) in sorted(rects.items()):
+        if n in grips:
+            gx, gy, ax = grips[n]
+            lines.append(f"\t\tr({n}, {w}, {h}, {gx:.1f}f, {gy:.1f}f, {ax:.1f}f);")
+        else:
+            lines.append(f"\t\tr({n}, {w}, {h});")
     open(JAVA, "w").write(JAVA_TEMPLATE.replace("%RECTS%", "\n".join(lines)))
     print(f"built {len(drawn)} redrawn sprites, {len(rects)} HD slots")
     if "--preview" in sys.argv:
@@ -577,6 +599,19 @@ public class ItemSpriteSheetHD {
 		int y = (item / WIDTH) * SIZE;
 		film.add( item, x, y, x+width, y+height );
 		HAS[item] = true;
+	}
+
+	//gear: where it is held (in 32px sprite pixels) and the angle of its pommel->tip axis
+	private static final float[][] GRIP = new float[WIDTH * (TX_HEIGHT / SIZE)][];
+
+	private static void r( int item, int width, int height, float gripX, float gripY, float axis ){
+		r( item, width, height );
+		GRIP[item] = new float[]{ gripX, gripY, axis };
+	}
+
+	//{x, y, axis degrees} or null
+	public static float[] grip( int image ){
+		return image >= 0 && image < GRIP.length ? GRIP[image] : null;
 	}
 
 	static {
