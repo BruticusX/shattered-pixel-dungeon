@@ -903,6 +903,8 @@ public class SkillEffects {
 		if (cw > 0) keep *= 1f - 0.15f * cw;
 		Sundered sd = enemy.buff(Sundered.class);
 		if (sd != null) keep *= 1f - sd.pct;
+		//stiletto, halberd and khopesh get past part of the target's armor
+		keep *= com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponPerks.drKeep(hero);
 		return Math.round(dr * keep);
 	}
 

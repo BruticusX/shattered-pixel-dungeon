@@ -165,6 +165,11 @@ public class Armor extends EquipableItem {
 	//MOD: the armor system. Each armor type has a real-world weight which sets its base block
 	// and its evasion/stealth penalty; the material multiplies the block (Material.armorMult).
 	public float armorKg() {
+		//the Phase 4 types extend the nearest classic type, so check them first
+		if (this instanceof Gambeson)       return 5f;
+		if (this instanceof StuddedLeather) return 8f;
+		if (this instanceof Brigandine)     return 10f;
+		if (this instanceof HalfPlate)      return 19f;
 		if (this instanceof ClothArmor)   return 3f;
 		if (this instanceof LeatherArmor) return 6f;
 		if (this instanceof MailArmor)    return 12f;
@@ -189,6 +194,7 @@ public class Armor extends EquipableItem {
 	//leather has no penalty, and cloth is a bonus: +5% evasion and a little quieter
 	public float weightPenalty() {
 		if (material() == null) return 0f;
+		if (this instanceof Gambeson)     return 0f; //no bonus, no penalty
 		if (this instanceof ClothArmor)   return -0.05f;
 		if (this instanceof LeatherArmor) return 0f;
 		return armorKg() / 80f;

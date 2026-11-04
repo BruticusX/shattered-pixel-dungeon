@@ -60,16 +60,16 @@ public class Proficiency {
 		for (Class<?> c : classes) FAMILIES.put(c, f);
 	}
 	static {
-		fam(Family.DAGGERS,  Dagger.class, Dirk.class, AssassinsBlade.class);
+		fam(Family.DAGGERS,  Dagger.class, Dirk.class, AssassinsBlade.class, Stiletto.class, Kris.class);
 		fam(Family.SWORDS,   WornShortsword.class, Shortsword.class, Sword.class, Longsword.class, Greatsword.class,
-				Scimitar.class, Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class);
-		fam(Family.AXES,     HandAxe.class, BattleAxe.class, Greataxe.class);
-		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class);
-		fam(Family.POLEARMS, Spear.class, Glaive.class, Sickle.class, WarScythe.class);
-		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class);
-		fam(Family.FIST,     Gloves.class, Gauntlet.class, Sai.class);
-		fam(Family.SHIELDS,  RoundShield.class, Greatshield.class);
-		fam(Family.FLEXIBLE, Whip.class, Flail.class);
+				Scimitar.class, Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class);
+		fam(Family.AXES,     HandAxe.class, BattleAxe.class, Greataxe.class, BeardedAxe.class);
+		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class);
+		fam(Family.POLEARMS, Spear.class, Glaive.class, Sickle.class, WarScythe.class, Halberd.class, Pike.class);
+		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class, IronShodStaff.class);
+		fam(Family.FIST,     Gloves.class, Gauntlet.class, Sai.class, Katar.class, TigerClaws.class);
+		fam(Family.SHIELDS,  RoundShield.class, Greatshield.class, Buckler.class, KiteShield.class);
+		fam(Family.FLEXIBLE, Whip.class, Flail.class, Kusarigama.class, MeteorHammer.class);
 		fam(Family.RANGED,   Crossbow.class, SpiritBow.class);
 	}
 

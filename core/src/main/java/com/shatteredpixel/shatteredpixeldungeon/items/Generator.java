@@ -167,11 +167,31 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Shortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Spear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Stiletto;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Kris;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Katar;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.TigerClaws;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Khopesh;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Falchion;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BeardedAxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Kusarigama;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MorningStar;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.IronShodStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeteorHammer;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Halberd;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Maul;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Pike;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KiteShield;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingAxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Gambeson;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.StuddedLeather;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Brigandine;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.HalfPlate;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarScythe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
@@ -180,17 +200,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfArsenal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Kunai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingClub;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpear;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Trident;
@@ -435,21 +451,29 @@ public class Generator {
 					Quarterstaff.class,
 					Dirk.class,
 					Sickle.class,
-					Pickaxe.class
+					Pickaxe.class,
+					Stiletto.class,
+					Kris.class,
+					Katar.class,
+					TigerClaws.class,
+					Buckler.class
 			};
-			WEP_T2.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 0 };
+			WEP_T2.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2 }; //MOD: +Phase 4 types
 			WEP_T2.probs = WEP_T2.defaultProbs.clone();
 			
 			WEP_T3.classes = new Class<?>[]{
 					Sword.class,
 					Mace.class,
-					Scimitar.class,
 					RoundShield.class,
 					Sai.class,
 					Whip.class,
-					Bloodletter.class //MOD
+					Bloodletter.class, //MOD
+					Khopesh.class,
+					Falchion.class,
+					BeardedAxe.class,
+					Kusarigama.class
 			};
-			WEP_T3.defaultProbs = new float[]{ 2, 2, 0, 2, 2, 2, 2 }; //MOD: +Bloodletter, scimitar cut (kept for old saves)
+			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 }; //MOD: scimitar cut, +Phase 4 types
 			WEP_T3.probs = WEP_T3.defaultProbs.clone();
 			
 			WEP_T4.classes = new Class<?>[]{
@@ -459,9 +483,13 @@ public class Generator {
 					RunicBlade.class,
 					AssassinsBlade.class,
 					Crossbow.class,
-					Katana.class
+					Katana.class,
+					MorningStar.class,
+					IronShodStaff.class,
+					MeteorHammer.class,
+					Halberd.class
 			};
-			WEP_T4.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2 };
+			WEP_T4.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
 			WEP_T4.probs = WEP_T4.defaultProbs.clone();
 			
 			WEP_T5.classes = new Class<?>[]{
@@ -471,9 +499,12 @@ public class Generator {
 					Greataxe.class,
 					Greatshield.class,
 					Gauntlet.class,
-					WarScythe.class
+					WarScythe.class,
+					Maul.class,
+					Pike.class,
+					KiteShield.class
 			};
-			WEP_T5.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2 };
+			WEP_T5.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
 			WEP_T5.probs = WEP_T5.defaultProbs.clone();
 			
 			//see Generator.randomArmor
@@ -499,26 +530,24 @@ public class Generator {
 			MIS_T1.classes = new Class<?>[]{
 					ThrowingStone.class,
 					ThrowingKnife.class,
-					ThrowingSpike.class,
 					Dart.class
 			};
-			MIS_T1.defaultProbs = new float[]{ 3, 3, 0, 0 }; //MOD: throwing spike cut
+			MIS_T1.defaultProbs = new float[]{ 3, 3, 0 }; //MOD: throwing spike cut
 			MIS_T1.probs = MIS_T1.defaultProbs.clone();
 			
 			MIS_T2.classes = new Class<?>[]{
 					FishingSpear.class,
-					ThrowingClub.class,
 					Shuriken.class
 			};
-			MIS_T2.defaultProbs = new float[]{ 3, 0, 3 }; //MOD: throwing club cut
+			MIS_T2.defaultProbs = new float[]{ 3, 3 }; //MOD: throwing club cut
 			MIS_T2.probs = MIS_T2.defaultProbs.clone();
 			
 			MIS_T3.classes = new Class<?>[]{
-					ThrowingSpear.class,
+					ThrowingAxe.class,
 					Kunai.class,
 					Bolas.class
 			};
-			MIS_T3.defaultProbs = new float[]{ 0, 3, 3 }; //MOD: throwing spear cut
+			MIS_T3.defaultProbs = new float[]{ 3, 3, 3 }; //MOD: throwing spear cut, +throwing axe
 			MIS_T3.probs = MIS_T3.defaultProbs.clone();
 			
 			MIS_T4.classes = new Class<?>[]{
@@ -531,10 +560,9 @@ public class Generator {
 			
 			MIS_T5.classes = new Class<?>[]{
 					Trident.class,
-					ThrowingHammer.class,
-					ForceCube.class
+					ThrowingHammer.class
 			};
-			MIS_T5.defaultProbs = new float[]{ 3, 3, 0 }; //MOD: force cube cut
+			MIS_T5.defaultProbs = new float[]{ 3, 3 }; //MOD: force cube cut
 			MIS_T5.probs = MIS_T5.defaultProbs.clone();
 			
 			FOOD.classes = new Class<?>[]{
@@ -789,7 +817,16 @@ public class Generator {
 
 		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 		
-		Armor a = (Armor)Reflection.newInstance(Category.ARMOR.classes[Random.chances(floorSetTierProbs[floorSet])]);
+		//MOD: each armor tier has a classic type and a Phase 4 type of similar weight
+		Class<?>[][] byTier = {
+				{ClothArmor.class, Gambeson.class},
+				{LeatherArmor.class, StuddedLeather.class},
+				{MailArmor.class, Brigandine.class},
+				{ScaleArmor.class, HalfPlate.class},
+				{PlateArmor.class}
+		};
+		Class<?>[] options = byTier[Random.chances(floorSetTierProbs[floorSet])];
+		Armor a = (Armor)Reflection.newInstance(options[Random.Int(options.length)]);
 		a.random();
 		return a;
 	}

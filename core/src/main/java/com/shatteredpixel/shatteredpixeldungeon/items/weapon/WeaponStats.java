@@ -89,7 +89,7 @@ public class WeaponStats {
 		melee(Sword.class,          1.2f, 1.00f);
 		melee(Katana.class,         1.2f, 0.95f);
 		melee(Bloodletter.class,    1.2f, 0.85f);
-		melee(Scimitar.class,       1.3f, 1.00f);
+		melee(Scimitar.class,       1.3f, 1.00f); //cut from loot, kept for old saves
 		melee(RunicBlade.class,     1.3f, 0.85f);
 		melee(Mace.class,           1.5f, 0.95f);
 		melee(Longsword.class,      1.5f, 1.00f);
@@ -107,6 +107,24 @@ public class WeaponStats {
 		melee(Crossbow.class,       3.5f, 0.75f);
 		melee(Greatshield.class,    5.0f, 0.60f);
 
+		//Phase 4 types
+		melee(Stiletto.class,       0.3f, 0.70f); //low damage, ignores most armor
+		melee(TigerClaws.class,     0.5f, 0.80f);
+		melee(Kris.class,           0.6f, 0.85f);
+		melee(Katar.class,          0.7f, 0.90f);
+		melee(Buckler.class,        1.2f, 0.70f);
+		melee(Kusarigama.class,     1.2f, 0.85f);
+		melee(BeardedAxe.class,     1.3f, 0.95f);
+		melee(Khopesh.class,        1.4f, 0.95f);
+		melee(Falchion.class,       1.6f, 1.00f);
+		melee(MorningStar.class,    2.2f, 0.95f);
+		melee(IronShodStaff.class,  2.4f, 0.80f);
+		melee(MeteorHammer.class,   2.6f, 0.95f);
+		melee(Halberd.class,        3.2f, 0.90f);
+		melee(KiteShield.class,     3.5f, 0.60f);
+		melee(Pike.class,           3.6f, 0.90f);
+		melee(Maul.class,           4.5f, 1.10f); //the slowest weapon, the biggest hits
+
 		//thrown (metal ones; stones, clubs, bolas, darts and the force cube keep their own stats)
 		thrown(Shuriken.class,       0.10f, 1.00f);
 		thrown(ThrowingSpike.class,  0.15f, 1.00f);
@@ -119,6 +137,7 @@ public class WeaponStats {
 		thrown(ThrowingSpear.class,  1.50f, 1.00f);
 		thrown(ThrowingHammer.class, 1.50f, 1.05f);
 		thrown(Trident.class,        2.50f, 1.00f);
+		thrown(ThrowingAxe.class,    1.10f, 1.00f);
 	}
 
 	public static WeaponStats of(Object weapon) {

@@ -55,7 +55,7 @@ import com.watabou.utils.Reflection;
 //on its own tile, identified and grouped by category, next to an alchemy pot.
 public class TestLevel extends Level {
 
-	private static final int W = 40, H = 46;
+	private static final int W = 40, H = 64;
 
 	{
 		color1 = 0x48763c;
@@ -193,7 +193,8 @@ public class TestLevel extends Level {
 				}
 			}
 			cx++;
-			for (Class<?> c : new Class<?>[]{MailArmor.class, ScaleArmor.class, PlateArmor.class}) {
+			for (Class<?> c : new Class<?>[]{com.shatteredpixel.shatteredpixeldungeon.items.armor.Brigandine.class, MailArmor.class, ScaleArmor.class,
+					com.shatteredpixel.shatteredpixeldungeon.items.armor.HalfPlate.class, PlateArmor.class}) {
 				Armor a = (Armor) Reflection.newInstance(c);
 				a.material = m;
 				place(a);
@@ -205,9 +206,15 @@ public class TestLevel extends Level {
 		for (Material m : Material.values()) {
 			if (m.kind == Material.Kind.CLOTH)   { ClothArmor a = new ClothArmor(); a.material = m; place(a); }
 		}
+		for (Material m : Material.values()) {
+			if (m.kind == Material.Kind.CLOTH)   { ClothArmor a = new com.shatteredpixel.shatteredpixeldungeon.items.armor.Gambeson(); a.material = m; place(a); }
+		}
 		cx++;
 		for (Material m : Material.values()) {
 			if (m.kind == Material.Kind.LEATHER) { LeatherArmor a = new LeatherArmor(); a.material = m; place(a); }
+		}
+		for (Material m : Material.values()) {
+			if (m.kind == Material.Kind.LEATHER) { LeatherArmor a = new com.shatteredpixel.shatteredpixeldungeon.items.armor.StuddedLeather(); a.material = m; place(a); }
 		}
 		cx++;
 		for (Material m : Material.values()) {
