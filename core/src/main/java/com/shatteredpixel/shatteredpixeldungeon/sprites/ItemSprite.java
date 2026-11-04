@@ -45,6 +45,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+import com.watabou.utils.RectF;
 
 import java.nio.Buffer;
 
@@ -130,6 +131,13 @@ public class ItemSprite extends MovieClip {
 	public void copy(Image other) {
 		super.copy(other);
 
+		if (other instanceof ItemSprite){
+			ItemSprite o = (ItemSprite) other;
+			sheet = o.sheet;
+			loaded = o.loaded;
+			hd = o.hd;
+		}
+
 		if (other instanceof ItemSprite && ((ItemSprite) other).glowing != null){
 			glow(((ItemSprite) other).glowing);
 		}
@@ -198,14 +206,37 @@ public class ItemSprite extends MovieClip {
 		}
 	}
 
-	//MOD: items made of a material are drawn from that material's recoloured sheet
-	private String sheet = Assets.Sprites.ITEMS;
+	//MOD: items made of a material are drawn from that material's recoloured sheet.
+	//Gear slots come from the 32x32 version of that sheet (ItemSpriteSheetHD), drawn at half
+	//size so they fill the same space as the 16px art with twice the detail.
+	private String sheet = Assets.Sprites.ITEMS;  //the 16px sheet this item uses
+	private String loaded = Assets.Sprites.ITEMS; //the texture actually bound
+	private boolean hd = false;
 
 	private void useSheet( String s ){
-		if (s == null) s = Assets.Sprites.ITEMS;
-		if (!s.equals(sheet)){
-			sheet = s;
-			texture( s );
+		sheet = (s == null) ? Assets.Sprites.ITEMS : s;
+	}
+
+	private void bindSheet( boolean wantHD ){
+		String want = wantHD ? ItemSpriteSheetHD.sheet(sheet) : sheet;
+		hd = wantHD;
+		if (!want.equals(loaded)){
+			loaded = want;
+			texture( want );
+		}
+	}
+
+	public boolean isHD(){
+		return hd;
+	}
+
+	@Override
+	public void frame( RectF frame ) {
+		super.frame( frame );
+		if (hd) {
+			width /= 2f;
+			height /= 2f;
+			updateVertices();
 		}
 	}
 
@@ -264,9 +295,11 @@ public class ItemSprite extends MovieClip {
 	}
 
 	public void frame( int image ){
-		frame( ItemSpriteSheet.film.get( image ));
+		boolean wantHD = ItemSpriteSheetHD.has( image );
+		bindSheet( wantHD );
+		frame( wantHD ? ItemSpriteSheetHD.film.get( image ) : ItemSpriteSheet.film.get( image ));
 
-		float height = ItemSpriteSheet.film.height( image );
+		float height = wantHD ? ItemSpriteSheetHD.film.height( image ) / 2f : ItemSpriteSheet.film.height( image );
 		//adds extra raise to very short items, so they are visible
 		if (height < 8f){
 			perspectiveRaise =  (5 + 8 - height) / 16f;
@@ -336,10 +369,13 @@ public class ItemSprite extends MovieClip {
 
 		//MOD: masked glow overlay
 		if (glowing != null && glowing.masked && visible) {
-			if (maskOverlay == null) {
-				maskOverlay = new com.watabou.noosa.Image(Assets.Sprites.ITEMS_MASK);
+			String maskSheet = hd ? Assets.Sprites.ITEMS_HD_MASK : Assets.Sprites.ITEMS_MASK;
+			if (maskOverlay == null || !maskSheet.equals(maskOverlayTx)) {
+				maskOverlay = new MaskImage(maskSheet);
+				maskOverlayTx = maskSheet;
 			}
 			maskOverlay.frame(frame);
+			maskOverlay.fit(width, height);
 			maskOverlay.x = x; maskOverlay.y = y;
 			maskOverlay.origin.set(origin);
 			maskOverlay.scale.set(scale);
@@ -353,7 +389,18 @@ public class ItemSprite extends MovieClip {
 
 	}
 
-	private com.watabou.noosa.Image maskOverlay;
+	private MaskImage maskOverlay;
+	private String maskOverlayTx;
+
+	//an Image whose size can be set to match a half-size HD frame
+	private static class MaskImage extends com.watabou.noosa.Image {
+		MaskImage( Object tx ){ super( tx ); }
+		void fit( float w, float h ){
+			width = w;
+			height = h;
+			updateVertices();
+		}
+	}
 	private float maskValue = 0.25f;
 
 	@Override

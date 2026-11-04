@@ -18,8 +18,8 @@ from PIL import Image
 SRC = "core/src/main/assets/sprites/items.png"
 OUT = "core/src/main/assets/sprites/items_{}.png"
 SIZE = 16
-GEAR_ROWS = [7, 8, 9, 10, 11, 12, 13]     # 1-based sheet rows holding weapons and armor
-GOLD_HEAD_SLOTS = {129, 179}            # war hammer head and scale armor's scales are gold-toned: recolour them too
+GEAR_ROWS = [7, 8, 9, 10, 11, 12, 13, 33, 34]  # 1-based sheet rows holding weapons and armor
+GOLD_HEAD_SLOTS = set()                 # (the old art's gold-toned war hammer head and scale armor; the redrawn art is grey, and its brass fittings stay brass)
 
 METAL = {
     "tin":      ((96, 92, 84),   (168, 164, 152), (224, 222, 212)),
@@ -66,7 +66,7 @@ def is_brown(r, g, b):
     return 0.02 <= h <= 0.11 and 0.25 < s and 0.15 < v < 0.85
 
 
-def make(base, colors, kind):
+def make(base, colors, kind, SIZE=SIZE):
     out = Image.new("RGBA", base.size, (0, 0, 0, 0))
     src, px = base.load(), out.load()
     w = base.width
@@ -80,6 +80,8 @@ def make(base, colors, kind):
                     continue
                 slot = (y // SIZE) * (w // SIZE) + x // SIZE
                 v = (r + g + b) / 3
+                if (r, g, b) == (22, 18, 24):   # the HD outline colour stays as it is
+                    continue
                 if kind == "metal":
                     if neutral(r, g, b, 22) or (slot in GOLD_HEAD_SLOTS and is_gold(r, g, b)):
                         px[x, y] = ramp(colors, v) + (a,)
@@ -92,13 +94,19 @@ def make(base, colors, kind):
     return out
 
 
+HD_SRC = "core/src/main/assets/sprites/items_hd.png"
+HD_OUT = "core/src/main/assets/sprites/items_hd_{}.png"
+
+
 def main():
     base = Image.open(SRC).convert("RGBA")
+    hd = Image.open(HD_SRC).convert("RGBA")
     sheets = {}
     for kind, table in (("metal", METAL), ("cloth", CLOTH), ("leather", LEATHER)):
         for name, colors in table.items():
             sheets[name] = make(base, colors, kind)
             sheets[name].save(OUT.format(name), optimize=True)
+            make(hd, colors, kind, 32).save(HD_OUT.format(name), optimize=True)
     if "--preview" in sys.argv:
         preview(sheets, sys.argv[sys.argv.index("--preview") + 1])
     print(f"wrote {len(sheets)} material sheets")
