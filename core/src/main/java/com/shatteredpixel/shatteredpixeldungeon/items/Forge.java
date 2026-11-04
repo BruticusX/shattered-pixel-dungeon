@@ -63,6 +63,11 @@ public class Forge {
 	private static void setMaterial(Item item, Material m) {
 		if (item instanceof Weapon) ((Weapon) item).material = m;
 		if (item instanceof Armor)  ((Armor) item).material = m;
+		//the worn armor's colour on the hero follows its material
+		if (item instanceof Armor && com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero != null && com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero.belongings.armor() == item
+				&& com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero.sprite instanceof com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite) {
+			((com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite) com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero.sprite).updateArmor();
+		}
 	}
 
 	//light weapons 2, medium 3, heavy 4; thrown weapons 1 per set;
