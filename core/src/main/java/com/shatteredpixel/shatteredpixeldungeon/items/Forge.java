@@ -190,6 +190,8 @@ public class Forge {
 			out.quantity(meltYield(item));
 		}
 		String name = item.name();
+		int made = out.quantity(); //collect() can merge `out` into a stack, so note this first
+		String madeName = out.name();
 		item.detachAll(hero.belongings.backpack);
 		if (!out.collect(hero.belongings.backpack)) {
 			com.shatteredpixel.shatteredpixeldungeon.Dungeon.level.drop(out, hero.pos).sprite.drop();
@@ -200,7 +202,7 @@ public class Forge {
 		hero.spend(1f);
 		hero.busy();
 		Item.updateQuickslot();
-		GLog.p(Messages.get(Forge.class, "melted", name, out.quantity(), out.name()));
+		GLog.p(Messages.get(Forge.class, "melted", name, made, madeName));
 		return true;
 	}
 }

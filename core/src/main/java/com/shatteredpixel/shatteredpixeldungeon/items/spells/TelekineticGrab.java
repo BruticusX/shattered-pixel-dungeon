@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -144,23 +143,43 @@ public class TelekineticGrab extends TargetedSpell {
 
 	@Override
 	public int energyVal() {
-		return (int)(10 * (quantity/(float)Recipe.OUT_QUANTITY));
+		return (int)(8 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 
-	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
+	//MOD: liquid metal is gone; any metal ingot (not ore, not umbralite) makes the grabs
+	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe {
 
-		private static final int OUT_QUANTITY = 8;
+		private static final int OUT_QUANTITY = 6;
+		private static final int COST = 8;
 
-		{
-			inputs =  new Class[]{LiquidMetal.class};
-			inQuantity = new int[]{10};
-
-			cost = 10;
-
-			output = TelekineticGrab.class;
-			outQuantity = OUT_QUANTITY;
+		private static boolean isIngot(Item i) {
+			return i instanceof com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem
+					&& !((com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem) i).ore
+					&& ((com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem) i).material.kind == com.shatteredpixel.shatteredpixeldungeon.items.Material.Kind.METAL
+					&& ((com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem) i).material != com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN;
 		}
 
+		@Override
+		public boolean testIngredients(java.util.ArrayList<Item> ingredients) {
+			return ingredients.size() == 1 && isIngot(ingredients.get(0)) && ingredients.get(0).quantity() >= 1;
+		}
+
+		@Override
+		public int cost(java.util.ArrayList<Item> ingredients) {
+			return COST;
+		}
+
+		@Override
+		public Item brew(java.util.ArrayList<Item> ingredients) {
+			if (!testIngredients(ingredients)) return null;
+			ingredients.get(0).quantity(ingredients.get(0).quantity() - 1);
+			return sampleOutput(null);
+		}
+
+		@Override
+		public Item sampleOutput(java.util.ArrayList<Item> ingredients) {
+			return new TelekineticGrab().quantity(OUT_QUANTITY);
+		}
 	}
 
 }

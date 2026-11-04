@@ -81,6 +81,37 @@ DART_LEN = 26
 ORE_SLOTS = {"METAL_ORE"}                        # rock is warmed up so only the veins take metal tints
 CLOTH_SLOTS = {"ARMOR_CLOTH", "ARMOR_GAMBESON", "CLOTH_BOLT"}   # off-white fabric is made neutral grey so cloth tints apply
 
+# ---- non-gear items (tools/hd/misc_items.py) ----
+import misc_items  # noqa: E402
+M = "tools/spritecook/misc/"
+for _k in range((len(misc_items.ITEMS) + 15) // 16):
+    SHEETS["M%d" % _k] = ("../misc/M%d_raw.png" % _k, 4, 4)
+SHEETS["BASE"] = ("../misc/BASE_raw.png", 3, 3)
+for _i, (_name, _desc, _len) in enumerate(misc_items.ITEMS):
+    SRC[_name] = ("M%d" % (_i // 16), _i % 16, _len)
+
+# families drawn from one neutral base: (base cell, longest side, how)
+POTION_COLOURS = ["CRIMSON", "AMBER", "GOLDEN", "JADE", "TURQUOISE", "AZURE", "INDIGO", "MAGENTA",
+                  "BISTRE", "CHARCOAL", "SILVER", "IVORY"]
+RUNES = ["KAUNAN", "SOWILO", "LAGUZ", "YNGVI", "GYFU", "RAIDO", "ISAZ", "MANNAZ", "NAUDIZ",
+         "BERKANAN", "ODAL", "TIWAZ"]
+STONES = ["AGGRESSION", "AUGMENTATION", "FEAR", "BLAST", "BLINK", "CLAIRVOYANCE", "SLEEP", "DETECT",
+          "ENCHANT", "FLOCK", "INTUITION", "SHOCK"]
+RINGS = ["GARNET", "RUBY", "TOPAZ", "EMERALD", "ONYX", "OPAL", "TOURMALINE", "SAPPHIRE", "AMETHYST",
+         "QUARTZ", "AGATE", "DIAMOND"]
+DERIVED = []
+DERIVED += [("POTION_" + c, 0, 24, "liquid") for c in POTION_COLOURS]
+DERIVED += [("EXOTIC_" + c, 1, 24, "liquid") for c in POTION_COLOURS]
+DERIVED += [(b, 2, 24, "liquid") for b in ["BREW_INFERNAL", "BREW_BLIZZARD", "BREW_SHOCKING", "BREW_CAUSTIC", "BREW_AQUA"]]
+DERIVED += [(e, 3, 24, "liquid") for e in ["ELIXIR_HONEY", "ELIXIR_AQUA", "ELIXIR_MIGHT", "ELIXIR_DRAGON",
+                                           "ELIXIR_TOXIC", "ELIXIR_ICY", "ELIXIR_ARCANE", "ELIXIR_FEATHER"]]
+DERIVED += [("RING_" + g, 4, 21, "gem") for g in RINGS]
+DERIVED += [("SCROLL_" + r, 5, 28, "rune_dark") for r in RUNES] + [("SCROLL_ARSENAL", 5, 28, "rune_red")]
+DERIVED += [("EXOTIC_" + r, 6, 28, "rune_glow") for r in RUNES]
+DERIVED += [("STONE_" + t, 7, 21, "rune_glow") for t in STONES]
+DERIVED += [(d, 8, 21, "page") for d in ["GUIDE_PAGE", "ALCH_PAGE", "SEWER_PAGE", "PRISON_PAGE", "CAVES_PAGE",
+                                         "CITY_PAGE", "HALLS_PAGE"]]
+
 _cache = {}
 
 
@@ -91,15 +122,18 @@ def sheet(key):
     return _cache[key]
 
 
-def cell(key, i):
+SOLE = {"SPARKLING_POTION"}   # sheets where a neighbour's bits sit right under the item: keep the main body only
+
+
+def cell(key, i, sole=False):
     im, c, r = sheet(key)
     W, H = im.size
     x, y = i % c, i // c
     cr = im.crop((x * W // c, y * H // r, (x + 1) * W // c, (y + 1) * H // r))
-    return keep_main(cr)
+    return keep_main(cr, sole)
 
 
-def keep_main(cr):
+def keep_main(cr, sole=False):
     """Drop stray specks from neighbouring cells: keep connected parts at least 4% of the biggest."""
     a = cr.getchannel("A").point(lambda v: 255 if v > 60 else 0)
     w, h = a.size
@@ -121,11 +155,17 @@ def keep_main(cr):
                                 seen[ny][nx] = True
                                 stack.append((nx, ny))
                 comps.append(pts)
-    big = max(len(p) for p in comps)
+    main = max(comps, key=len)
+    big = len(main)
+    mx0, my0 = min(p[0] for p in main), min(p[1] for p in main)
+    mx1, my1 = max(p[0] for p in main), max(p[1] for p in main)
+    pad = max(w, h) * 0.03
     keep = Image.new("L", (w, h), 0)
     kp = keep.load()
     for pts in comps:
-        if len(pts) >= big * 0.04:
+        # big parts always stay; small ones only if they sit next to the main body
+        near = any(mx0 - pad <= x <= mx1 + pad and my0 - pad <= y <= my1 + pad for x, y in pts[:50])
+        if pts is main or (not sole and (len(pts) >= big * 0.4 or (len(pts) >= big * 0.04 and near))):
             for p in pts:
                 kp[p] = 255
     out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
@@ -267,6 +307,143 @@ def tint_tip(dart, c):
     return out
 
 
+def old_cell(old, n):
+    col, row = n % COLS, n // COLS
+    return old.crop((col * 16, row * 16, col * 16 + 16, row * 16 + 16))
+
+
+def mode_colour(pts):
+    from collections import Counter
+    if not pts:
+        return (200, 200, 200)
+    return Counter(pts).most_common(1)[0][0]
+
+
+def ramp3(c, t):
+    """t in 0..1 along dark (40%) -> c -> light (c toward white)."""
+    lo = tuple(v * 0.4 for v in c)
+    hi = tuple(v + (255 - v) * 0.5 for v in c)
+    if t < 0.5:
+        f = t / 0.5
+        return tuple(round(lo[i] + (c[i] - lo[i]) * f) for i in range(3))
+    f = (t - 0.5) / 0.5
+    return tuple(round(c[i] + (hi[i] - c[i]) * f) for i in range(3))
+
+
+def is_whiteish(r, g, b, s_max=0.18, v_min=0.55):
+    h, s_, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+    return s_ <= s_max and v >= v_min
+
+
+def tint_region(spr, colour, y_from, y_to):
+    """Recolour the near-white pixels between two heights (fractions) with a ramp of colour."""
+    out = spr.copy()
+    px = out.load()
+    for y in range(int(out.height * y_from), int(out.height * y_to)):
+        for x in range(out.width):
+            r, g, b, a = px[x, y]
+            if a and (r, g, b, a) != OUTLINE and is_whiteish(r, g, b):
+                v = max(r, g, b) / 255
+                px[x, y] = ramp3(colour, max(0.0, min(1.0, (v - 0.55) / 0.45))) + (a,)
+    return out
+
+
+def old_liquid(o):
+    """The old potion's liquid colour: the commonest non-outline colour in its lower half."""
+    pts = [o.getpixel((x, y))[:3] for y in range(8, 15) for x in range(2, 14)
+           if o.getpixel((x, y))[3] == 255 and max(o.getpixel((x, y))[:3]) >= 45]
+    return mode_colour(pts)
+
+
+def old_gem(o):
+    best, bs = (220, 220, 220), -1
+    for y in range(0, 8):
+        for x in range(3, 13):
+            r, g, b, a = o.getpixel((x, y))
+            if a < 255 or max(r, g, b) < 40:
+                continue
+            h, s_, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if 0.09 < h < 0.17 and s_ > 0.5:   # skip the gold of the band
+                continue
+            score = s_ + v * 0.3
+            if score > bs:
+                bs, best = score, (r, g, b)
+    return best
+
+
+def old_glyph(o, kind):
+    """The rune pixels of an old scroll/stone (centre area), as a set of (x, y) in 16px space."""
+    pts = set()
+    for y in range(3, 13):
+        for x in range(3, 13):
+            r, g, b, a = o.getpixel((x, y))
+            if a < 255:
+                continue
+            h, s_, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if kind == "rune_dark" and 40 < (r + g + b) / 3 < 75:
+                pts.add((x, y))
+            elif kind == "rune_red" and s_ > 0.5 and (h < 0.05 or h > 0.93):
+                pts.add((x, y))
+            elif kind == "rune_glow" and s_ > 0.45 and 0.03 <= h <= 0.16 and v > 0.5:
+                pts.add((x, y))
+    return pts
+
+
+def stamp_glyph(spr, pts, colour, shade, k=2):
+    """Draw the old glyph at k x scale, centred on the sprite."""
+    if not pts:
+        return spr
+    out = spr.copy()
+    px = out.load()
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    gw, gh = (max(xs) - min(xs) + 1) * k, (max(ys) - min(ys) + 1) * k
+    ox = (out.width - gw) // 2 - min(xs) * k
+    oy = (out.height - gh) // 2 - min(ys) * k
+    for (x, y) in pts:
+        for dx in range(k):
+            for dy in range(k):
+                X, Y = ox + x * k + dx, oy + y * k + dy
+                if 0 <= X < out.width and 0 <= Y < out.height and px[X, Y][3]:
+                    px[X, Y] = (shade if (k > 1 and dy == k - 1) else colour) + (255,)
+    return out
+
+
+def derived(old, idx):
+    """Potions, rings, scrolls, stones and pages made from their neutral base."""
+    made = {}
+    bases = {}
+    for name, cellno, longest, how in DERIVED:
+        n = idx[name]
+        key = (cellno, longest)
+        if key not in bases:
+            bases[key] = shrink(cell("BASE", cellno), size_for(longest))
+        base = bases[key]
+        o = old_cell(old, n)
+        if how == "liquid":
+            spr = tint_region(base, old_liquid(o), 0.3, 1.0)
+        elif how == "gem":
+            spr = tint_region(base, old_gem(o), 0.0, 0.55)
+        elif how == "page":
+            pts = [o.getpixel((x, y))[:3] for y in range(2, 14) for x in range(2, 14) if o.getpixel((x, y))[3] == 255 and max(o.getpixel((x, y))[:3]) > 30 and colorsys.rgb_to_hsv(*[v / 255 for v in o.getpixel((x, y))[:3]])[1] < 0.6]
+            c = mode_colour(pts)
+            spr = base.copy()
+            px = spr.load()
+            for y in range(spr.height):
+                for x in range(spr.width):
+                    r, g, b, a = px[x, y]
+                    if a and (r, g, b, a) != OUTLINE:
+                        px[x, y] = ramp3(c, max(0.0, min(1.0, (r + g + b) / 3 / 255 * 1.1))) + (a,)
+        elif how == "rune_dark":
+            spr = stamp_glyph(base, old_glyph(o, how), (70, 44, 26), (70, 44, 26), 1)
+        elif how == "rune_red":
+            spr = stamp_glyph(base, old_glyph(o, how), (196, 40, 40), (196, 40, 40), 1)
+        else:  # rune_glow: 1x on the slim exotic scrolls, 2x on the round stones
+            spr = stamp_glyph(base, old_glyph(o, how), (255, 176, 48), (214, 120, 24), 2 if cellno == 7 else 1)
+        made[n] = spr
+    return made
+
+
 def even(n):
     return n + (n & 1)
 
@@ -278,12 +455,13 @@ def main():
     rects = {}
     drawn = {}
     for name, (key, i, longest) in SRC.items():
-        spr = shrink(cell(key, i), size_for(longest))
+        spr = shrink(cell(key, i, name in SOLE), size_for(longest))
         if name in CLOTH_SLOTS:
             spr = neutralize_cloth(spr)
         if name in ORE_SLOTS:
             spr = warm_rock(spr)
         drawn[idx[name]] = spr
+    drawn.update(derived(old, idx))
     dart = shrink(cell("F", 0).rotate(180), size_for(DART_LEN))
     for name in DARTS:
         n = idx[name]
@@ -304,12 +482,21 @@ def main():
                 hd.paste(o.resize((32, 32), Image.NEAREST), (x0, y0))
                 bb = o.getbbox()
                 rects[n] = (bb[2] * 2, bb[3] * 2)
+    # non-gear slots that were redrawn (gear rows are handled above)
+    for n, spr in drawn.items():
+        if (n // COLS + 1) in GEAR_ROWS:
+            continue
+        col, row = n % COLS, n // COLS
+        hd.paste(spr, (col * 32, row * 32))
+        rects[n] = (even(spr.width), even(spr.height))
     hd.save(OUT_HD, optimize=True)
 
     # the 16px sheet gets each redrawn sprite at half size
     cur = Image.open(SHEET16).convert("RGBA")
     for n, spr in drawn.items():
         col, row = n % COLS, n // COLS
+        if (row + 1) not in GEAR_ROWS:
+            continue  # other items keep their old 16px art there (potion colours are picked from it)
         half = spr.resize(((spr.width + 1) // 2, (spr.height + 1) // 2), Image.BOX)
         hp = half.load()
         for y in range(half.height):
@@ -329,8 +516,9 @@ def main():
 
 
 def preview(hd, path):
-    crop = Image.new("RGBA", (COLS * 32, 9 * 32))
-    for k, row in enumerate(GEAR_ROWS):
+    rows = list(range(1, ROWS + 1))
+    crop = Image.new("RGBA", (COLS * 32, len(rows) * 32))
+    for k, row in enumerate(rows):
         crop.paste(hd.crop((0, (row - 1) * 32, COLS * 32, row * 32)), (0, k * 32))
     s = 3
     bg = Image.new("RGBA", (crop.width * s, crop.height * s), (40, 40, 48, 255))
