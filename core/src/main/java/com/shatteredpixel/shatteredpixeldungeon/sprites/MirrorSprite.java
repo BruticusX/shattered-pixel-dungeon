@@ -58,8 +58,9 @@ public class MirrorSprite extends MobSprite {
 
 	@Override
 	public void draw() {
-		super.draw();
-		if (Dungeon.hero == null || ch == null || !ch.isAlive()) return;
+		//facing left, the weapon is in the far hand: draw it first so the body covers its grip
+		if (!flipHorizontal) super.draw();
+		if (Dungeon.hero == null || ch == null || !ch.isAlive()) { if (flipHorizontal) super.draw(); return; }
 		int f;
 		if (curAnim == idle) f = new int[]{0, 0, 0, 1, 0, 0, 1, 1}[Math.min(curFrame, 7)];
 		else if (curAnim == run) f = 2 + Math.min(curFrame, 5);
@@ -67,6 +68,7 @@ public class MirrorSprite extends MobSprite {
 		else if (curAnim == die) f = -1;
 		else f = 0;
 		held.draw(this, Dungeon.hero.belongings.weapon(), f);
+		if (flipHorizontal) super.draw();
 	}
 
 	@Override

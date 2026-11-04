@@ -292,9 +292,11 @@ public class HeroSprite extends CharSprite {
 		if (hd) {
 			int f = shownFrameHD();
 			boolean show = Dungeon.hero != null && ch != null && ch.isAlive();
-			if (show && L.behind[f]) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null, L);
+			//facing left, the weapon stays in the same real hand, which is now the far one: behind the body
+			boolean behind = L.behind[f] || flipHorizontal;
+			if (show && behind) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null, L);
 			super.draw();
-			if (show && !L.behind[f]) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass), L);
+			if (show && !behind) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass), L);
 			return;
 		}
 		super.draw();
