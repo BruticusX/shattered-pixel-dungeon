@@ -110,6 +110,10 @@ public class TestLevel extends Level {
 			Elite.make(elites[i]);
 			mobs.add(elites[i]);
 		}
+		//a statue in random gear: it stands still until you attack it
+		com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue statue = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue();
+		statue.pos = cell(W / 2 + 6, H - 3);
+		mobs.add(statue);
 	}
 
 	public Actor addRespawner() {
@@ -145,6 +149,14 @@ public class TestLevel extends Level {
 		Dungeon.energy = Math.max(Dungeon.energy, 200);
 
 		//one chest beside the forge with every crafting material (10 of each) and some ore
+		//a loot chest beside the entrance to try the chest window
+		int loot = cell(W / 2 - 3, 1);
+		drop(new Gold(150), loot).type = Heap.Type.CHEST;
+		drop(Generator.random(Generator.Category.POTION), loot);
+		drop(Generator.random(Generator.Category.SCROLL), loot);
+		drop(Generator.random(Generator.Category.RING), loot);
+		drop(Generator.randomWeapon(), loot);
+
 		int chest = cell(W / 2 + 3, 1);
 		for (Material m : Material.values()) {
 			drop(new MaterialItem(m).quantity(10), chest).type = Heap.Type.CHEST;

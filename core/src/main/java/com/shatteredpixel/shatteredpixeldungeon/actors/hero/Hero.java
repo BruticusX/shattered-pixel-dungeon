@@ -2520,9 +2520,12 @@ public class Hero extends Char {
 				}
 
 				if (hasKey) {
+					//MOD: chests show a window of what's inside instead of just spilling it
+					boolean chest = heap.type == Type.CHEST || heap.type == Type.LOCKED_CHEST || heap.type == Type.CRYSTAL_CHEST;
 					GameScene.updateKeyDisplay();
 					heap.open(this);
 					spend(Key.TIME_TO_UNLOCK);
+					if (chest && !heap.isEmpty()) GameScene.show(new com.shatteredpixel.shatteredpixeldungeon.windows.WndChest(heap));
 				}
 			}
 			
