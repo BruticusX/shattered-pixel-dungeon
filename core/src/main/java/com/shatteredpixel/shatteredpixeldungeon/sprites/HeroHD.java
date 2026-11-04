@@ -34,7 +34,7 @@ import java.util.Locale;
 //Classes that are not redrawn yet keep the old 12x15 sprites.
 public class HeroHD {
 
-	public static final float HEIGHT = 16f;
+	public static final float HEIGHT = 20f; //art pixels the same size as floor items (ItemSprite.WORLD_SCALE)
 
 	public static boolean has( HeroClass cls ){
 		return cls == HeroClass.WARRIOR;
