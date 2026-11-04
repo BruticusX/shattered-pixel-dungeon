@@ -96,6 +96,16 @@ abstract public class MissileWeapon extends Weapon {
 	
 	public int tier;
 
+	//MOD: light / medium / heavy by the type's weight, replacing "tier-N" in the info text
+	public String weightLabel() {
+		com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats s = com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats.of(this);
+		if (s == null || s.weight == com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats.Weight.LIGHT)
+			return Messages.get(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon.class, "label_light");
+		if (s.weight == com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponStats.Weight.MEDIUM)
+			return Messages.get(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon.class, "label_medium");
+		return Messages.get(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon.class, "label_heavy");
+	}
+
 	protected int usesToID(){
 		return 10; //half of a melee weapon
 	}
@@ -444,8 +454,20 @@ abstract public class MissileWeapon extends Weapon {
 		}
 	}
 	
+	//MOD: recovery passive (ranged skills): a thrown weapon sometimes lands back at the thrower's feet
+	protected boolean recoverToThrower( int cell ){
+		if (!(curUser instanceof com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) || spawnedForEffect) return false;
+		int rec = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.activeRank(
+				(com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) curUser,
+				com.shatteredpixel.shatteredpixeldungeon.actors.hero.Skill.RECOVERY);
+		if (rec <= 0 || Random.Float() >= 0.1f * rec) return false;
+		Dungeon.level.drop( this, curUser.pos ).sprite.drop( cell );
+		return true;
+	}
+
 	protected void rangedHit( Char enemy, int cell ){
 		decrementDurability();
+		if (durability > 0 && !spawnedForEffect && !(enemy instanceof VaultBossElemental) && recoverToThrower(cell)) return;
 		if (durability > 0 && !spawnedForEffect){
 			//ALL projectiles stick to the vault boss elemental, as it has custom logic for it
 			boolean doesStick = sticky || enemy instanceof VaultBossElemental;
@@ -463,6 +485,7 @@ abstract public class MissileWeapon extends Weapon {
 	
 	protected void rangedMiss( int cell ) {
 		parent = null;
+		if (recoverToThrower(cell)) return;
 		if (!spawnedForEffect) super.onThrow(cell);
 	}
 
@@ -701,7 +724,7 @@ abstract public class MissileWeapon extends Weapon {
 		String info = super.info();
 
 		if (levelKnown) {
-			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
+			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known_w", weightLabel(), augment.damageFactor(min()), augment.damageFactor(max()));
 			if (!materialInfo().equals("")) info += " " + materialInfo(); //MOD
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
@@ -711,7 +734,7 @@ abstract public class MissileWeapon extends Weapon {
 				}
 			}
 		} else {
-			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq(0));
+			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_unknown_w", weightLabel(), min(0), max(0));
 			if (Dungeon.hero != null && STRReq(0) > Dungeon.hero.STR()) {
 				info += " " + Messages.get(MissileWeapon.class, "probably_too_heavy");
 			}

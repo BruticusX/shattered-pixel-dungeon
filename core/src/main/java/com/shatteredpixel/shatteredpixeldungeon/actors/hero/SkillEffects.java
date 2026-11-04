@@ -206,6 +206,7 @@ public class SkillEffects {
 					hero.attack(t, 1.5f * concussedBonus(hero, t), 0, 1f);
 					if (t.isAlive()) Buff.prolong(t, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis.class, 2f);
 				}
+				crackWalls(hero);
 				com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene.shake(3, 0.8f);
 				Sample.INSTANCE.play(Assets.Sounds.BLAST);
 				finish(hero, s, rank, hero.attackDelay());
@@ -800,6 +801,107 @@ public class SkillEffects {
 		Item.updateQuickslot();
 	}
 
+	//elemental infusion: weapon hits carry the last wand's element. Returns extra damage multiplier.
+	private static float infuseElement(Hero hero, Char enemy, int damage, int rank) {
+		LastWand lw = hero.buff(LastWand.class);
+		if (lw == null || lw.wand.isEmpty() || !enemy.isAlive()) return 0f;
+		String w = lw.wand.substring(lw.wand.lastIndexOf('.') + 1);
+		float chance = 0.15f + 0.1f * rank; //25 / 35 / 45%
+		boolean roll = com.watabou.utils.Random.Float() < chance;
+		switch (w) {
+			case "WandOfFireblast":
+				if (roll) Buff.affect(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning.class).reignite(enemy, 3f);
+				return 0f;
+			case "WandOfFrost":
+				Buff.prolong(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill.class, 1f + rank);
+				return 0f;
+			case "WandOfLightning":
+				//a spark arcs to one other enemy next to the target
+				if (roll) {
+					for (int i : PathFinder.NEIGHBOURS8) {
+						Char ch = Actor.findChar(enemy.pos + i);
+						if (ch != null && ch != hero && ch.alignment == Char.Alignment.ENEMY) {
+							ch.damage(Math.max(1, Math.round(damage * 0.4f)), new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning());
+							if (ch.sprite != null) ch.sprite.flash();
+							break;
+						}
+					}
+				}
+				return 0f;
+			case "WandOfCorrosion":
+				if (roll) Buff.affect(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion.class).set(3f, 1 + rank);
+				return 0f;
+			case "WandOfBlastWave":
+				if (roll) knockBack(hero, enemy, 1);
+				return 0f;
+			case "WandOfCorruption":
+				if (roll) Buff.prolong(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness.class, 3f);
+				return 0f;
+			case "WandOfPrismaticLight":
+				if (roll) Buff.prolong(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness.class, 2f);
+				return 0f;
+			case "WandOfRegrowth":
+				if (roll) Buff.prolong(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots.class, 2f);
+				return 0f;
+			case "WandOfTransfusion": {
+				int heal = Math.min(Math.max(1, Math.round(damage * 0.1f)), hero.HT - hero.HP);
+				if (heal > 0) {
+					hero.HP += heal;
+					hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText.HEALING);
+				}
+				return 0f;
+			}
+			case "WandOfLivingEarth":
+				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin.conditionallyAppend(hero, 1 + rank, 3);
+				return 0f;
+			case "WandOfDisintegration":
+				return 0.1f; //pure force: just hits harder
+			default:
+				return 0f;   //magic missile, warding: the base bonus only
+		}
+	}
+
+	//earthshaker: the quake reveals hidden doors and traps in view, and caves in ordinary walls
+	//right next to the hero (never the map edge, special or secret rooms, or boss floors)
+	private static void crackWalls(Hero hero) {
+		com.shatteredpixel.shatteredpixeldungeon.levels.Level level = Dungeon.level;
+		int w = level.width();
+		for (int c = 0; c < level.length(); c++) {
+			if (level.heroFOV[c] && Dungeon.level.distance(hero.pos, c) <= 4
+					&& (com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.flags[level.map[c]] & com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.SECRET) != 0) {
+				int old = level.map[c];
+				level.discover(c);
+				GameScene.discoverTile(c, old);
+				com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping.discover(c);
+			}
+		}
+		if (Dungeon.bossLevel() || !(level instanceof com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel)) return;
+		com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel rl = (com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel) level;
+		boolean any = false;
+		for (int i : PathFinder.NEIGHBOURS8) {
+			int c = hero.pos + i;
+			int x = c % w, y = c / w;
+			if (x <= 1 || y <= 1 || x >= w - 2 || y >= level.height() - 2) continue;
+			int t = level.map[c];
+			if (t != com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.WALL && t != com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.WALL_DECO) continue;
+			boolean safe = true;
+			for (int j : PathFinder.NEIGHBOURS8) {
+				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room r = rl.room(c + j);
+				if (r instanceof com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom
+						|| r instanceof com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom) {
+					safe = false;
+					break;
+				}
+			}
+			if (!safe) continue;
+			com.shatteredpixel.shatteredpixeldungeon.levels.Level.set(c, com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.EMPTY_DECO);
+			GameScene.updateMap(c);
+			com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter.get(c).burst(com.shatteredpixel.shatteredpixeldungeon.effects.Speck.factory(com.shatteredpixel.shatteredpixeldungeon.effects.Speck.ROCK), 4);
+			any = true;
+		}
+		if (any) Dungeon.observe();
+	}
+
 	public static class LastWand extends Buff {
 		public String wand = "";
 		@Override public void storeInBundle(Bundle b) { super.storeInBundle(b); b.put("wand", wand); }
@@ -1111,7 +1213,10 @@ public class SkillEffects {
 		if (hero.buff(ArcaneOverload.class) != null && canUseWith(hero, Skill.ARCANE_OVERLOAD)) mult += 0.5f;
 		//elemental infusion
 		Infusion inf = hero.buff(Infusion.class);
-		if (inf != null) mult += 0.1f + 0.1f * inf.rank;
+		if (inf != null) {
+			mult += 0.1f + 0.1f * inf.rank;
+			mult += infuseElement(hero, enemy, damage, inf.rank);
+		}
 		damage = Math.round(damage * mult);
 
 		//entangle: chance to root
