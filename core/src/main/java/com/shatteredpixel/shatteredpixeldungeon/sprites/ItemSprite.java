@@ -82,7 +82,17 @@ public class ItemSprite extends MovieClip {
 	
 	public ItemSprite( Heap heap ){
 		super(Assets.Sprites.ITEMS);
+		inWorld = true;
 		view( heap );
+	}
+
+	//MOD: redrawn items lying on the floor or flying through the air are drawn at 75%, so their
+	//pixels are the same size as the redrawn heroes' (HeroHD.HEIGHT); in the bag they stay full size
+	public static final float WORLD_SCALE = 0.75f;
+	protected boolean inWorld = false;
+
+	public void inWorld( boolean value ){
+		inWorld = value;
 	}
 	
 	public ItemSprite( Item item ) {
@@ -106,6 +116,7 @@ public class ItemSprite extends MovieClip {
 	
 	public void link( Heap heap ) {
 		this.heap = heap;
+		inWorld = true;
 		view(heap);
 		renderShadow = true;
 		visible = heap.seen;
@@ -136,6 +147,7 @@ public class ItemSprite extends MovieClip {
 			sheet = o.sheet;
 			loaded = o.loaded;
 			hd = o.hd;
+			inWorld = o.inWorld;
 		}
 
 		if (other instanceof ItemSprite && ((ItemSprite) other).glowing != null){
@@ -242,8 +254,9 @@ public class ItemSprite extends MovieClip {
 	public void frame( RectF frame ) {
 		super.frame( frame );
 		if (hd) {
-			width /= 2f;
-			height /= 2f;
+			float k = inWorld ? 0.5f * WORLD_SCALE : 0.5f;
+			width *= k;
+			height *= k;
 			updateVertices();
 		}
 	}
@@ -307,7 +320,7 @@ public class ItemSprite extends MovieClip {
 		bindSheet( wantHD );
 		frame( wantHD ? ItemSpriteSheetHD.film.get( image ) : ItemSpriteSheet.film.get( image ));
 
-		float height = wantHD ? ItemSpriteSheetHD.film.height( image ) / 2f : ItemSpriteSheet.film.height( image );
+		float height = wantHD ? ItemSpriteSheetHD.film.height( image ) / 2f * (inWorld ? WORLD_SCALE : 1f) : ItemSpriteSheet.film.height( image );
 		//adds extra raise to very short items, so they are visible
 		if (height < 8f){
 			perspectiveRaise =  (5 + 8 - height) / 16f;

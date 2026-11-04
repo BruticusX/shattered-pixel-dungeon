@@ -76,6 +76,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	public void reset( PointF from, PointF to, Item item, Callback listener) {
 		revive();
 
+		inWorld = true; //MOD: thrown items are drawn at floor size
 		if (item == null)   view(0, null);
 		else                view( item );
 
