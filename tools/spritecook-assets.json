@@ -145,5 +145,77 @@
   {
     "asset_id": "3c2f013e-ba32-4b5b-87a2-21ed6334a920",
     "label": "proposal: thrown sheet"
+  },
+  {
+    "asset_id": "15f6ddb8-847c-4118-bb9b-8b3a67c558d7",
+    "label": "item sheet M0"
+  },
+  {
+    "asset_id": "39b39631-fb46-41cd-b159-f3dd847925d2",
+    "label": "item sheet M1"
+  },
+  {
+    "asset_id": "5d6be9b7-3c49-43b4-99e1-c7f4ea6b6bf0",
+    "label": "item sheet M2"
+  },
+  {
+    "asset_id": "532583aa-7fd6-4a11-b489-d72aa68242cf",
+    "label": "item sheet M3"
+  },
+  {
+    "asset_id": "f25adc1b-fa5f-41fa-b6fa-08a727f3133d",
+    "label": "item sheet M4"
+  },
+  {
+    "asset_id": "24cb9f87-ced1-47b7-9eb9-08a961d3db6b",
+    "label": "item sheet M5"
+  },
+  {
+    "asset_id": "6000d671-f332-445c-bd87-cde683abf1ad",
+    "label": "item sheet M6"
+  },
+  {
+    "asset_id": "6ca33675-f2f1-440a-9642-7860ec989bb4",
+    "label": "item sheet M7"
+  },
+  {
+    "asset_id": "74050171-4114-45b7-8781-5b22cb7adb94",
+    "label": "item sheet M8"
+  },
+  {
+    "asset_id": "56e568d7-f93d-41dd-baa6-a9a45cc3abbf",
+    "label": "item sheet M9"
+  },
+  {
+    "asset_id": "38111e6d-9606-41c6-9602-0f94bed35c87",
+    "label": "item sheet M10"
+  },
+  {
+    "asset_id": "582f838a-9e52-4ec2-89c3-06f1a1a58abb",
+    "label": "item sheet BASE"
+  },
+  {
+    "asset_id": "b573ba74-02d9-4192-b0e0-76d8081ae6a2",
+    "label": "item sheet gear A"
+  },
+  {
+    "asset_id": "c93381c6-b0ce-4a1d-b065-a63e393869e7",
+    "label": "item sheet gear B"
+  },
+  {
+    "asset_id": "1cffb486-04e5-47fe-a563-385e33f4d613",
+    "label": "item sheet gear C"
+  },
+  {
+    "asset_id": "bbdf5f5b-7698-460e-8739-8b16ab251530",
+    "label": "item sheet gear D"
+  },
+  {
+    "asset_id": "b932b6ca-8cdb-45fa-888d-d5bed84d8da9",
+    "label": "item sheet gear E"
+  },
+  {
+    "asset_id": "03e595b8-60df-4249-9e57-6d49a2021747",
+    "label": "item sheet gear F"
   }
 ]
