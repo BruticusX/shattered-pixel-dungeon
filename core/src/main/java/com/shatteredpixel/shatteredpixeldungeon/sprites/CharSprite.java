@@ -889,4 +889,11 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			visual.shadowOffset = 0.25f - hVal*0.8f;
 		}
 	}
+
+	//MOD: plays the attack animation with no attack behind it (test room showcase monsters)
+	public void showcaseAttack( int from, int to ){
+		if (attack == null) return;
+		turnTo( from, to );
+		play( attack.clone() );
+	}
 }

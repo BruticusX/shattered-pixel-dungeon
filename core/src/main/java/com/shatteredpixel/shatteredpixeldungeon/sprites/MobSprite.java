@@ -33,6 +33,19 @@ public class MobSprite extends CharSprite {
 
 	private static final float FADE_TIME	= 3f;
 	private static final float FALL_TIME	= 1f;
+
+	//MOD: redrawn monsters are drawn at a higher resolution and shown scaled down to their usual size
+	protected float hdScale = 1f;
+
+	@Override
+	public void frame( com.watabou.utils.RectF frame ) {
+		super.frame( frame );
+		if (hdScale != 1f) {
+			width *= hdScale;
+			height *= hdScale;
+			updateVertices();
+		}
+	}
 	
 	@Override
 	public void update() {
