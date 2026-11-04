@@ -99,9 +99,246 @@ public class SkillEffects {
 					});
 				}
 				break;
+			//daggers
+			case BACKSTAB:
+				withAdjacentTarget(hero, s, rank, new TargetAction() {
+					public void run(Char t) { backstab(hero, t, rank); }
+				});
+				break;
+			case FAN_OF_KNIVES: {
+				ArrayList<Char> targets = visibleEnemies(hero, 4);
+				java.util.Collections.shuffle(targets);
+				int n = Math.min(targets.size(), 2 + rank);
+				for (int i = 0; i < n; i++) hero.attack(targets.get(i), 0.5f, 0, 1f);
+				Sample.INSTANCE.play(Assets.Sounds.MISS);
+				finish(hero, s, rank, hero.attackDelay());
+				break;
+			}
+			case DEATH_MARK:
+				withVisibleTarget(hero, s, rank, new TargetAction() {
+					public void run(Char t) {
+						Buff.affect(t, DeathMarked.class, 10f);
+						t.sprite.showStatus(CharSprite.NEGATIVE, s.title());
+						Sample.INSTANCE.play(Assets.Sounds.DEBUFF);
+					}
+				}, 1f);
+				break;
+			//axes
+			case SUNDER:
+				withAdjacentTarget(hero, s, rank, new TargetAction() {
+					public void run(Char t) {
+						hero.attack(t, 1.1f + 0.2f * rank, 0, 1f);
+						if (t.isAlive()) Buff.affect(t, Sundered.class, 10f).pct = 0.15f + 0.15f * rank;
+						Sample.INSTANCE.play(Assets.Sounds.HIT_CRUSH);
+					}
+				});
+				break;
+			case WHIRLWIND: {
+				for (Char t : adjacentEnemies(hero)) {
+					hero.attack(t, 0.7f + 0.2f * rank, 0, 1f);
+					knockBack(hero, t, 1);
+				}
+				Sample.INSTANCE.play(Assets.Sounds.HIT_SLASH);
+				finish(hero, s, rank, hero.attackDelay());
+				break;
+			}
+			case RAMPAGE:
+				Buff.affect(hero, Rampage.class, 8f);
+				hero.sprite.showStatus(CharSprite.POSITIVE, s.title());
+				Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+				finish(hero, s, rank, 1f);
+				break;
+			//blunt
+			case SKULL_CRACK:
+				withAdjacentTarget(hero, s, rank, new TargetAction() {
+					public void run(Char t) {
+						hero.attack(t, (1.05f + 0.15f * rank) * concussedBonus(hero, t), 0, 1f);
+						if (t.isAlive()) {
+							float stun = rank == 1 ? 2 : 3;
+							if (t.properties().contains(Char.Property.BOSS)) stun = 1;
+							Buff.prolong(t, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis.class, stun);
+						}
+						Sample.INSTANCE.play(Assets.Sounds.HIT_CRUSH);
+					}
+				});
+				break;
+			case GROUND_SLAM: {
+				for (Char t : visibleEnemies(hero, 2)) {
+					hero.attack(t, (0.5f + 0.2f * rank) * concussedBonus(hero, t), 0, 1f);
+					if (t.isAlive()) Buff.prolong(t, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple.class, 3f);
+				}
+				com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene.shake(1, 0.4f);
+				Sample.INSTANCE.play(Assets.Sounds.ROCKS);
+				finish(hero, s, rank, hero.attackDelay());
+				break;
+			}
+			case EARTHSHAKER: {
+				for (Char t : visibleEnemies(hero, 99)) {
+					hero.attack(t, 1.5f * concussedBonus(hero, t), 0, 1f);
+					if (t.isAlive()) Buff.prolong(t, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis.class, 2f);
+				}
+				com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene.shake(3, 0.8f);
+				Sample.INSTANCE.play(Assets.Sounds.BLAST);
+				finish(hero, s, rank, hero.attackDelay());
+				break;
+			}
 			default:
 				GLog.w(Messages.get(SkillEffects.class, "not_ready"));
 		}
+	}
+
+	// ---------------- targeting helpers ----------------
+
+	private interface TargetAction { void run(Char target); }
+
+	private static ArrayList<Char> adjacentEnemies(Hero hero) {
+		ArrayList<Char> list = new ArrayList<>();
+		for (int i : PathFinder.NEIGHBOURS8) {
+			Char ch = Actor.findChar(hero.pos + i);
+			if (ch != null && ch.alignment == Char.Alignment.ENEMY) list.add(ch);
+		}
+		return list;
+	}
+
+	private static ArrayList<Char> visibleEnemies(Hero hero, int range) {
+		ArrayList<Char> list = new ArrayList<>();
+		for (com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob m : Dungeon.level.mobs.toArray(new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob[0])) {
+			if (m.alignment == Char.Alignment.ENEMY && hero.fieldOfView[m.pos]
+					&& Dungeon.level.distance(hero.pos, m.pos) <= range) list.add(m);
+		}
+		return list;
+	}
+
+	//uses the only adjacent enemy, or asks for one
+	private static void withAdjacentTarget(final Hero hero, final Skill s, final int rank, final TargetAction action) {
+		Char only = soleAdjacentEnemy(hero);
+		if (only != null) {
+			action.run(only);
+			finish(hero, s, rank, hero.attackDelay());
+			return;
+		}
+		GameScene.selectCell(new CellSelector.Listener() {
+			@Override
+			public void onSelect(Integer cell) {
+				if (cell == null) return;
+				Char ch = Actor.findChar(cell);
+				if (ch == null || ch == hero || !Dungeon.level.adjacent(hero.pos, cell) || ch.alignment == Char.Alignment.ALLY) {
+					GLog.w(Messages.get(SkillEffects.class, "need_adjacent"));
+					return;
+				}
+				action.run(ch);
+				finish(hero, s, rank, hero.attackDelay());
+			}
+			@Override
+			public String prompt() { return Messages.get(SkillEffects.class, "choose_target"); }
+		});
+	}
+
+	private static void withVisibleTarget(final Hero hero, final Skill s, final int rank, final TargetAction action, final float time) {
+		GameScene.selectCell(new CellSelector.Listener() {
+			@Override
+			public void onSelect(Integer cell) {
+				if (cell == null) return;
+				Char ch = Actor.findChar(cell);
+				if (ch == null || ch == hero || !hero.fieldOfView[cell] || ch.alignment == Char.Alignment.ALLY) {
+					GLog.w(Messages.get(SkillEffects.class, "need_visible"));
+					return;
+				}
+				action.run(ch);
+				finish(hero, s, rank, time);
+			}
+			@Override
+			public String prompt() { return Messages.get(SkillEffects.class, "choose_target"); }
+		});
+	}
+
+	private static void knockBack(Hero hero, Char t, int power) {
+		if (!t.isAlive()) return;
+		int dest = t.pos + (t.pos - hero.pos);
+		com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica traj = new com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica(
+				t.pos, dest, com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica.MAGIC_BOLT);
+		com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave.throwChar(t, traj, power, false, true, hero);
+	}
+
+	// ---------------- daggers ----------------
+
+	private static void backstab(Hero hero, Char t, int rank) {
+		//blink to the far side of the target if there's room
+		int behind = t.pos + (t.pos - hero.pos);
+		if (behind >= 0 && behind < Dungeon.level.length() && Dungeon.level.passable[behind]
+				&& Actor.findChar(behind) == null) {
+			com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation.appear(hero, behind);
+			Dungeon.observe();
+		}
+		hero.attack(t, 1.25f + 0.25f * rank, 0, Char.INFINITE_ACCURACY);
+		if (t.isAlive() && Proficiency.rank(hero.heroClass, Skill.LACERATE) > 0) {
+			Buff.affect(t, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding.class).set(2 + Dungeon.scalingDepth() / 2f);
+		}
+		Sample.INSTANCE.play(Assets.Sounds.HIT_STAB);
+	}
+
+	public static class DeathMarked extends FlavourBuff {
+		{ type = buffType.NEGATIVE; announced = true; }
+		@Override public int icon() { return BuffIndicator.MARK; }
+		@Override public void tintIcon(com.watabou.noosa.Image icon) { icon.hardlight(1f, 0.2f, 0.2f); }
+		@Override public String desc() { return Messages.get(this, "desc", dispTurns()); }
+	}
+
+	// ---------------- axes ----------------
+
+	public static class Sundered extends FlavourBuff {
+		{ type = buffType.NEGATIVE; announced = true; }
+		public float pct = 0.3f;
+		@Override public int icon() { return BuffIndicator.ARMOR; }
+		@Override public void tintIcon(com.watabou.noosa.Image icon) { icon.hardlight(1f, 0.5f, 0.2f); }
+		@Override public String desc() { return Messages.get(this, "desc", Math.round(pct * 100), dispTurns()); }
+		@Override public void storeInBundle(Bundle b) { super.storeInBundle(b); b.put("pct", pct); }
+		@Override public void restoreFromBundle(Bundle b) { super.restoreFromBundle(b); pct = b.getFloat("pct"); }
+	}
+
+	public static class Rampage extends FlavourBuff {
+		{ type = buffType.POSITIVE; announced = true; }
+		@Override public int icon() { return BuffIndicator.FURY; }
+		@Override public void tintIcon(com.watabou.noosa.Image icon) { icon.hardlight(1f, 0.3f, 0.1f); }
+		@Override public String desc() { return Messages.get(this, "desc", dispTurns()); }
+		public void extend(float turns) { spend(turns); }
+	}
+
+	// ---------------- blunt ----------------
+
+	//dazed or stunned targets take +20% from blunt skills when concussive is learned
+	private static float concussedBonus(Hero hero, Char t) {
+		if (Proficiency.rank(hero.heroClass, Skill.CONCUSSIVE) == 0) return 1f;
+		if (t.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze.class) != null
+				|| t.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis.class) != null) return 1.2f;
+		return 1f;
+	}
+
+	// ---------------- armor and kills ----------------
+
+	//how much of the target's armor still counts against the hero's hit
+	public static int modifyDR(Hero hero, Char enemy, int dr) {
+		float keep = 1f;
+		int cw = Proficiency.activeRank(hero, Skill.CRUSHING_WEIGHT);
+		if (cw > 0) keep *= 1f - 0.15f * cw;
+		Sundered sd = enemy.buff(Sundered.class);
+		if (sd != null) keep *= 1f - sd.pct;
+		return Math.round(dr * keep);
+	}
+
+	//called when the hero's attack kills an enemy
+	public static void onKill(Hero hero, Char enemy) {
+		int ss = Proficiency.activeRank(hero, Skill.SHADOW_STEP);
+		if (ss > 0) Buff.affect(hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility.class, ss);
+		if (enemy.buff(DeathMarked.class) != null) {
+			Cooldowns.clear(hero, Skill.BACKSTAB);
+		}
+		if (Proficiency.activeRank(hero, Skill.EXECUTIONER) > 0) {
+			Cooldowns.reduce(hero, Skill.SUNDER, 3);
+		}
+		Rampage r = hero.buff(Rampage.class);
+		if (r != null) r.extend(2f);
+		GameScene.updateSkillBar();
 	}
 
 	private static void finish(Hero hero, Skill s, int rank, float time) {
@@ -184,6 +421,41 @@ public class SkillEffects {
 
 	//momentum: each hit in a row on the same target adds +4/6/8% damage, up to 5 stacks
 	public static int onHeroHit(Hero hero, Char enemy, int damage) {
+		float mult = 1f;
+		//death mark: +50% damage from you
+		if (enemy.buff(DeathMarked.class) != null) mult += 0.5f;
+		//bloodlust: +1% per 3/2.5/2% of missing HP, up to +30%
+		int bl = Proficiency.activeRank(hero, Skill.BLOODLUST);
+		if (bl > 0 && hero.HT > 0) {
+			float missing = 100f * (hero.HT - hero.HP) / hero.HT;
+			mult += Math.min(0.30f, missing / (3.5f - 0.5f * bl) / 100f);
+		}
+		//executioner: +25/40/55% against enemies below 30% HP
+		int ex = Proficiency.activeRank(hero, Skill.EXECUTIONER);
+		if (ex > 0 && enemy.HP < enemy.HT * 0.3f) mult += 0.10f + 0.15f * ex;
+		//rampage: +40%, and heals for 10% of damage dealt
+		if (hero.buff(Rampage.class) != null) {
+			mult += 0.4f;
+			int heal = Math.max(1, Math.round(damage * mult * 0.1f));
+			heal = Math.min(heal, hero.HT - hero.HP);
+			if (heal > 0) {
+				hero.HP += heal;
+				hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText.HEALING);
+			}
+		}
+		damage = Math.round(damage * mult);
+
+		//lacerate: chance to bleed
+		int lc = Proficiency.activeRank(hero, Skill.LACERATE);
+		if (lc > 0 && enemy.isAlive() && com.watabou.utils.Random.Float() < 0.05f + 0.10f * lc) {
+			Buff.affect(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding.class).set(Math.max(1, damage / 3f));
+		}
+		//concussive: chance to daze
+		int cc = Proficiency.activeRank(hero, Skill.CONCUSSIVE);
+		if (cc > 0 && enemy.isAlive() && com.watabou.utils.Random.Float() < 0.04f + 0.04f * cc) {
+			Buff.prolong(enemy, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze.class, 3f);
+		}
+
 		int r = Proficiency.activeRank(hero, Skill.MOMENTUM);
 		if (r > 0) {
 			MomentumStacks m = Buff.affect(hero, MomentumStacks.class);
@@ -220,6 +492,18 @@ public class SkillEffects {
 			if (c == null) return 0;
 			Integer v = c.left.get(s);
 			return v == null ? 0 : v;
+		}
+
+		public static void clear(Hero hero, Skill s) {
+			Cooldowns c = hero.buff(Cooldowns.class);
+			if (c != null) c.left.remove(s);
+		}
+
+		public static void reduce(Hero hero, Skill s, int turns) {
+			Cooldowns c = hero.buff(Cooldowns.class);
+			if (c == null || !c.left.containsKey(s)) return;
+			int v = c.left.get(s) - turns;
+			if (v <= 0) c.left.remove(s); else c.left.put(s, v);
 		}
 
 		public static void start(Hero hero, Skill s, int turns) {

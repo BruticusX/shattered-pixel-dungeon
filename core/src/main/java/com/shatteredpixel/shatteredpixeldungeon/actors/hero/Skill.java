@@ -36,25 +36,25 @@ public enum Skill {
 	THOUSAND_CUTS    (Family.SWORDS,   Kind.ULTIMATE, true,  70),
 
 	//daggers
-	BACKSTAB         (Family.DAGGERS,  Kind.ACTIVE,   false, 20, 17, 14),
-	FAN_OF_KNIVES    (Family.DAGGERS,  Kind.ACTIVE,   false, 25, 25, 25),
-	LACERATE         (Family.DAGGERS,  Kind.PASSIVE,  false),
-	SHADOW_STEP      (Family.DAGGERS,  Kind.PASSIVE,  false),
-	DEATH_MARK       (Family.DAGGERS,  Kind.ULTIMATE, false, 80),
+	BACKSTAB         (Family.DAGGERS,  Kind.ACTIVE,   true, 20, 17, 14),
+	FAN_OF_KNIVES    (Family.DAGGERS,  Kind.ACTIVE,   true, 25, 25, 25),
+	LACERATE         (Family.DAGGERS,  Kind.PASSIVE,  true),
+	SHADOW_STEP      (Family.DAGGERS,  Kind.PASSIVE,  true),
+	DEATH_MARK       (Family.DAGGERS,  Kind.ULTIMATE, true, 80),
 
 	//axes
-	SUNDER           (Family.AXES,     Kind.ACTIVE,   false, 18, 16, 14),
-	WHIRLWIND        (Family.AXES,     Kind.ACTIVE,   false, 25, 22, 19),
-	BLOODLUST        (Family.AXES,     Kind.PASSIVE,  false),
-	EXECUTIONER      (Family.AXES,     Kind.PASSIVE,  false),
-	RAMPAGE          (Family.AXES,     Kind.ULTIMATE, false, 90),
+	SUNDER           (Family.AXES,     Kind.ACTIVE,   true, 18, 16, 14),
+	WHIRLWIND        (Family.AXES,     Kind.ACTIVE,   true, 25, 22, 19),
+	BLOODLUST        (Family.AXES,     Kind.PASSIVE,  true),
+	EXECUTIONER      (Family.AXES,     Kind.PASSIVE,  true),
+	RAMPAGE          (Family.AXES,     Kind.ULTIMATE, true, 90),
 
 	//blunt
-	SKULL_CRACK      (Family.BLUNT,    Kind.ACTIVE,   false, 20, 18, 15),
-	GROUND_SLAM      (Family.BLUNT,    Kind.ACTIVE,   false, 28, 25, 22),
-	CRUSHING_WEIGHT  (Family.BLUNT,    Kind.PASSIVE,  false),
-	CONCUSSIVE       (Family.BLUNT,    Kind.PASSIVE,  false),
-	EARTHSHAKER      (Family.BLUNT,    Kind.ULTIMATE, false, 100),
+	SKULL_CRACK      (Family.BLUNT,    Kind.ACTIVE,   true, 20, 18, 15),
+	GROUND_SLAM      (Family.BLUNT,    Kind.ACTIVE,   true, 28, 25, 22),
+	CRUSHING_WEIGHT  (Family.BLUNT,    Kind.PASSIVE,  true),
+	CONCUSSIVE       (Family.BLUNT,    Kind.PASSIVE,  true),
+	EARTHSHAKER      (Family.BLUNT,    Kind.ULTIMATE, true, 100),
 
 	//polearms
 	IMPALE           (Family.POLEARMS, Kind.ACTIVE,   false, 18, 16, 14),

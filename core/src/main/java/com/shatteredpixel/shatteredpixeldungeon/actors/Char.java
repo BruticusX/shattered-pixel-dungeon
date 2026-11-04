@@ -417,6 +417,9 @@ public abstract class Char extends Actor {
 				if (h.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
 					dr = 0;
 				}
+
+				//MOD: crushing weight and sunder let the hero's hits ignore armor
+				dr = com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.modifyDR(h, enemy, dr);
 			}
 
 			//we use a float here briefly so that we don't have to constantly round while
