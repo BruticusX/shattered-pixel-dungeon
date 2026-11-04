@@ -375,7 +375,9 @@ public class QuickRecipe extends Component {
 			case 8:
 				result.add(new QuickRecipe(new UnstableSpell.Recipe(), new ArrayList<>(Arrays.asList(new Scroll.PlaceHolder(), new  Runestone.PlaceHolder())), new UnstableSpell()));
 				result.add(new QuickRecipe(new WildEnergy.Recipe()));
-				result.add(new QuickRecipe(new TelekineticGrab.Recipe()));
+				result.add(new QuickRecipe(new TelekineticGrab.Recipe(), //MOD: from a metal ingot
+						new ArrayList<>(Arrays.asList((Item) new com.shatteredpixel.shatteredpixeldungeon.items.MaterialItem(com.shatteredpixel.shatteredpixeldungeon.items.Material.IRON))),
+						new TelekineticGrab().quantity(6)));
 				result.add(new QuickRecipe(new PhaseShift.Recipe()));
 				if (!PixelScene.landscape()) result.add(null);
 				result.add(null);
