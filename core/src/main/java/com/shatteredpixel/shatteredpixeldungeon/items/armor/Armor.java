@@ -813,6 +813,7 @@ public class Armor extends EquipableItem {
 			if (effectRoll < 0.3f * ParchmentScrap.curseChanceMultiplier()) {
 				inscribe(Glyph.randomCurse());
 				cursed = true;
+				level(0); //MOD: cursed gear never comes with upgrades
 			} else if (effectRoll >= 1f - (0.15f * ParchmentScrap.enchantChanceMultiplier())){
 				inscribe();
 			}

@@ -420,6 +420,7 @@ abstract public class MissileWeapon extends Weapon {
 			if (effectRoll < 0.3f * ParchmentScrap.curseChanceMultiplier()) {
 				enchant(Enchantment.randomCurse());
 				cursed = true;
+				level(0); //MOD: cursed gear never comes with upgrades
 			} else if (effectRoll >= 1f - (0.1f * ParchmentScrap.enchantChanceMultiplier())){
 				enchant();
 			}
