@@ -103,8 +103,11 @@ public class Elite extends ChampionEnemy {
 		}
 	}
 
-	//1-2 materials, chosen for the current depth; obsidian never drops from elites
+	//1-2 materials, chosen for the current depth; from the caves down, a small chance of umbralite
 	public static void dropLoot(Mob m) {
+		if (Dungeon.depth >= 11 && Random.Float() < 0.08f) {
+			Dungeon.level.drop(MaterialItem.obsidian(), m.pos).sprite.drop();
+		}
 		int count = Random.Int(2) == 0 ? 1 : 2;
 		for (int i = 0; i < count; i++) {
 			if (Random.Float() < 0.75f) {

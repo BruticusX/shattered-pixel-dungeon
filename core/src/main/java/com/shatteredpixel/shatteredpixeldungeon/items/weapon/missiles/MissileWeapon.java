@@ -408,7 +408,7 @@ abstract public class MissileWeapon extends Weapon {
 				n++;
 			}
 		}
-		level(n);
+		level(Math.min(n, 1 + Math.max(0, Dungeon.depth - 1) / 5)); //MOD: capped by region
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen

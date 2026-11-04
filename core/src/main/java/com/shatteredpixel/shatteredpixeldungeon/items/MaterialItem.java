@@ -80,6 +80,8 @@ public class MaterialItem extends Item {
 		loot.add(randomFor(Material.Kind.METAL, depth).quantity(2));
 		loot.add(randomFor(Material.Kind.METAL, depth));
 		loot.add(randomFor(Random.Int(2) == 0 ? Material.Kind.CLOTH : Material.Kind.LEATHER, depth).quantity(2));
+		//bosses from the prison down also leave an umbralite ingot
+		if (com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth >= 10) loot.add(obsidian());
 		for (Item i : loot) {
 			com.shatteredpixel.shatteredpixeldungeon.Dungeon.level.drop(i, pos).sprite.drop();
 		}
@@ -92,7 +94,7 @@ public class MaterialItem extends Item {
 	//how many of a material the hero carries (finished materials only, not ore)
 	public static int count(Hero hero, Material m) {
 		int total = 0;
-		for (Item i : hero.belongings.backpack.items) {
+		for (Item i : hero.belongings.backpack) { //includes the forge satchel
 			if (i instanceof MaterialItem && ((MaterialItem) i).material == m && !((MaterialItem) i).ore) {
 				total += i.quantity();
 			}
@@ -103,7 +105,9 @@ public class MaterialItem extends Item {
 	//removes this many of a material from the hero's bag; returns false if they don't have enough
 	public static boolean spend(Hero hero, Material m, int amount) {
 		if (count(hero, m) < amount) return false;
-		for (Item i : hero.belongings.backpack.items.toArray(new Item[0])) {
+		java.util.ArrayList<Item> all = new java.util.ArrayList<>();
+		for (Item i : hero.belongings.backpack) all.add(i); //includes the forge satchel
+		for (Item i : all) {
 			if (amount <= 0) break;
 			if (i instanceof MaterialItem && ((MaterialItem) i).material == m && !((MaterialItem) i).ore) {
 				int take = Math.min(amount, i.quantity());
@@ -117,6 +121,57 @@ public class MaterialItem extends Item {
 		}
 		Item.updateQuickslot();
 		return true;
+	}
+
+	public static final String AC_MELD = "MELD";
+
+	private boolean isUmbralite() {
+		return material == Material.OBSIDIAN && !ore;
+	}
+
+	@Override
+	public java.util.ArrayList<String> actions(Hero hero) {
+		java.util.ArrayList<String> actions = super.actions(hero);
+		if (isUmbralite()) actions.add(AC_MELD);
+		return actions;
+	}
+
+	@Override
+	public String defaultAction() {
+		return isUmbralite() ? AC_MELD : super.defaultAction();
+	}
+
+	@Override
+	public void execute(Hero hero, String action) {
+		super.execute(hero, action);
+		if (action.equals(AC_MELD) && isUmbralite()) {
+			curUser = hero;
+			com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene.selectItem(meldSelector);
+		}
+	}
+
+	//umbralite can be melded on the spot, no anvil needed
+	public static final com.shatteredpixel.shatteredpixeldungeon.windows.WndBag.ItemSelector meldSelector =
+			new com.shatteredpixel.shatteredpixeldungeon.windows.WndBag.ItemSelector() {
+		@Override
+		public String textPrompt() {
+			return Messages.get(MaterialItem.class, "meld_prompt");
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return Forge.canMeld(item);
+		}
+
+		@Override
+		public void onSelect(Item item) {
+			if (item != null) Forge.meld(curUser, item);
+		}
+	};
+
+	@Override
+	public com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing glowing() {
+		return isUmbralite() ? UMBRA_GLOW : null;
 	}
 
 	@Override

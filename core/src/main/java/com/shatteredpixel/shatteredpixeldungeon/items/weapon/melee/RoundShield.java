@@ -60,6 +60,8 @@ public class RoundShield extends MeleeWeapon {
 
 	//4 extra defence, plus 1 per level
 	public int DRMax(int lvl){
+		//MOD: shield block scales with its material like everything else
+		if (material() != null) return Math.round((2 + lvl) * material().damageMult());
 		return 4 + lvl;
 	}
 	

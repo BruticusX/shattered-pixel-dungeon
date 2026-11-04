@@ -185,15 +185,20 @@ public class Armor extends EquipableItem {
 		return 1;
 	}
 
-	//evasion (and stealth) lost to the armor's weight: kg / 80
+	//evasion (and stealth) lost to the armor's weight: kg / 80 for metal armor.
+	//leather has no penalty, and cloth is a bonus: +5% evasion and a little quieter
 	public float weightPenalty() {
 		if (material() == null) return 0f;
+		if (this instanceof ClothArmor)   return -0.05f;
+		if (this instanceof LeatherArmor) return 0f;
 		return armorKg() / 80f;
 	}
 
 	public String weightLabel() {
 		if (material() == null) return Messages.get(Armor.class, "tier_label", tier);
 		float p = weightPenalty();
+		if (this instanceof ClothArmor)   return Messages.get(Armor.class, "label_light");
+		if (this instanceof LeatherArmor) return Messages.get(Armor.class, "label_medium");
 		if (p <= 0.05f) return Messages.get(Armor.class, "label_light");
 		if (p <= 0.1f)  return Messages.get(Armor.class, "label_medium");
 		if (p <= 0.2f)  return Messages.get(Armor.class, "label_heavy");
@@ -719,6 +724,7 @@ public class Armor extends EquipableItem {
 						+ (broken() ? Messages.get(Armor.class, "condition_broken") : Messages.get(Armor.class, "condition_info", (int)Math.ceil(condition)));
 				if (magicResist() > 0)   info += " " + Messages.get(Armor.class, "magic_resist", Math.round(magicResist()*100));
 				if (weightPenalty() > 0) info += " " + Messages.get(Armor.class, "weight_penalty", Math.round(weightPenalty()*100));
+				else if (weightPenalty() < 0) info += " " + Messages.get(Armor.class, "weight_bonus", Math.round(-weightPenalty()*100));
 			}
 			
 			if (Dungeon.hero != null && STRReq() > Dungeon.hero.STR()) {
@@ -801,7 +807,8 @@ public class Armor extends EquipableItem {
 				n++;
 			}
 		}
-		level(n);
+		//MOD: found gear is capped by region: +1 on floors 1-5, +2 on 6-10, +3 on 11-15...
+		level(Math.min(n, 1 + Math.max(0, Dungeon.depth - 1) / 5));
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen
@@ -921,7 +928,8 @@ public class Armor extends EquipableItem {
 				&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || glyph == null)){
 			return HOLY;
 		} else {
-			//MOD: glyphs show as a particle aura around the armor instead of a colour pulse
+			//MOD: umbralite gear pulses purple; enchantments/glyphs show as particle auras instead
+			if (material() == com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN) return UMBRA_GLOW;
 			return null;
 		}
 	}

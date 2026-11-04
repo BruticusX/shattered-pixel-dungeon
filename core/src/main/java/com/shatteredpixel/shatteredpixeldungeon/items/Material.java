@@ -34,7 +34,7 @@ public enum Material {
 	BRONZE     (Kind.METAL,   2.45f, 300, 0f,    4,  9),
 	IRON       (Kind.METAL,   2.80f, 400, 0f,    7, 12),
 	STEEL      (Kind.METAL,   3.50f, 500, 0f,   10, 15),
-	OBSIDIAN   (Kind.METAL,   5.00f, 120, 0f,   13, 18), //razor sharp but brittle
+	OBSIDIAN   (Kind.METAL,   5.00f, 600, 0f,   13, 18), //shown as "umbralite": the rare top metal
 	TITANIUM   (Kind.METAL,   4.20f, 600, 0f,   16, 21),
 	TUNGSTEN   (Kind.METAL,   5.25f, 800, 0f,   19, 26),
 
@@ -77,7 +77,7 @@ public enum Material {
 			case STEEL:    return 2.8f;
 			case TITANIUM: return 3.0f;
 			case TUNGSTEN: return 3.3f;
-			case OBSIDIAN: return 3.1f;
+			case OBSIDIAN: return 4.0f; //umbralite
 		}
 	}
 

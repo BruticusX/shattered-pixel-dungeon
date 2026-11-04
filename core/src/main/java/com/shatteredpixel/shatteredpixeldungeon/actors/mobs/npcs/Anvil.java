@@ -33,7 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 
 import java.util.ArrayList;
 
-//MOD: reforges gear into other materials, enhances and repairs it, and infuses
+//MOD: reforges gear into other materials, enhances and repairs it, and melds umbralite into
 //wands, rings and other upgradable items with obsidian
 public class Anvil extends ForgeStation {
 
@@ -47,7 +47,7 @@ public class Anvil extends ForgeStation {
 		GameScene.show(new WndOptions(new AnvilSprite(), Messages.titleCase(name()),
 				Messages.get(this, "menu", MaterialItem.summary(hero)),
 				Messages.get(this, "reforge"), Messages.get(this, "enhance"),
-				Messages.get(this, "repair"), Messages.get(this, "infuse")) {
+				Messages.get(this, "repair"), Messages.get(this, "meld")) {
 			@Override
 			protected void onSelect(int index) {
 				switch (index) {
@@ -87,14 +87,14 @@ public class Anvil extends ForgeStation {
 				if (m.kind != Forge.kind(item) || m == Forge.material(item)) continue;
 				options.add(m);
 				labels.add(Messages.get(Anvil.class, "material_option", Messages.titleCase(m.title()),
-						MaterialItem.count(hero, m), cost));
+						MaterialItem.count(hero, m), Forge.reforgeCost(item, m)));
 			}
 			GameScene.show(new WndOptions(Messages.titleCase(item.name()),
 					Messages.get(Anvil.class, "reforge_choose", cost),
 					labels.toArray(new String[0])) {
 				@Override
 				protected boolean enabled(int index) {
-					return MaterialItem.count(Dungeon.hero, options.get(index)) >= cost;
+					return MaterialItem.count(Dungeon.hero, options.get(index)) >= Forge.reforgeCost(item, options.get(index));
 				}
 
 				@Override
@@ -144,18 +144,18 @@ public class Anvil extends ForgeStation {
 	private final WndBag.ItemSelector infuseSelector = new WndBag.ItemSelector() {
 		@Override
 		public String textPrompt() {
-			return Messages.get(Anvil.class, "infuse_prompt");
+			return Messages.get(MaterialItem.class, "meld_prompt");
 		}
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return Forge.canInfuse(item);
+			return Forge.canMeld(item);
 		}
 
 		@Override
 		public void onSelect(Item item) {
 			if (item == null) return;
-			if (!Forge.infuse(Dungeon.hero, item)) notEnough(Material.OBSIDIAN, 1);
+			if (!Forge.meld(Dungeon.hero, item)) notEnough(Material.OBSIDIAN, 1);
 		}
 	};
 }

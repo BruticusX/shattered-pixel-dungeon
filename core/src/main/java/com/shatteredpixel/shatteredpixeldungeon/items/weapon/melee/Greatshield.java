@@ -51,6 +51,8 @@ public class Greatshield extends MeleeWeapon {
 
 	//6 extra defence, plus 2 per level
 	public int DRMax(int lvl){
+		//MOD: shield block scales with its material like everything else
+		if (material() != null) return Math.round((3 + 2*lvl) * material().damageMult());
 		return 6 + 2*lvl;
 	}
 	

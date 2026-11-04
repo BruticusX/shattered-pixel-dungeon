@@ -47,8 +47,13 @@ public class Quarterstaff extends MeleeWeapon {
 	}
 
 	@Override
+	public String statsInfo() {
+		return Messages.get(this, "stats_desc", defenseFactor(null));
+	}
+
 	public int defenseFactor( Char owner ) {
-		return 2;	//2 extra defence
+		//MOD: 1 extra defence at tin, scaling with the metal (was a flat 2)
+		return material() != null ? Math.max(1, Math.round(material().damageMult())) : 2;
 	}
 
 	@Override

@@ -34,7 +34,7 @@ import com.watabou.noosa.audio.Sample;
 //  reforge : change gear to any material of its kind, for its weight cost in that material
 //  enhance : +1 level, for its weight cost in its own material
 //  repair  : +50% durability, for 1 of its own material
-//  infuse  : +1 level to wands, rings and other upgradable items, for 1 obsidian ingot
+//  meld    : +1 umbralite level (max 5) to any upgradable item, for 1 umbralite ingot (also works anywhere)
 //  melt    : unused gear back into half its cost (rounded up) in its material
 //  smelt   : ore into ingots, one for one
 public class Forge {
@@ -79,6 +79,11 @@ public class Forge {
 		return 0;
 	}
 
+	//umbralite gear is the rare top tier: reforging into it costs 3x
+	public static int reforgeCost(Item item, Material to) {
+		return cost(item) * (to == Material.OBSIDIAN ? 3 : 1);
+	}
+
 	public static int meltYield(Item item) {
 		return (cost(item) + 1) / 2;
 	}
@@ -87,8 +92,10 @@ public class Forge {
 		return RepairKit.repairable(item);
 	}
 
-	public static boolean canInfuse(Item item) {
-		return item.isUpgradable() && !isGear(item) && !(item instanceof MaterialItem);
+	//umbralite levels: any upgradable item, up to Item.UMBRA_CAP
+	public static boolean canMeld(Item item) {
+		return item != null && item.isUpgradable() && !(item instanceof MaterialItem)
+				&& item.umbraLevel < Item.UMBRA_CAP;
 	}
 
 	private static void effects(Hero hero) {
@@ -107,7 +114,7 @@ public class Forge {
 
 	public static boolean reforge(Hero hero, Item item, Material to) {
 		if (!canReforge(item) || to.kind != kind(item) || to == material(item)) return false;
-		if (!MaterialItem.spend(hero, to, cost(item))) return false;
+		if (!MaterialItem.spend(hero, to, reforgeCost(item, to))) return false;
 		setMaterial(item, to);
 		effects(hero);
 		GLog.p(Messages.get(Forge.class, "reforged", item.name()));
@@ -133,14 +140,28 @@ public class Forge {
 		return true;
 	}
 
-	public static boolean infuse(Hero hero, Item item) {
-		if (!canInfuse(item)) return false;
+	public static boolean meld(Hero hero, Item item) {
+		if (!canMeld(item)) return false;
 		if (!MaterialItem.spend(hero, Material.OBSIDIAN, 1)) return false;
-		upgrade(hero, item);
-		effects(hero);
-		GLog.p(Messages.get(Forge.class, "infused", item.name()));
+		item.umbraLevel++;
+		if (item instanceof com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) {
+			((com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand) item).updateLevel();
+		}
+		if (item instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) {
+			((com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) item).updateWand(true);
+		}
+		com.shatteredpixel.shatteredpixeldungeon.Badges.validateItemLevelAquired(item);
+		com.shatteredpixel.shatteredpixeldungeon.Badges.validateMageUnlock();
+		hero.sprite.operate(hero.pos);
+		hero.sprite.emitter().burst(com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle.UP, 8);
+		Sample.INSTANCE.play(Assets.Sounds.MELD);
+		hero.spend(1f);
+		hero.busy();
+		Item.updateQuickslot();
+		GLog.p(Messages.get(Forge.class, "melded", item.name(), item.umbraLevel, Item.UMBRA_CAP));
 		return true;
 	}
+
 
 	//uses the scroll of upgrade's logic so curses and enchantments behave as before
 	private static void upgrade(Hero hero, Item item) {

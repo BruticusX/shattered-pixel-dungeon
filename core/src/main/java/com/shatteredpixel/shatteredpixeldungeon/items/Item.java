@@ -377,7 +377,24 @@ public class Item implements Bundlable {
 
 	//returns the persistant level of the item, only affected by modifiers which are persistent (e.g. curse infusion)
 	public int level(){
-		return level;
+		return level + umbraBonus();
+	}
+
+	//each umbralite level is worth a bit more than a normal one: +1/+3/+4/+6/+7 for 1-5 levels
+	public int umbraBonus() {
+		return umbraLevel + umbraLevel / 2;
+	}
+
+	//MOD: umbralite levels, melded in with umbralite ingots. They count as upgrades but are tracked
+	// separately from normal levels (shown as a purple +N) and capped at UMBRA_CAP.
+	public static final int UMBRA_CAP = 5;
+	public int umbraLevel = 0;
+
+	public static final ItemSprite.Glowing UMBRA_GLOW = new ItemSprite.Glowing( 0x9933FF, 1.5f );
+
+	//the normal (yellow) level shown in titles and slots, without umbralite levels
+	public int visibleBaseLevel() {
+		return visiblyUpgraded() - umbraBonus();
 	}
 	
 	//returns the level of the item, after it may have been modified by temporary boosts/reductions
@@ -433,7 +450,7 @@ public class Item implements Bundlable {
 	}
 	
 	public int visiblyUpgraded() {
-		return levelKnown ? level() : 0;
+		return levelKnown ? level() : umbraBonus(); //MOD: you always know your own umbralite levels
 	}
 
 	public int buffedVisiblyUpgraded() {
@@ -486,8 +503,8 @@ public class Item implements Bundlable {
 
 		String name = name();
 
-		if (visiblyUpgraded() != 0)
-			name = Messages.format( TXT_TO_STRING_LVL, name, visiblyUpgraded()  );
+		if (visibleBaseLevel() != 0)
+			name = Messages.format( TXT_TO_STRING_LVL, name, visibleBaseLevel()  );
 
 		if (quantity > 1)
 			name = Messages.format( TXT_TO_STRING_X, name, quantity );
@@ -595,6 +612,7 @@ public class Item implements Bundlable {
 	public void storeInBundle( Bundle bundle ) {
 		bundle.put( QUANTITY, quantity );
 		bundle.put( LEVEL, level );
+		bundle.put( "umbra_level", umbraLevel );
 		bundle.put( LEVEL_KNOWN, levelKnown );
 		bundle.put( CURSED, cursed );
 		bundle.put( CURSED_KNOWN, cursedKnown );
@@ -609,6 +627,7 @@ public class Item implements Bundlable {
 	public void restoreFromBundle( Bundle bundle ) {
 		quantity	= bundle.getInt( QUANTITY );
 		levelKnown	= bundle.getBoolean( LEVEL_KNOWN );
+		umbraLevel  = bundle.getInt( "umbra_level" );
 		cursedKnown	= bundle.getBoolean( CURSED_KNOWN );
 		
 		int level = bundle.getInt( LEVEL );
