@@ -19,7 +19,7 @@ SRC = "core/src/main/assets/sprites/items.png"
 OUT = "core/src/main/assets/sprites/items_{}.png"
 SIZE = 16
 GEAR_ROWS = [7, 8, 9, 10, 11, 12, 13]     # 1-based sheet rows holding weapons and armor
-GOLD_HEAD_SLOTS = {129}                 # war hammer: its head is gold, recolour it with the metal
+GOLD_HEAD_SLOTS = {129, 179}            # war hammer head and scale armor's scales are gold-toned: recolour them too
 
 METAL = {
     "tin":      ((96, 92, 84),   (168, 164, 152), (224, 222, 212)),
@@ -58,7 +58,7 @@ def neutral(r, g, b, spread=12):
 
 def is_gold(r, g, b):
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-    return 0.08 <= h <= 0.17 and s > 0.35 and v > 0.35
+    return 0.11 <= h <= 0.18 and s > 0.15 and v > 0.35
 
 
 def is_brown(r, g, b):

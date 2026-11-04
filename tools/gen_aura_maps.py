@@ -11,6 +11,7 @@ from PIL import Image
 
 ROOT = "core/src/main"
 SHEET = f"{ROOT}/assets/sprites/items.png"
+MASK = f"{ROOT}/assets/sprites/items_mask.png"
 OUT = f"{ROOT}/java/com/shatteredpixel/shatteredpixeldungeon/effects/AuraMaps.java"
 SIZE, COLS = 16, 16
 BLADE_ROWS = [7, 8, 9, 10, 11]
@@ -18,7 +19,7 @@ ARMOR_ROWS = [12]
 
 
 def is_metal(r, g, b):
-    return max(r, g, b) - min(r, g, b) <= 12 and (r + g + b) / 3 >= 60
+    return max(r, g, b) - min(r, g, b) <= 22 and (r + g + b) / 3 >= 40
 
 
 def slot(im, idx):
@@ -57,11 +58,18 @@ def outline_pixels(px):
 def main():
     im = Image.open(SHEET).convert("RGBA")
     blade, outline = {}, {}
+    mask = Image.open(MASK).convert("RGBA")
     for rows, target, fn in ((BLADE_ROWS, blade, blade_pixels), (ARMOR_ROWS, outline, outline_pixels)):
         for row in rows:
             for c in range(COLS):
                 idx = (row - 1) * COLS + c
                 pts = fn(slot(im, idx))
+                #MOD: glyph particles on mail, scale and plate come off the metal plates only
+                if row in ARMOR_ROWS and c in (2, 3, 4):
+                    mp = slot(mask, idx)
+                    metal = [y * SIZE + x for y in range(SIZE) for x in range(SIZE) if mp[x, y][3] > 0]
+                    if len(metal) >= 5:
+                        pts = metal
                 if pts:
                     target[idx] = pts
 

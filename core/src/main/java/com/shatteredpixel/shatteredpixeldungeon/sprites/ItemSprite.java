@@ -275,7 +275,7 @@ public class ItemSprite extends MovieClip {
 	
 	public synchronized void glow( Glowing glowing ){
 		this.glowing = glowing;
-		if (glowing == null) resetColor();
+		if (glowing == null || glowing.masked) resetColor();
 	}
 
 	@Override
@@ -334,7 +334,27 @@ public class ItemSprite extends MovieClip {
 
 		super.draw();
 
+		//MOD: masked glow overlay
+		if (glowing != null && glowing.masked && visible) {
+			if (maskOverlay == null) {
+				maskOverlay = new com.watabou.noosa.Image(Assets.Sprites.ITEMS_MASK);
+			}
+			maskOverlay.frame(frame);
+			maskOverlay.x = x; maskOverlay.y = y;
+			maskOverlay.origin.set(origin);
+			maskOverlay.scale.set(scale);
+			maskOverlay.angle = angle;
+			maskOverlay.camera = camera();
+			maskOverlay.rm = maskOverlay.gm = maskOverlay.bm = 0;
+			maskOverlay.ra = glowing.red; maskOverlay.ga = glowing.green; maskOverlay.ba = glowing.blue;
+			maskOverlay.am = alpha() * maskValue;
+			maskOverlay.draw();
+		}
+
 	}
+
+	private com.watabou.noosa.Image maskOverlay;
+	private float maskValue = 0.25f;
 
 	@Override
 	public synchronized void update() {
@@ -393,11 +413,15 @@ public class ItemSprite extends MovieClip {
 			}
 			
 			float value = phase / glowing.period * 0.6f;
-			
-			rm = gm = bm = 1 - value;
-			ra = glowing.red * value;
-			ga = glowing.green * value;
-			ba = glowing.blue * value;
+
+			if (glowing.masked) {
+				maskValue = 0.25f + value; //drawn as an overlay in draw()
+			} else {
+				rm = gm = bm = 1 - value;
+				ra = glowing.red * value;
+				ga = glowing.green * value;
+				ba = glowing.blue * value;
+			}
 		}
 	}
 
@@ -421,6 +445,15 @@ public class ItemSprite extends MovieClip {
 			this( color, 1f );
 		}
 		
+		//MOD: a masked glow only lights up the item's glowing parts (sprites/items_mask.png:
+		// metal, leather, or a cloth sigil) instead of tinting the whole sprite
+		public boolean masked = false;
+
+		public Glowing( int color, float period, boolean masked ) {
+			this( color, period );
+			this.masked = masked;
+		}
+
 		public Glowing( int color, float period ) {
 
 			this.color = color;

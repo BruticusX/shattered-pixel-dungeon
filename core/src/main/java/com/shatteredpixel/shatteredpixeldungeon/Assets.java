@@ -316,6 +316,7 @@ public class Assets {
 		public static final String MAKER    = "sprites/wandmaker.png";
 		public static final String TROLL    = "sprites/blacksmith.png";
 		public static final String FURNACE  = "sprites/furnace.png"; //MOD
+		public static final String ITEMS_MASK = "sprites/items_mask.png"; //MOD: glowing parts of gear
 		public static final String ANVIL    = "sprites/anvil.png";   //MOD
 		public static final String IMP      = "sprites/imp.png";
 		public static final String RATKING  = "sprites/ratking.png";

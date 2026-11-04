@@ -930,6 +930,10 @@ public class Armor extends EquipableItem {
 		} else {
 			//MOD: umbralite gear pulses purple; enchantments/glyphs show as particle auras instead
 			if (material() == com.shatteredpixel.shatteredpixeldungeon.items.Material.OBSIDIAN) return UMBRA_GLOW;
+			//cloth armor shows its glyph as a pulsing sigil on the fabric
+			if (this instanceof ClothArmor && glyph != null && (cursedKnown || !glyph.curse()) && glyph.glowing() != null) {
+				return new ItemSprite.Glowing(glyph.glowing().color, 1.5f, true);
+			}
 			return null;
 		}
 	}
