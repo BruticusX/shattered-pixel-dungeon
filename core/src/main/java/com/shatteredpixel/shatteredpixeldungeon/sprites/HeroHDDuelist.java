@@ -31,8 +31,8 @@ public class HeroHDDuelist {
 			90, 38, 82,
 			new int[]{0, 8, 8, 10, 18, 8, 26, 12},
 			new int[]{17, 8, 56, 70},
-			new float[]{51.7f, 51.4f, 51.8f, 51.8f, 51.5f, 51.5f, 51.6f, 51.8f, 54.2f, 39.6f, 46.9f, 40.8f, 42.0f, 38.0f, 41.0f, 49.7f, 58.4f, 54.5f, 52.2f, 64.0f, 67.0f, 54.1f, 58.1f, 55.0f, 39.2f, 50.1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{33.6f, 33.7f, 32.5f, 32.5f, 32.6f, 32.6f, 33.3f, 33.5f, 36.5f, 50.0f, 43.2f, 39.2f, 28.5f, 49.5f, 32.5f, 39.5f, 46.6f, 51.0f, 33.4f, 40.5f, 34.0f, 36.3f, 38.4f, 48.0f, 34.9f, 36.6f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{51.7f, 51.4f, 51.8f, 51.8f, 51.5f, 51.5f, 51.6f, 51.8f, 54.2f, 39.6f, 46.9f, 40.8f, 42.0f, 38.0f, 41.0f, 49.7f, 58.4f, 54.5f, 51.6f, 50.6f, 34.0f, 51.5f, 39.7f, 73.0f, 66.0f, 55.2f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
+			new float[]{33.6f, 33.7f, 32.5f, 32.5f, 32.6f, 32.6f, 33.3f, 33.5f, 36.5f, 50.0f, 43.2f, 39.2f, 28.5f, 49.5f, 32.5f, 39.5f, 46.6f, 51.0f, 34.5f, 33.2f, 41.4f, 35.0f, 53.7f, 30.0f, 36.0f, 34.5f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
 			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
 			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
 }
