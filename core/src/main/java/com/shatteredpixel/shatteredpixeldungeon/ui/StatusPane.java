@@ -168,6 +168,8 @@ public class StatusPane extends Component {
 		if (large)  exp = new Image(asset, 0, 121, 128, 7);
 		else        exp = new Image(asset, 0, 48, 17, 4);
 		add( exp );
+		//MOD: the phone layout has the framed XP bar under the health bar instead
+		exp.visible = large;
 
 		if (!large) {
 			//frame cut from the HP bar's frame (same bevel and angled tip), gold fill shaped like the HP bar
@@ -185,6 +187,7 @@ public class StatusPane extends Component {
 		expText.hardlight( 0xFFFFAA );
 		expText.alpha(0.6f);
 		add(expText);
+		expText.visible = large;
 
 		level = new BitmapText( PixelScene.pixelFont);
 		level.hardlight( 0xFFFFAA );
@@ -213,7 +216,8 @@ public class StatusPane extends Component {
 		if (large)  bg.size( 160, bg.height ); //HP bars must be 128px wide atm
 		else        bg.size(hpBarMaxWidth+32, bg.height ); //default max right is 50px health bar + 32
 
-		avatar.x = bg.x - avatar.width / 2f + 15;
+		//MOD: centred across the portrait box (its inside runs 2..25)
+		avatar.x = bg.x - avatar.width / 2f + 14;
 		avatar.y = bg.y - avatar.height / 2f + 16;
 		PixelScene.align(avatar);
 
