@@ -74,7 +74,7 @@ public abstract class SentrySprite extends MobSprite {
 			parent.add(new Beam.DeathRay(center(), DungeonTilemap.raisedTileCenterToWorld(pos)));
 		}
 		Sample.INSTANCE.play( Assets.Sounds.RAY );
-		((SentryRoom.Sentry)ch).onZapComplete();
+		if (ch instanceof SentryRoom.Sentry) ((SentryRoom.Sentry)ch).onZapComplete();
 	}
 
 	@Override

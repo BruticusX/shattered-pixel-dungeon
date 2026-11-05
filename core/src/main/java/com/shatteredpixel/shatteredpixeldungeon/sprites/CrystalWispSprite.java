@@ -71,7 +71,7 @@ public abstract class CrystalWispSprite extends MobSprite {
 			@Override
 			public void onComplete() {
 				light.alpha(0.3f);
-				((CrystalWisp)ch).onZapComplete();
+				if (ch instanceof CrystalWisp) ((CrystalWisp)ch).onZapComplete();
 				Beam ray = new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell));
 				Sample.INSTANCE.play( Assets.Sounds.RAY );
 				ray.hardlight(blood() & 0x00FFFFFF);
