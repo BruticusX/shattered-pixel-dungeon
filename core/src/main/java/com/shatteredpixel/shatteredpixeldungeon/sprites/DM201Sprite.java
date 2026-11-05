@@ -36,25 +36,23 @@ public class DM201Sprite extends MobSprite {
 	public DM201Sprite () {
 		super();
 
-		texture( Assets.Sprites.DM200 );
-
-		TextureFilm frames = new TextureFilm( texture, 21, 18 );
-
-		int c = 12;
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.DM200_HD, 70, 17f / 54f );
+		int c = 32;
 
 		idle = new Animation( 2, true );
-		idle.frames( frames, c+0, c+1 );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
 		run = idle.clone();
 
-		attack = new Animation( 15, false );
-		attack.frames( frames, c+4, c+5, c+6 );
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		zap = new Animation( 15, false );
-		zap.frames( frames, c+7, c+8, c+8, c+7 );
+		zap = new Animation( 12, false );
+		zap.frames( frames, row( c, 4, 5, 5, 4, 12 ) );
 
 		die = new Animation( 8, false );
-		die.frames( frames, c+9, c+10, c+11 );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

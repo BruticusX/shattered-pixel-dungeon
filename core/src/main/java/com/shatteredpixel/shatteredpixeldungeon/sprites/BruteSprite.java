@@ -29,22 +29,22 @@ public class BruteSprite extends MobSprite {
 	public BruteSprite() {
 		super();
 		
-		texture( Assets.Sprites.BRUTE );
-		
-		TextureFilm frames = new TextureFilm( texture, 12, 16 );
-		
-		idle = new Animation( 2, true );
-		idle.frames( frames, 0, 0, 0, 1, 0, 0, 1, 1 );
-		
-		run = new Animation( 12, true );
-		run.frames( frames, 4, 5, 6, 7 );
-		
-		attack = new Animation( 12, false );
-		attack.frames( frames, 2, 3, 0 );
-		
-		die = new Animation( 12, false );
-		die.frames( frames, 8, 9, 10 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.BRUTE_HD, 59, 15f / 48f );
+		int c = 0;
+
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
+
+		run = new Animation( 10, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
 		play( idle );
 	}
 }
