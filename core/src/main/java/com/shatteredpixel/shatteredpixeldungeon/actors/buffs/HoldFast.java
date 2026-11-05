@@ -59,7 +59,7 @@ public class HoldFast extends Buff {
 			} else {
 				Armor armor = ((Hero) target).belongings.armor();
 				if (armor != null) {
-					max = armor.tier + armor.buffedLvl();
+					max = armor.weightClass() + 1 + armor.buffedLvl(); //MOD: weight class, not hidden tier
 				}
 			}
 			int block = Random.NormalIntRange(((Hero) target).pointsInTalent(Talent.HOLD_FAST), 2*((Hero) target).pointsInTalent(Talent.HOLD_FAST));

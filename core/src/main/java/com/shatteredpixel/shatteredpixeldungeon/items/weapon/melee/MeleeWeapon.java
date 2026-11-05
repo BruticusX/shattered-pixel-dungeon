@@ -322,6 +322,14 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	//MOD: replaces "tier-N" in item info now that materials decide power
+	//MOD: 1 light, 2 medium, 3 heavy (players see weight classes, not the old tiers)
+	public int weightClass() {
+		if (material() == null) return Math.max(1, Math.min(3, (tier + 1) / 2));
+		if (weightFactor() < 1f) return 1;
+		if (weightFactor() > 1f) return 3;
+		return 2;
+	}
+
 	public String weightLabel() {
 		if (material() == null) return Messages.get(MeleeWeapon.class, "tier_label", tier);
 		if (weightFactor() < 1f) return Messages.get(MeleeWeapon.class, "label_light");
@@ -368,8 +376,8 @@ public class MeleeWeapon extends Weapon {
 				int otherLevel = other.buffedLvl();
 				evaluatingTwinUpgrades = false;
 
-				//weaker weapon needs to be 2/1/0 tiers lower, based on talent level
-				if ((tier + (3 - Dungeon.hero.pointsInTalent(Talent.TWIN_UPGRADES))) <= ((MeleeWeapon) other).tier
+				//MOD: weaker weapon needs to be 2/1/0 weight classes lighter, based on talent level
+				if ((weightClass() + (3 - Dungeon.hero.pointsInTalent(Talent.TWIN_UPGRADES))) <= ((MeleeWeapon) other).weightClass()
 						&& otherLevel > super.buffedLvl()) {
 					return otherLevel;
 				}
