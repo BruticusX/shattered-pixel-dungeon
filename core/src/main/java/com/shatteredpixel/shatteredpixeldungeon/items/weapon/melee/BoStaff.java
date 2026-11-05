@@ -39,7 +39,7 @@ public class BoStaff extends Quarterstaff {
 
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
-		WeaponPerks.daze(defender, 0.2f);
+		WeaponPerks.daze(defender, 0.15f);
 		return super.proc(attacker, defender, damage);
 	}
 }

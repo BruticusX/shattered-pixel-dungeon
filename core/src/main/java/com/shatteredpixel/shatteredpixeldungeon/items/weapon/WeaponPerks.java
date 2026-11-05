@@ -48,7 +48,7 @@ public class WeaponPerks {
 		if (w instanceof Stiletto) return 0.25f; //slips between plates
 		if (w instanceof Halberd)  return 0.6f;  //the axe head cleaves armor
 		if (w instanceof Khopesh)  return 0.7f;  //hooks the guard aside
-		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarPick) return 0.5f; //the spike punches through
+		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarPick) return 0.6f; //the spike punches through
 		return 1f;
 	}
 
