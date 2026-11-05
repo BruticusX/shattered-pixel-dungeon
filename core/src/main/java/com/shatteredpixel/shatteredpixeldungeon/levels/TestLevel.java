@@ -134,6 +134,15 @@ public class TestLevel extends Level {
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollTrickster.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.CausticSlime.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Thief.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bandit.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectralNecromancer.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RotHeart.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RotLasher.class,
 		};
 		for (int i = 0; i < lineup.length; i++) {
 			Mob m = lineup[i] == ShowSwarm.class ? new ShowSwarm() : new ShowMob().as( (Class<? extends Mob>) lineup[i] );

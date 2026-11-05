@@ -29,20 +29,21 @@ public class BanditSprite extends MobSprite {
 	public BanditSprite() {
 		super();
 		
-		texture( Assets.Sprites.THIEF );
-		TextureFilm film = new TextureFilm( texture, 12, 13 );
-		
-		idle = new Animation( 1, true );
-		idle.frames( film, 21, 21, 21, 22, 21, 21, 21, 21, 22 );
-		
-		run = new Animation( 15, true );
-		run.frames( film, 21, 21, 23, 24, 24, 25 );
-		
-		die = new Animation( 10, false );
-		die.frames( film, 25, 27, 28, 29, 30 );
-		
-		attack = new Animation( 12, false );
-		attack.frames( film, 31, 32, 33 );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm film = hdFilm( Assets.Sprites.THIEF_HD, 57, 12f / 38f );
+		int c = 16;
+
+		idle = new Animation( 3, true );
+		idle.frames( film, row( c, 12, 12, 13, 12, 14, 15 ) );
+
+		run = new Animation( 10, true );
+		run.frames( film, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( film, row( c, 4, 5, 6, 7, 12 ) );
+
+		die = new Animation( 8, false );
+		die.frames( film, row( c, 8, 9, 10, 11 ) );
 		
 		idle();
 	}

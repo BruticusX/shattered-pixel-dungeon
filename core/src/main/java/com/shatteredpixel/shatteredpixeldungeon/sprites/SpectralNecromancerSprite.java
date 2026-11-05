@@ -39,25 +39,24 @@ public class SpectralNecromancerSprite extends MobSprite {
 	public SpectralNecromancerSprite(){
 		super();
 
-		texture( Assets.Sprites.NECRO );
-		TextureFilm film = new TextureFilm( texture, 16, 16 );
-
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm film = hdFilm( Assets.Sprites.NECRO_HD, 60, 15f / 46f );
 		int c = 16;
 
-		idle = new Animation( 1, true );
-		idle.frames( film, c+0, c+0, c+0, c+1, c+0, c+0, c+0, c+0, c+1 );
+		idle = new Animation( 3, true );
+		idle.frames( film, row( c, 12, 12, 13, 12, 14, 15 ) );
 
 		run = new Animation( 8, true );
-		run.frames( film, c+0, c+0, c+0, c+2, c+3, c+4 );
+		run.frames( film, row( c, 0, 1, 2, 3 ) );
 
 		zap = new Animation( 10, false );
-		zap.frames( film, c+5, c+6, c+7, c+8 );
+		zap.frames( film, row( c, 4, 5, 6, 7 ) );
 
 		charging = new Animation( 5, true );
-		charging.frames( film, c+7, c+8 );
+		charging.frames( film, row( c, 5, 6 ) );
 
-		die = new Animation( 10, false );
-		die.frames( film, c+9, c+10, c+11, c+12 );
+		die = new Animation( 8, false );
+		die.frames( film, row( c, 8, 9, 10, 11 ) );
 
 		attack = zap.clone();
 
