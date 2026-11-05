@@ -37,6 +37,21 @@ public class MobSprite extends CharSprite {
 	//MOD: redrawn monsters are drawn at a higher resolution and shown scaled down to their usual size
 	protected float hdScale = 1f;
 
+	//MOD: binds a redrawn sheet: square frames of `frame` pixels, shown at `scale`. Redrawn sheets
+	//hold one row of 16 frames per look: move 0-3, attack 4-7, death 8-11, idle 12-15
+	protected com.watabou.noosa.TextureFilm hdFilm( String asset, int frame, float scale ){
+		hdScale = scale;
+		texture( asset );
+		return new com.watabou.noosa.TextureFilm( texture, frame, frame );
+	}
+
+	//frame numbers offset to a look's row
+	protected static Object[] row( int c, int... f ){
+		Object[] k = new Object[f.length];
+		for (int i = 0; i < f.length; i++) k[i] = c + f[i];
+		return k;
+	}
+
 	@Override
 	public void frame( com.watabou.utils.RectF frame ) {
 		super.frame( frame );

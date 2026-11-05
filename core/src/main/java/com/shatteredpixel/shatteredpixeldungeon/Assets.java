@@ -293,10 +293,13 @@ public class Assets {
 		public static final String PIRANHA  = "sprites/piranha.png";
 		public static final String EYE      = "sprites/eye.png";
 		public static final String GNOLL    = "sprites/gnoll.png";
+		public static final String GNOLL_HD = "sprites/gnoll_hd.png";   //MOD: redrawn
 		public static final String CRAB     = "sprites/crab.png";
+		public static final String CRAB_HD = "sprites/crab_hd.png";   //MOD: redrawn
 		public static final String GOO      = "sprites/goo.png";
 		public static final String GOO_HD   = "sprites/goo_hd.png";   //MOD: redrawn
 		public static final String SWARM    = "sprites/swarm.png";
+		public static final String SWARM_HD = "sprites/swarm_hd.png";   //MOD: redrawn
 		public static final String SKELETON = "sprites/skeleton.png";
 		public static final String SHAMAN   = "sprites/shaman.png";
 		public static final String THIEF    = "sprites/thief.png";
@@ -331,7 +334,9 @@ public class Assets {
 		public static final String WARDS    = "sprites/wards.png";
 		public static final String GUARDIAN = "sprites/guardian.png";
 		public static final String SLIME    = "sprites/slime.png";
+		public static final String SLIME_HD = "sprites/slime_hd.png";   //MOD: redrawn
 		public static final String SNAKE    = "sprites/snake.png";
+		public static final String SNAKE_HD = "sprites/snake_hd.png";   //MOD: redrawn
 		public static final String NECRO    = "sprites/necromancer.png";
 		public static final String GHOUL    = "sprites/ghoul.png";
 		public static final String RIPPER   = "sprites/ripper.png";

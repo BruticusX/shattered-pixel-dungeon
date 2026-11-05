@@ -118,19 +118,20 @@ def restyle(fr, tier):
         elif tier == 2:    # leather jerkin: brown with darker seams at the edges
             k = 0.65 if edge else 1.0
             px[x, y] = (round((90 + 70 * t) * k), round((54 + 44 * t) * k), round((30 + 26 * t) * k), 255)
-        elif tier == 3:    # mail: rings and gaps
-            px[x, y] = grey(120 + 70 * t) if (x + y) % 2 else grey(52 + 30 * t)
-        elif tier == 4:    # scale: overlapping rows of scales, each row offset
+        elif tier == 3:    # mail: small interlocking rings, each row offset by half a ring, soft contrast
+            u = (x + (y % 2) * 2) % 4
+            ring = (1.0, 0.82, 0.62, 0.82)[u]
+            px[x, y] = grey((70 + 85 * t) * ring + 22 - (14 if edge else 0))
+        elif tier == 4:    # scale: overlapping rounded scales, light at the top and shaded at the rim
             row = y // 3
             u = (x + (row % 2) * 2) % 4
-            if y % 3 == 2 or u == 0:
-                px[x, y] = grey(60 + 30 * t)
-            else:
-                px[x, y] = grey(125 + 75 * t - (u == 3) * 18)
+            v = y % 3
+            shade_k = ((0.95, 1.12, 1.12, 0.95), (0.9, 1.0, 1.0, 0.9), (0.62, 0.78, 0.78, 0.62))[v][u]
+            px[x, y] = grey((75 + 85 * t) * shade_k + 14 - (14 if edge else 0))
         else:              # plate (5) and class armor (6): smooth steel, plate seams, a shine
-            seam = (y % 6 == 0)
+            seam = (y % 7 == 0)
             shine = abs(x - (cx + 2)) <= 1
-            c = 110 + 90 * t + (30 if shine else 0) - (40 if seam else 0) - (25 if edge else 0)
+            c = 110 + 90 * t + (26 if shine else 0) - (16 if seam else 0) - (22 if edge else 0)
             px[x, y] = grey(c)
             if tier == 6 and abs(x - cx) <= 2 and not seam:
                 k = 0.6 + 0.5 * t

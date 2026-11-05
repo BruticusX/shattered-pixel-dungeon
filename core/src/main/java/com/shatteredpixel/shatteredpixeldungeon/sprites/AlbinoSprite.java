@@ -29,21 +29,21 @@ public class AlbinoSprite extends MobSprite {
 	public AlbinoSprite() {
 		super();
 		
-		texture( Assets.Sprites.RAT );
-		
-		TextureFilm frames = new TextureFilm( texture, 16, 15 );
-		
-		idle = new Animation( 2, true );
-		idle.frames( frames, 16, 16, 16, 17 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.RAT_HD, 57, 11f / 34f );
+		int c = 1 * 16;
+
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 12, 13, 13, 12, 12, 14, 15, 14 ) );
+
 		run = new Animation( 10, true );
-		run.frames( frames, 22, 23, 24, 25, 26 );
-		
-		attack = new Animation( 15, false );
-		attack.frames( frames, 18, 19, 20, 21 );
-		
-		die = new Animation( 10, false );
-		die.frames( frames, 27, 28, 29, 30 );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 9, 10, 11 ) );
 		
 		play( idle );
 	}

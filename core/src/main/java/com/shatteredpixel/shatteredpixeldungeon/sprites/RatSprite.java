@@ -29,23 +29,21 @@ public class RatSprite extends MobSprite {
 	public RatSprite() {
 		super();
 		
-		//MOD: redrawn. One row of 16 frames: run 0-3, bite 4-7, death 8-11, idle 12-15
-		texture( Assets.Sprites.RAT_HD );
-		hdScale = 11f / 34f;
-
-		TextureFilm frames = new TextureFilm( texture, 57, 57 );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.RAT_HD, 57, 11f / 34f );
+		int c = 0 * 16;
 
 		idle = new Animation( 3, true );
-		idle.frames( frames, 12, 12, 12, 13, 13, 12, 12, 14, 15, 14 );
+		idle.frames( frames, row( c, 12, 12, 12, 13, 13, 12, 12, 14, 15, 14 ) );
 
 		run = new Animation( 10, true );
-		run.frames( frames, 0, 1, 2, 3 );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
 		attack = new Animation( 14, false );
-		attack.frames( frames, 4, 5, 6, 7, 12 );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
 		die = new Animation( 8, false );
-		die.frames( frames, 9, 10, 11 );
+		die.frames( frames, row( c, 9, 10, 11 ) );
 
 		play( idle );
 	}

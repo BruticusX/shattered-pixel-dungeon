@@ -29,21 +29,21 @@ public class SlimeSprite extends MobSprite {
 	public SlimeSprite() {
 		super();
 		
-		texture( Assets.Sprites.SLIME );
-		
-		TextureFilm frames = new TextureFilm( texture, 14, 12 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SLIME_HD, 63, 11f / 36f );
+		int c = 0 * 16;
+
 		idle = new Animation( 3, true );
-		idle.frames( frames, 0, 1, 1, 0 );
-		
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
+
 		run = new Animation( 10, true );
-		run.frames( frames, 0, 2, 3, 3, 2, 0 );
-		
-		attack = new Animation( 15, false );
-		attack.frames( frames, 2, 3, 4, 6, 5 );
-		
-		die = new Animation( 10, false );
-		die.frames( frames, 0, 5, 6, 7 );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 		
 		play(idle);
 	}

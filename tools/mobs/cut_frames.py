@@ -1,5 +1,6 @@
 """Cut a 4x4 SpriteCook pose sheet (1024px raw) into clean pixel-art frames for a monster.
-    python3 tools/mobs/cut_frames.py <mob> <height_px>
+    python3 tools/mobs/cut_frames.py <mob> <height_px> [loose]
+("loose" keeps every small detached bit, for things like a swarm of flies)
 Reads tools/spritecook/mobs/<mob>_frames_raw.png, writes tools/spritecook/mobs/<mob>_frames.png:
 one row of 16 equal frames (row-major from the sheet), feet on a shared baseline, body centred.
 All frames get one common scale, taken from the first idle-ish frame (row 4, col 1), so the
@@ -10,6 +11,7 @@ import numpy as np
 from scipy import ndimage
 
 MOB, H = sys.argv[1], int(sys.argv[2])
+LOOSE = len(sys.argv) > 3 and sys.argv[3] == 'loose'
 SRC = f"tools/spritecook/mobs/{MOB}_frames_raw.png"
 OUTLINE = (22, 18, 24, 255)
 
@@ -27,7 +29,7 @@ def clean(cell):
     big = sizes.max()
     keep = np.zeros_like(solid)
     for i, s in enumerate(sizes, 1):
-        if s >= big * 0.04:             # main body plus real detached bits (droplets, tail)
+        if s >= (12 if LOOSE else big * 0.04):   # main body plus real detached bits (droplets, tail)
             keep |= lab == i
     a[..., 3] = np.where(keep, 255, 0)
     im = Image.fromarray(a.astype(np.uint8))
