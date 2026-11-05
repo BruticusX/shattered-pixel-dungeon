@@ -456,9 +456,10 @@ public class Generator {
 					Kris.class,
 					Katar.class,
 					TigerClaws.class,
-					Buckler.class
+					Buckler.class,
+					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.class //MOD: rare
 			};
-			WEP_T2.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2 }; //MOD: +Phase 4 types
+			WEP_T2.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 1 }; //MOD: +Phase 4 types, +tome
 			WEP_T2.probs = WEP_T2.defaultProbs.clone();
 			
 			WEP_T3.classes = new Class<?>[]{

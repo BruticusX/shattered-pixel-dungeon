@@ -188,14 +188,13 @@ public enum HeroClass {
 	}
 
 	private static void initMage( Hero hero ) {
-		MagesStaff staff;
+		//MOD: the Mage starts with a magic tome instead of a staff
+		com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome tome = new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome();
 
-		staff = new MagesStaff(new WandOfMagicMissile());
-
-		(hero.belongings.weapon = staff).identify();
+		(hero.belongings.weapon = tome).identify();
 		hero.belongings.weapon.activate(hero);
 
-		Dungeon.quickslot.setSlot(0, staff);
+		Dungeon.quickslot.setSlot(0, tome);
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();

@@ -897,6 +897,14 @@ public class Hero extends Char {
 			spendAndNext( TICK );
 			return false;
 		}
+
+		//MOD: channelling ray of frost: each turn goes to the next pulse until it ends or is broken
+		com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.FrostChannel frostChannel = buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.FrostChannel.class);
+		if (frostChannel != null && frostChannel.pulse(this)) {
+			curAction = null;
+			spendAndNext( TICK );
+			return false;
+		}
 		
 		boolean actResult;
 		if (curAction == null) {
@@ -1677,6 +1685,17 @@ public class Hero extends Char {
 		}
 
 		dmg = SkillEffects.onHeroDamaged( this, dmg, src ); //MOD: aegis
+
+		//MOD: the battlemage's disintegration aura turns magic bolts away
+		if (buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.DisintAura.class) != null && src != null
+				&& com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic.RESISTS.contains(src.getClass())) {
+			sprite.showStatus( CharSprite.NEUTRAL, Messages.get(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.class, "immune") );
+			return;
+		}
+		//MOD: getting hurt breaks a ray of frost
+		if (dmg > 0 && buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.FrostChannel.class) != null) {
+			buff(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.FrostChannel.class).interrupt();
+		}
 
 		//regular damage interrupt, triggers on any damage except specific mild DOT effects
 		// unless the player recently hit 'continue moving', in which case this is ignored

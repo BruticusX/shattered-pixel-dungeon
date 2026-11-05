@@ -67,6 +67,7 @@ public class Proficiency {
 		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class);
 		fam(Family.POLEARMS, Spear.class, Glaive.class, Sickle.class, WarScythe.class, Halberd.class, Pike.class);
 		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class, IronShodStaff.class);
+		fam(Family.WANDS,    MagicTome.class); //MOD: the tome is magic
 		fam(Family.FIST,     Gloves.class, Gauntlet.class, Sai.class, Katar.class, TigerClaws.class);
 		fam(Family.SHIELDS,  RoundShield.class, Greatshield.class, Buckler.class, KiteShield.class);
 		fam(Family.FLEXIBLE, Whip.class, Flail.class, Kusarigama.class, MeteorHammer.class);
@@ -129,6 +130,16 @@ public class Proficiency {
 		//MOD: every hero starts at level 1 with the weapon families of their starting gear
 		if (startsWith(cls, f)) xp = Math.max(xp, THRESHOLDS[0]);
 		return xp;
+	}
+
+	//MOD: deciphering a magic tome: jump straight to the next proficiency level
+	public static void grantLevel(HeroClass cls, Family f) {
+		int lvl = level(cls, f);
+		if (lvl >= MAX_LEVEL) return;
+		load();
+		data.put(key(cls, f), Math.max(xp(cls, f), THRESHOLDS[lvl]));
+		saveNeeded = true;
+		save();
 	}
 
 	public static boolean startsWith(HeroClass cls, Family f) {
