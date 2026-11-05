@@ -182,15 +182,6 @@ public class HeldWeapon {
 			ws.setFlipped(!faceLeft);
 			ws.origin.set(faceLeft ? ws.width * 0.18f : ws.width * 0.82f, ws.height * 0.82f);
 			ws.angle = faceLeft ? -h[2] : h[2];
-		} else if (hold == Hold.FIST && g != null) {
-			//a glove is worn on the hand: its wrist-to-knuckles line follows the arm, hanging down at
-			//rest and pointing forward while punching
-			ws.setFlipped(faceLeft);
-			ws.origin.set(ws.width / 2f, ws.height / 2f);
-			float a = L.angle[f];
-			float target = (a >= 70 && a <= 130) ? 95 : 170;
-			float rot = target - g[2];
-			ws.angle = faceLeft ? -rot : rot;
 		} else {
 			ws.setFlipped(faceLeft);
 			ws.origin.set(ws.width / 2f, ws.height / 2f);
