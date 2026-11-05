@@ -66,8 +66,22 @@ for im in cells:
     pa = np.array(pad); m = pa[..., 3] > 0
     ring = ndimage.binary_dilation(m, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]) & ~m
     pa[ring] = OUTLINE
+    if not LOOSE:
+        # drop stray specks left over from motion lines (a few pixels after the downscale)
+        m2 = pa[..., 3] > 0
+        lab2, n2 = ndimage.label(m2, structure=[[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+        if n2 > 1:
+            sz2 = ndimage.sum(m2, lab2, range(1, n2 + 1))
+            for i2, s2 in enumerate(sz2, 1):
+                if s2 < 25:
+                    pa[lab2 == i2] = 0
     small.append(Image.fromarray(pa))
-F = max(max(im.width, im.height) for im in small) + 4
+# frames are centred on their mass, so leave room for the far side of a lunge (otherwise it spills
+# into the neighbouring frame)
+def _half(im):
+    cx = np.nonzero(np.array(im)[..., 3] > 0)[1].mean()
+    return max(cx, im.width - cx)
+F = int(max(max(2 * _half(im), im.height) for im in small)) + 4
 sheet = Image.new("RGBA", (F * 16, F))
 for i, im in enumerate(small):
     a = np.array(im)[..., 3] > 0

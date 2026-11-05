@@ -30,7 +30,7 @@ public class BatSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.BAT_HD, 59, 12f / 40f );
+		TextureFilm frames = hdFilm( Assets.Sprites.BAT_HD, 61, 12f / 40f );
 		int c = 0;
 
 		idle = new Animation( 3, true );

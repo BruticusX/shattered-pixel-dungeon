@@ -32,7 +32,7 @@ public class GuardSprite extends MobSprite {
 		super();
 
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.GUARD_HD, 52, 15f / 46f );
+		TextureFilm frames = hdFilm( Assets.Sprites.GUARD_HD, 53, 15f / 46f );
 		int c = 0;
 
 		idle = new MovieClip.Animation( 3, true );

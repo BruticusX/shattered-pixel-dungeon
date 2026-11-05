@@ -32,7 +32,7 @@ public class SkeletonSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.SKELETON_HD, 54, 14f / 44f );
+		TextureFilm frames = hdFilm( Assets.Sprites.SKELETON_HD, 59, 14f / 44f );
 		int c = texOffset();
 
 		idle = new Animation( 3, true );

@@ -37,7 +37,7 @@ public class DM200Sprite extends MobSprite {
 		super();
 
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.DM200_HD, 70, 17f / 54f );
+		TextureFilm frames = hdFilm( Assets.Sprites.DM200_HD, 73, 17f / 54f );
 		int c = texOffset();
 
 		idle = new Animation( 3, true );

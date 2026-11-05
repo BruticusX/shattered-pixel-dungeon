@@ -33,7 +33,7 @@ public class SeniorSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.MONK_HD, 53, 13f / 42f );
+		TextureFilm frames = hdFilm( Assets.Sprites.MONK_HD, 57, 13f / 42f );
 		int c = 16;
 
 		idle = new Animation( 3, true );

@@ -30,7 +30,7 @@ public class AlbinoSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.RAT_HD, 57, 11f / 34f );
+		TextureFilm frames = hdFilm( Assets.Sprites.RAT_HD, 61, 11f / 34f );
 		int c = 1 * 16;
 
 		idle = new Animation( 3, true );

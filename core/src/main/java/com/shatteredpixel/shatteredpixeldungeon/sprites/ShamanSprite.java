@@ -40,7 +40,7 @@ public abstract class ShamanSprite extends MobSprite {
 		int c = texOffset();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.SHAMAN_HD, 57, 14f / 44f );
+		TextureFilm frames = hdFilm( Assets.Sprites.SHAMAN_HD, 67, 14f / 44f );
 
 		idle = new Animation( 3, true );
 		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
