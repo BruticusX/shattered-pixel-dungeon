@@ -32,23 +32,25 @@ public class SpawnerSprite extends MobSprite {
 	public SpawnerSprite() {
 		super();
 
-		texture( Assets.Sprites.SPAWNER );
-
 		perspectiveRaise = 8 / 16f;
 		shadowOffset = 1.25f;
 		shadowHeight = 0.4f;
 		shadowWidth = 1f;
 
-		TextureFilm frames = new TextureFilm( texture, 16, 16 );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SPAWNER_HD, 56, 16f / 48f );
+		int c = 0;
 
-		idle = new Animation( 8, true );
-		idle.frames( frames, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 );
+		idle = new Animation( 6, true );
+		idle.frames( frames, row( c, 12, 13, 14, 15, 0, 1, 2, 3 ) );
 
 		run = idle.clone();
 
-		attack = idle.clone();
+		attack = new Animation( 10, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		die = idle.clone();
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

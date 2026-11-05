@@ -42,17 +42,22 @@ public abstract class SentrySprite extends MobSprite {
 	protected abstract int texOffset();
 
 	public SentrySprite(){
-		texture( Assets.Sprites.SENTRY );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SENTRY_HD, 60, 15f / 46f );
+		int c = texOffset() * 16;
 
-		idle = new Animation(1, true);
-		int ofs = texOffset();
-		idle.frames(texture.uvRect(ofs*8, 0, (ofs+1)*8, 15));
+		idle = new Animation( 2, true );
+		idle.frames( frames, row( c, 12, 13, 14, 15 ) );
 
 		run = idle.clone();
 		attack = idle.clone();
-		charging = idle.clone();
-		die = idle.clone();
 		zap = idle.clone();
+
+		charging = new Animation( 6, true );
+		charging.frames( frames, row( c, 4, 5 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

@@ -35,19 +35,19 @@ public class WandmakerSprite extends MobSprite {
 	public WandmakerSprite() {
 		super();
 		
-		texture( Assets.Sprites.MAKER );
-		
-		TextureFilm frames = new TextureFilm( texture, 12, 14 );
-		
-		idle = new Animation( 10, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 2, 1 );
-		
-		run = new Animation( 20, true );
-		run.frames( frames, 0 );
-		
-		die = new Animation( 20, false );
-		die.frames( frames, 0 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.MAKER_HD, 50, 14f / 44f );
+		int c = 0;
+
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15, 12, 4, 5, 6, 7 ) );
+
+		run = new Animation( 8, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
 		play( idle );
 	}
 	

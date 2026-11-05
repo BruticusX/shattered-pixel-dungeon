@@ -48,27 +48,26 @@ public class MimicSprite extends MobSprite {
 
 		int c = texOffset();
 
-		texture( Assets.Sprites.MIMIC );
-
-		TextureFilm frames = new TextureFilm( texture, 16, 16 );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.MIMIC_HD, 66, 13f / 40f );
 
 		advancedHiding = new Animation( 1, true );
-		advancedHiding.frames( frames, 0+c);
+		advancedHiding.frames( frames, row( c, 12 ) );
 
 		hiding = new Animation( 1, true );
-		hiding.frames( frames, 1+c, 1+c, 1+c, 1+c, 1+c, 2+c);
+		hiding.frames( frames, row( c, 12, 12, 12, 12, 12, 13 ) );
 
-		idle = new Animation( 5, true );
-		idle.frames( frames, 3+c, 3+c, 3+c, 4+c, 4+c );
+		idle = new Animation( 4, true );
+		idle.frames( frames, row( c, 3, 3, 3, 0 ) );
 
 		run = new Animation( 10, true );
-		run.frames( frames, 3+c, 4+c, 5+c, 6+c, 6+c, 5+c, 4+c );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		attack = new Animation( 10, false );
-		attack.frames( frames, 3+c, 7+c, 8+c, 9+c );
+		attack = new Animation( 12, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7 ) );
 
-		die = new Animation( 5, false );
-		die.frames( frames, 10+c, 11+c, 12+c );
+		die = new Animation( 6, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

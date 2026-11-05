@@ -37,30 +37,30 @@ public class RipperSprite extends MobSprite {
 	public RipperSprite() {
 		super();
 
-		texture( Assets.Sprites.RIPPER );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.RIPPER_HD, 76, 14f / 42f );
+		int c = 0;
 
-		TextureFilm frames = new TextureFilm( texture, 15, 14 );
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		idle = new Animation( 4, true );
-		idle.frames( frames, 1, 0, 1, 2 );
+		run = new Animation( 12, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		run = new Animation( 15, true );
-		run.frames( frames, 3, 4, 5, 6, 7, 8 );
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		attack = new Animation( 12, false );
-		attack.frames( frames, 0, 9, 10, 9 );
-
-		stab = new Animation( 12, false );
-		stab.frames( frames, 0, 9, 11, 9 );
+		stab = new Animation( 14, false );
+		stab.frames( frames, row( c, 4, 6, 7, 12 ) );
 
 		prep = new Animation( 1, true );
-		prep.frames( frames, 9 );
+		prep.frames( frames, row( c, 5 ) );
 
 		leap = new Animation( 1, true );
-		leap.frames( frames, 12 );
+		leap.frames( frames, row( c, 6 ) );
 
-		die = new Animation( 15, false );
-		die.frames( frames, 1, 13, 14, 15, 16 );
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

@@ -34,23 +34,22 @@ public class FungalSentrySprite extends MobSprite {
 	public FungalSentrySprite(){
 		super();
 
-		texture( Assets.Sprites.FUNGAL_SENTRY );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.FUNGAL_SENTRY_HD, 78, 17f / 50f );
+		int c = 0;
 
-		TextureFilm frames = new TextureFilm( texture, 18, 18 );
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		idle = new Animation( 0, true );
-		idle.frames( frames, 0);
+		run = idle.clone();
 
-		run = new Animation( 0, true );
-		run.frames( frames, 0);
-
-		attack = new Animation( 24, false );
-		attack.frames( frames, 0 );
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
 		zap = attack.clone();
 
-		die = new Animation( 12, false );
-		die.frames( frames, 0 );
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 
