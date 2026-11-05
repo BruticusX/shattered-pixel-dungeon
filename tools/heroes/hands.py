@@ -93,4 +93,15 @@ def front_hand(im, f):
             continue
         if best is None or cx > best[0]:
             best = (cx, cy, comp)
+    # the weapon hand is on the front half of the body. If the skin test only found the back hand
+    # (skin close to the trousers' colour gets filtered out), look for warm skin-like pixels on the
+    # front half at arm height instead
+    midx = (bb[0] + bb[2]) / 2
+    if best is None or best[0] < midx:
+        pts = [(x, y) for y in range(top + int(h * 0.35), top + int(h * 0.62))
+               for x in range(int(midx) + 1, bb[2]) if broad_skin(fr.getpixel((x, y)))]
+        if pts:
+            xr = max(p[0] for p in pts)
+            near = [p for p in pts if p[0] >= xr - 3]
+            best = (sum(p[0] for p in near) / len(near), sum(p[1] for p in near) / len(near), near)
     return best
