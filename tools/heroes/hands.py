@@ -8,6 +8,7 @@ from PIL import Image
 
 FS = 62
 _palette = None
+_palette_all = None
 
 
 def broad_skin(p):
@@ -37,8 +38,18 @@ def learn(face_frame):
             p = face_frame.getpixel((x, y))
             if p[3] >= 200:
                 legs[p[:3]] += 1
+    global _palette_all
+    _palette_all = [col for col, n in c.most_common(10) if n >= 2]
     _palette = [col for col, n in c.most_common(10) if n >= 2
                 and not any(legs[q] >= 3 and sum(abs(a - b) for a, b in zip(col, q)) <= 30 for q in legs)]
+
+
+def face_skin(p):
+    """Close to a colour sampled from the face, without the trouser filter (used only as a fallback
+    on the front half of the body, where the trousers aren't)."""
+    if p[3] < 200 or not _palette_all:
+        return False
+    return broad_skin(p) and min(abs(p[0] - c[0]) + abs(p[1] - c[1]) + abs(p[2] - c[2]) for c in _palette_all) <= 24
 
 
 def is_skin(p):
@@ -99,7 +110,7 @@ def front_hand(im, f):
     midx = (bb[0] + bb[2]) / 2
     if best is None or best[0] < midx:
         pts = [(x, y) for y in range(top + int(h * 0.35), top + int(h * 0.62))
-               for x in range(int(midx) + 1, bb[2]) if broad_skin(fr.getpixel((x, y)))]
+               for x in range(int(midx) + 1, bb[2]) if face_skin(fr.getpixel((x, y)))]
         if pts:
             xr = max(p[0] for p in pts)
             near = [p for p in pts if p[0] >= xr - 3]
