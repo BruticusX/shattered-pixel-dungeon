@@ -65,6 +65,11 @@ public class HeldWeapon {
 		return Hold.DIAGONAL;
 	}
 
+	//shields are strapped on facing outward, so they're always drawn in front of the body
+	public static boolean inFront( Item w ){
+		return w != null && holdOf(w) == Hold.SHIELD;
+	}
+
 	public void update(){
 		if (ws != null) ws.update();
 	}
