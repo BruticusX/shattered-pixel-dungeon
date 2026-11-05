@@ -218,21 +218,17 @@ public class Assets {
 		public static final String BURNING  = "sounds/burning.mp3";
 		public static final String FALLING  = "sounds/falling.mp3";
 		public static final String GHOST    = "sounds/ghost.mp3";
-		public static final String GHOST_HD = "sprites/ghost_hd.png";   //MOD: redrawn
 		public static final String SECRET   = "sounds/secret.mp3";
 		public static final String BONES    = "sounds/bones.mp3";
 		public static final String BEE      = "sounds/bee.mp3";
-		public static final String BEE_HD = "sprites/bee_hd.png";   //MOD: redrawn
 		public static final String DEGRADE  = "sounds/degrade.mp3";
 		public static final String MIMIC    = "sounds/mimic.mp3";
-		public static final String MIMIC_HD = "sprites/mimic_hd.png";   //MOD: redrawn
 		public static final String DEBUFF   = "sounds/debuff.mp3";
 		public static final String CHARGEUP = "sounds/chargeup.mp3";
 		public static final String GAS      = "sounds/gas.mp3";
 		public static final String CHAINS   = "sounds/chains.mp3";
 		public static final String SCAN     = "sounds/scan.mp3";
 		public static final String SHEEP    = "sounds/sheep.mp3";
-		public static final String SHEEP_HD = "sprites/sheep_hd.png";   //MOD: redrawn
 		public static final String MINE    = "sounds/mine.mp3";
 
 		public static final String[] all = new String[]{
@@ -317,6 +313,7 @@ public class Assets {
 		public static final String THIEF_HD = "sprites/thief_hd.png";   //MOD: redrawn
 		public static final String TENGU    = "sprites/tengu.png";
 		public static final String SHEEP    = "sprites/sheep.png";
+		public static final String SHEEP_HD = "sprites/sheep_hd.png";   //MOD: redrawn
 		public static final String KEEPER   = "sprites/shopkeeper.png";
 		public static final String KEEPER_HD = "sprites/shopkeeper_hd.png";   //MOD: redrawn
 		public static final String BAT      = "sprites/bat.png";
@@ -338,6 +335,7 @@ public class Assets {
 		public static final String YOG      = "sprites/yog.png";
 		public static final String LARVA    = "sprites/larva.png";
 		public static final String GHOST    = "sprites/ghost.png";
+		public static final String GHOST_HD = "sprites/ghost_hd.png";   //MOD: redrawn
 		public static final String MAKER    = "sprites/wandmaker.png";
 		public static final String MAKER_HD = "sprites/wandmaker_hd.png";   //MOD: redrawn
 		public static final String TROLL    = "sprites/blacksmith.png";
@@ -351,7 +349,9 @@ public class Assets {
 		public static final String RATKING  = "sprites/ratking.png";
 		public static final String RATKING_HD = "sprites/ratking_hd.png";   //MOD: redrawn
 		public static final String BEE      = "sprites/bee.png";
+		public static final String BEE_HD = "sprites/bee_hd.png";   //MOD: redrawn
 		public static final String MIMIC    = "sprites/mimic.png";
+		public static final String MIMIC_HD = "sprites/mimic_hd.png";   //MOD: redrawn
 		public static final String ROT_LASH = "sprites/rot_lasher.png";
 		public static final String ROT_LASH_HD = "sprites/rotlasher_hd.png";   //MOD: redrawn
 		public static final String ROT_HEART= "sprites/rot_heart.png";
