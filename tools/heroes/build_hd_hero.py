@@ -31,9 +31,10 @@ ANIMS = [("idle", 8), ("run", 10), ("attack", 8), ("death", 12)]
 THICKEN = {"duelist"}   # heroes drawn with very slender arms
 
 POSE = {
-    "idle":   [(55, False)] * 8,
-    "run":    [(62, False), (56, False), (46, True), (42, False), (52, False),
-               (62, False), (56, True), (46, False), (42, False), (52, False)],
+    # walking and standing, the blade points forward and down, swinging a little with the stride
+    "idle":   [(68, False)] * 8,
+    "run":    [(100, False), (106, False), (112, True), (106, False), (100, False),
+               (96, False), (102, True), (110, False), (104, False), (98, False)],
     # the attack animations are punches: the weapon hand draws back and drives forward, so the blade
     # is raised over the shoulder on the draw and swept down through the punch
     "attack": [(55, False), (15, False), (-15, False), (-25, False), (75, False), (115, False), (95, False), (65, False)],

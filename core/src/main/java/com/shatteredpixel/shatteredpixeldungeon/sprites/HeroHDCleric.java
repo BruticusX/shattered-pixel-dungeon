@@ -33,6 +33,6 @@ public class HeroHDCleric {
 			new int[]{16, 8, 49, 61},
 			new float[]{31.4f, 30.5f, 30.5f, 29.5f, 29.8f, 30.5f, 31.5f, 31.5f, 31.4f, 35.4f, 33.4f, 31.5f, 34.4f, 37.2f, 27.1f, 21.5f, 21.4f, 24.9f, 31.4f, 27.8f, 19.6f, 24.3f, 36.5f, 63.0f, 58.0f, 38.9f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
 			new float[]{52.1f, 52.1f, 52.3f, 53.3f, 52.9f, 53.0f, 52.2f, 52.1f, 51.9f, 52.0f, 47.5f, 43.0f, 47.7f, 52.4f, 49.3f, 42.6f, 45.5f, 49.6f, 52.1f, 50.2f, 34.2f, 33.8f, 42.5f, 30.0f, 31.0f, 48.9f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 55.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 62.0f, 56.0f, 46.0f, 42.0f, 52.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+			new float[]{68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 100.0f, 106.0f, 112.0f, 106.0f, 100.0f, 96.0f, 102.0f, 110.0f, 104.0f, 98.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
 			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
 }
