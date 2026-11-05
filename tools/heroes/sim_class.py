@@ -14,7 +14,7 @@ sheet = Image.open(f'core/src/main/assets/sprites/hero_hd_{CLS}_steel.png').conv
 hands = Image.open(f'core/src/main/assets/sprites/hero_hd_{CLS}_hands.png').convert('RGBA')
 items = Image.open('core/src/main/assets/sprites/items_hd_steel.png').convert('RGBA')
 v = slots.load()
-FAR = True
+FAR = False
 LENS = {int(a): int(b) for a, b in re.findall(r'LEN\[(\d+)\] = (\d+);', open('core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/sprites/ItemSpriteSheetHD.java').read())}
 def wep(n):
     w, h, gx, gy, ax = G[n]; c, r = n % 16, n // 16
