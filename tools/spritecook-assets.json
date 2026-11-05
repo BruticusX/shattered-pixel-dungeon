@@ -1,245 +1,250 @@
 [
-  {
-    "asset_id": "ecdf2e6c-f0de-4885-b0a5-71c29611dec0",
-    "sha12": "321d562d61cd",
-    "label": "obsidian_khopesh"
-  },
-  {
-    "asset_id": "5c1b89b9-1f3b-4f1d-9be0-28c11afc2812",
-    "sha12": "8453a7da466a",
-    "label": "hd_sword"
-  },
-  {
-    "asset_id": "0212ff66-4d70-4f2c-82d7-1d2ac5e1bc99",
-    "sha12": "fc236b6210b2",
-    "label": "hd_spear"
-  },
-  {
-    "asset_id": "d739b3f0-3ea8-499a-8323-3490273cd4aa",
-    "sha12": "84a659d8432d",
-    "label": "hd_flail"
-  },
-  {
-    "asset_id": "c0e84b7e-f9de-4492-bb0b-9b9d12080c1b",
-    "sha12": "29054eb3df07",
-    "label": "hd_greataxe"
-  },
-  {
-    "asset_id": "f25e0686-a876-4e04-ba00-e4d6466e9520",
-    "sha12": "41b2d1be995b",
-    "label": "ui_status_pane (aligned 2x)"
-  },
-  {
-    "asset_id": "71aa04d7-a0a4-47a2-b4d7-f475c6992ca1",
-    "sha12": "9a7af695fa46",
-    "label": "ui_toolbar"
-  },
-  {
-    "asset_id": "c9a6740b-a305-46a3-9d8d-773b3ad0c273",
-    "sha12": "51c18651cf75",
-    "label": "ui_chrome"
-  },
-  {
-    "asset_id": "d3bf029f-c8a6-45c1-ad4c-3381511c7885",
-    "sha12": "f9bf1d20aa4c",
-    "label": "ui_menu_pane"
-  },
-  {
-    "asset_id": "7c46af4b-4c79-4800-9386-108c6878e906",
-    "sha12": "004d9e2a260b",
-    "label": "ui_menu_button"
-  },
-  {
-    "asset_id": "243f487f-ddeb-4ab6-82f1-fc0a57ffe0bb",
-    "sha12": "72203cc12b9b",
-    "label": "ui_talent_button"
-  },
-  {
-    "asset_id": "a0d7be4d-3d95-43a4-88d6-bf0eeec02a8c",
-    "sha12": "c09e2de7e1c3",
-    "label": "ui_radial_menu"
-  },
-  {
-    "asset_id": "21a366ac-e133-43a4-959e-3f3082d8f535",
-    "sha12": null,
-    "label": "ui_boss_hp (not used yet)"
-  },
-  {
-    "asset_id": "8851723f-1f16-4f5e-b9b2-bb4f3d203325",
-    "sha12": "95322d0b3634",
-    "label": "furnace"
-  },
-  {
-    "asset_id": "284b8e48-1ba4-4572-a7d5-e1582e2af8f7",
-    "sha12": "cced1d70ec6e",
-    "label": "anvil"
-  },
-  {
-    "asset_id": "427e736d-848d-4538-964c-a7ae7f27e682",
-    "sha12": "60dd1e31e7e7",
-    "label": "furnace_anim (6 frames 16x16)"
-  },
-  {
-    "asset_id": "540bfa5b-36a4-4912-b63c-7a0967eea922",
-    "sha12": "d2e0a64a1025",
-    "label": "skill icons: swords"
-  },
-  {
-    "asset_id": "795a3997-4d5a-42ad-a96b-e6653206fb17",
-    "sha12": "ab383f915914",
-    "label": "skill icons: daggers"
-  },
-  {
-    "asset_id": "cd2fbf7c-0691-4e7e-af5d-eb1485fb9602",
-    "sha12": "a07a1c9cdcef",
-    "label": "skill icons: axes"
-  },
-  {
-    "asset_id": "3c5a71c5-d629-456a-aaf1-eb3523a13293",
-    "sha12": "455ab352679e",
-    "label": "skill icons: blunt"
-  },
-  {
-    "asset_id": "e2432597-5002-4671-8dd9-aca8818d267f",
-    "sha12": "f3e600f4fec8",
-    "label": "skill icons: polearms"
-  },
-  {
-    "asset_id": "13be765a-0c00-484f-a31e-7df0f33e5716",
-    "sha12": "6a46108126fb",
-    "label": "skill icons: staves"
-  },
-  {
-    "asset_id": "2e551325-daee-42c5-96f3-e52272896cab",
-    "sha12": "6e7b144c4992",
-    "label": "skill icons: fist"
-  },
-  {
-    "asset_id": "618079cc-6afc-462a-9761-1169b394ef06",
-    "sha12": "e0c1a8caa97b",
-    "label": "skill icons: shields"
-  },
-  {
-    "asset_id": "cb624753-2588-4043-a0e5-a02e97c0e764",
-    "sha12": "d6fc63cedae1",
-    "label": "skill icons: flexible"
-  },
-  {
-    "asset_id": "54d97c9b-32be-4b15-b6ce-d68abc2feccb",
-    "sha12": "33f2e1845196",
-    "label": "skill icons: ranged"
-  },
-  {
-    "asset_id": "1f2cfcea-283d-4dfd-ac89-a80b3989da9b",
-    "sha12": "bea4326baa6e",
-    "label": "skill icons: wands"
-  },
-  {
-    "asset_id": "dd95b6f3-c18e-47de-83a8-d4dc655e29bc",
-    "label": "proposal: melee sheet"
-  },
-  {
-    "asset_id": "c8bf5f35-3701-4d64-a8fe-4bcfb4cdf524",
-    "label": "proposal: armor sheet"
-  },
-  {
-    "asset_id": "3c2f013e-ba32-4b5b-87a2-21ed6334a920",
-    "label": "proposal: thrown sheet"
-  },
-  {
-    "asset_id": "15f6ddb8-847c-4118-bb9b-8b3a67c558d7",
-    "label": "item sheet M0"
-  },
-  {
-    "asset_id": "39b39631-fb46-41cd-b159-f3dd847925d2",
-    "label": "item sheet M1"
-  },
-  {
-    "asset_id": "5d6be9b7-3c49-43b4-99e1-c7f4ea6b6bf0",
-    "label": "item sheet M2"
-  },
-  {
-    "asset_id": "532583aa-7fd6-4a11-b489-d72aa68242cf",
-    "label": "item sheet M3"
-  },
-  {
-    "asset_id": "f25adc1b-fa5f-41fa-b6fa-08a727f3133d",
-    "label": "item sheet M4"
-  },
-  {
-    "asset_id": "24cb9f87-ced1-47b7-9eb9-08a961d3db6b",
-    "label": "item sheet M5"
-  },
-  {
-    "asset_id": "6000d671-f332-445c-bd87-cde683abf1ad",
-    "label": "item sheet M6"
-  },
-  {
-    "asset_id": "6ca33675-f2f1-440a-9642-7860ec989bb4",
-    "label": "item sheet M7"
-  },
-  {
-    "asset_id": "74050171-4114-45b7-8781-5b22cb7adb94",
-    "label": "item sheet M8"
-  },
-  {
-    "asset_id": "56e568d7-f93d-41dd-baa6-a9a45cc3abbf",
-    "label": "item sheet M9"
-  },
-  {
-    "asset_id": "38111e6d-9606-41c6-9602-0f94bed35c87",
-    "label": "item sheet M10"
-  },
-  {
-    "asset_id": "582f838a-9e52-4ec2-89c3-06f1a1a58abb",
-    "label": "item sheet BASE"
-  },
-  {
-    "asset_id": "b573ba74-02d9-4192-b0e0-76d8081ae6a2",
-    "label": "item sheet gear A"
-  },
-  {
-    "asset_id": "c93381c6-b0ce-4a1d-b065-a63e393869e7",
-    "label": "item sheet gear B"
-  },
-  {
-    "asset_id": "1cffb486-04e5-47fe-a563-385e33f4d613",
-    "label": "item sheet gear C"
-  },
-  {
-    "asset_id": "bbdf5f5b-7698-460e-8739-8b16ab251530",
-    "label": "item sheet gear D"
-  },
-  {
-    "asset_id": "b932b6ca-8cdb-45fa-888d-d5bed84d8da9",
-    "label": "item sheet gear E"
-  },
-  {
-    "asset_id": "03e595b8-60df-4249-9e57-6d49a2021747",
-    "label": "item sheet gear F"
-  },
-  {
-    "asset_id": "5163e858-ce31-4fe3-acdc-d498ef3e4bdb",
-    "label": "hero sample: warrior base"
-  },
-  {
-    "asset_id": "9b2a5e14-bc77-471f-b33c-5560a2972ad6",
-    "label": "hero sample: warrior mail still"
-  },
-  {
-    "asset_id": "65fabc99-40f7-44a2-b774-b18ba6c3e08d",
-    "label": "hero sample: warrior attack"
-  },
-  {
-    "asset_id": "b00ec92b-a6a4-4e37-94cd-ed592b228994",
-    "label": "hero sample: warrior idle"
-  },
-  {
-    "asset_id": "124bc8de-1173-4cd1-92b1-88f3e6fe13f4",
-    "label": "hero sample: warrior death"
-  },
-  {
-    "asset_id": "49167d66-5911-4df0-88be-105aff6ce525",
-    "label": "hero sample: warrior run"
-  }
+ {
+  "asset_id": "ecdf2e6c-f0de-4885-b0a5-71c29611dec0",
+  "sha12": "321d562d61cd",
+  "label": "obsidian_khopesh"
+ },
+ {
+  "asset_id": "5c1b89b9-1f3b-4f1d-9be0-28c11afc2812",
+  "sha12": "8453a7da466a",
+  "label": "hd_sword"
+ },
+ {
+  "asset_id": "0212ff66-4d70-4f2c-82d7-1d2ac5e1bc99",
+  "sha12": "fc236b6210b2",
+  "label": "hd_spear"
+ },
+ {
+  "asset_id": "d739b3f0-3ea8-499a-8323-3490273cd4aa",
+  "sha12": "84a659d8432d",
+  "label": "hd_flail"
+ },
+ {
+  "asset_id": "c0e84b7e-f9de-4492-bb0b-9b9d12080c1b",
+  "sha12": "29054eb3df07",
+  "label": "hd_greataxe"
+ },
+ {
+  "asset_id": "f25e0686-a876-4e04-ba00-e4d6466e9520",
+  "sha12": "41b2d1be995b",
+  "label": "ui_status_pane (aligned 2x)"
+ },
+ {
+  "asset_id": "71aa04d7-a0a4-47a2-b4d7-f475c6992ca1",
+  "sha12": "9a7af695fa46",
+  "label": "ui_toolbar"
+ },
+ {
+  "asset_id": "c9a6740b-a305-46a3-9d8d-773b3ad0c273",
+  "sha12": "51c18651cf75",
+  "label": "ui_chrome"
+ },
+ {
+  "asset_id": "d3bf029f-c8a6-45c1-ad4c-3381511c7885",
+  "sha12": "f9bf1d20aa4c",
+  "label": "ui_menu_pane"
+ },
+ {
+  "asset_id": "7c46af4b-4c79-4800-9386-108c6878e906",
+  "sha12": "004d9e2a260b",
+  "label": "ui_menu_button"
+ },
+ {
+  "asset_id": "243f487f-ddeb-4ab6-82f1-fc0a57ffe0bb",
+  "sha12": "72203cc12b9b",
+  "label": "ui_talent_button"
+ },
+ {
+  "asset_id": "a0d7be4d-3d95-43a4-88d6-bf0eeec02a8c",
+  "sha12": "c09e2de7e1c3",
+  "label": "ui_radial_menu"
+ },
+ {
+  "asset_id": "21a366ac-e133-43a4-959e-3f3082d8f535",
+  "sha12": null,
+  "label": "ui_boss_hp (not used yet)"
+ },
+ {
+  "asset_id": "8851723f-1f16-4f5e-b9b2-bb4f3d203325",
+  "sha12": "95322d0b3634",
+  "label": "furnace"
+ },
+ {
+  "asset_id": "284b8e48-1ba4-4572-a7d5-e1582e2af8f7",
+  "sha12": "cced1d70ec6e",
+  "label": "anvil"
+ },
+ {
+  "asset_id": "427e736d-848d-4538-964c-a7ae7f27e682",
+  "sha12": "60dd1e31e7e7",
+  "label": "furnace_anim (6 frames 16x16)"
+ },
+ {
+  "asset_id": "540bfa5b-36a4-4912-b63c-7a0967eea922",
+  "sha12": "d2e0a64a1025",
+  "label": "skill icons: swords"
+ },
+ {
+  "asset_id": "795a3997-4d5a-42ad-a96b-e6653206fb17",
+  "sha12": "ab383f915914",
+  "label": "skill icons: daggers"
+ },
+ {
+  "asset_id": "cd2fbf7c-0691-4e7e-af5d-eb1485fb9602",
+  "sha12": "a07a1c9cdcef",
+  "label": "skill icons: axes"
+ },
+ {
+  "asset_id": "3c5a71c5-d629-456a-aaf1-eb3523a13293",
+  "sha12": "455ab352679e",
+  "label": "skill icons: blunt"
+ },
+ {
+  "asset_id": "e2432597-5002-4671-8dd9-aca8818d267f",
+  "sha12": "f3e600f4fec8",
+  "label": "skill icons: polearms"
+ },
+ {
+  "asset_id": "13be765a-0c00-484f-a31e-7df0f33e5716",
+  "sha12": "6a46108126fb",
+  "label": "skill icons: staves"
+ },
+ {
+  "asset_id": "2e551325-daee-42c5-96f3-e52272896cab",
+  "sha12": "6e7b144c4992",
+  "label": "skill icons: fist"
+ },
+ {
+  "asset_id": "618079cc-6afc-462a-9761-1169b394ef06",
+  "sha12": "e0c1a8caa97b",
+  "label": "skill icons: shields"
+ },
+ {
+  "asset_id": "cb624753-2588-4043-a0e5-a02e97c0e764",
+  "sha12": "d6fc63cedae1",
+  "label": "skill icons: flexible"
+ },
+ {
+  "asset_id": "54d97c9b-32be-4b15-b6ce-d68abc2feccb",
+  "sha12": "33f2e1845196",
+  "label": "skill icons: ranged"
+ },
+ {
+  "asset_id": "1f2cfcea-283d-4dfd-ac89-a80b3989da9b",
+  "sha12": "bea4326baa6e",
+  "label": "skill icons: wands"
+ },
+ {
+  "asset_id": "dd95b6f3-c18e-47de-83a8-d4dc655e29bc",
+  "label": "proposal: melee sheet"
+ },
+ {
+  "asset_id": "c8bf5f35-3701-4d64-a8fe-4bcfb4cdf524",
+  "label": "proposal: armor sheet"
+ },
+ {
+  "asset_id": "3c2f013e-ba32-4b5b-87a2-21ed6334a920",
+  "label": "proposal: thrown sheet"
+ },
+ {
+  "asset_id": "15f6ddb8-847c-4118-bb9b-8b3a67c558d7",
+  "label": "item sheet M0"
+ },
+ {
+  "asset_id": "39b39631-fb46-41cd-b159-f3dd847925d2",
+  "label": "item sheet M1"
+ },
+ {
+  "asset_id": "5d6be9b7-3c49-43b4-99e1-c7f4ea6b6bf0",
+  "label": "item sheet M2"
+ },
+ {
+  "asset_id": "532583aa-7fd6-4a11-b489-d72aa68242cf",
+  "label": "item sheet M3"
+ },
+ {
+  "asset_id": "f25adc1b-fa5f-41fa-b6fa-08a727f3133d",
+  "label": "item sheet M4"
+ },
+ {
+  "asset_id": "24cb9f87-ced1-47b7-9eb9-08a961d3db6b",
+  "label": "item sheet M5"
+ },
+ {
+  "asset_id": "6000d671-f332-445c-bd87-cde683abf1ad",
+  "label": "item sheet M6"
+ },
+ {
+  "asset_id": "6ca33675-f2f1-440a-9642-7860ec989bb4",
+  "label": "item sheet M7"
+ },
+ {
+  "asset_id": "74050171-4114-45b7-8781-5b22cb7adb94",
+  "label": "item sheet M8"
+ },
+ {
+  "asset_id": "56e568d7-f93d-41dd-baa6-a9a45cc3abbf",
+  "label": "item sheet M9"
+ },
+ {
+  "asset_id": "38111e6d-9606-41c6-9602-0f94bed35c87",
+  "label": "item sheet M10"
+ },
+ {
+  "asset_id": "582f838a-9e52-4ec2-89c3-06f1a1a58abb",
+  "label": "item sheet BASE"
+ },
+ {
+  "asset_id": "b573ba74-02d9-4192-b0e0-76d8081ae6a2",
+  "label": "item sheet gear A"
+ },
+ {
+  "asset_id": "c93381c6-b0ce-4a1d-b065-a63e393869e7",
+  "label": "item sheet gear B"
+ },
+ {
+  "asset_id": "1cffb486-04e5-47fe-a563-385e33f4d613",
+  "label": "item sheet gear C"
+ },
+ {
+  "asset_id": "bbdf5f5b-7698-460e-8739-8b16ab251530",
+  "label": "item sheet gear D"
+ },
+ {
+  "asset_id": "b932b6ca-8cdb-45fa-888d-d5bed84d8da9",
+  "label": "item sheet gear E"
+ },
+ {
+  "asset_id": "03e595b8-60df-4249-9e57-6d49a2021747",
+  "label": "item sheet gear F"
+ },
+ {
+  "asset_id": "5163e858-ce31-4fe3-acdc-d498ef3e4bdb",
+  "label": "hero sample: warrior base"
+ },
+ {
+  "asset_id": "9b2a5e14-bc77-471f-b33c-5560a2972ad6",
+  "label": "hero sample: warrior mail still"
+ },
+ {
+  "asset_id": "65fabc99-40f7-44a2-b774-b18ba6c3e08d",
+  "label": "hero sample: warrior attack"
+ },
+ {
+  "asset_id": "b00ec92b-a6a4-4e37-94cd-ed592b228994",
+  "label": "hero sample: warrior idle"
+ },
+ {
+  "asset_id": "124bc8de-1173-4cd1-92b1-88f3e6fe13f4",
+  "label": "hero sample: warrior death"
+ },
+ {
+  "asset_id": "49167d66-5911-4df0-88be-105aff6ce525",
+  "label": "hero sample: warrior run"
+ },
+ {
+  "asset_id": "70041b43-1272-4896-b7de-b8c43a55c403",
+  "sha12": "fe1fc02ac69a",
+  "label": "magic tome: closed icon + open held book"
+ }
 ]
