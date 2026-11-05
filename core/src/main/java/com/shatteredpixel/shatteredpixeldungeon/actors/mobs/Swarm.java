@@ -124,8 +124,13 @@ public class Swarm extends Mob {
 		return 10;
 	}
 	
+	//MOD: the creature a split makes (the test room's harmless swarm splits into harmless swarms)
+	protected Swarm newClone() {
+		return new Swarm();
+	}
+
 	private Swarm split() {
-		Swarm clone = new Swarm();
+		Swarm clone = newClone();
 		clone.generation = generation + 1;
 		clone.EXP = 0;
 		if (buff( Burning.class ) != null) {
