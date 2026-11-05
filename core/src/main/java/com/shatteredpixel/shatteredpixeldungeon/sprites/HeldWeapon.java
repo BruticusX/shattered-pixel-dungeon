@@ -98,8 +98,8 @@ public class HeldWeapon {
 		//item sprites are 32px art shown at half size; held weapons use the same pixel size as
 		//items on the floor, whatever resolution the hero's own art was drawn at
 		float sc = 2f * ItemSprite.WORLD_SCALE * 0.5f;
-		if (hold != Hold.SHIELD) sc *= ItemSpriteSheetHD.handScale(w.image());
-		if (hold == Hold.FIST) sc *= 0.8f;
+		if (hold == Hold.DIAGONAL || hold == Hold.COILED) sc *= ItemSpriteSheetHD.handScale(w.image());
+		if (hold == Hold.FIST) sc *= 0.6f;     //about the size of the hand it covers
 		if (hold == Hold.SHIELD) sc *= 0.7f;   //strapped to the forearm, not as wide as the body
 		ws.scale.set(sc);
 		if (hold == Hold.DIAGONAL && g != null) {
@@ -108,14 +108,23 @@ public class HeldWeapon {
 			ws.origin.set(faceLeft ? ws.width - gx : gx, gy);
 			float rot = L.angle[f] - g[2];
 			ws.angle = faceLeft ? -rot : rot;
+		} else if (hold == Hold.FIST && g != null) {
+			//a glove is worn on the hand: its wrist-to-knuckles line follows the arm, hanging down at
+			//rest and pointing forward while punching
+			ws.setFlipped(faceLeft);
+			ws.origin.set(ws.width / 2f, ws.height / 2f);
+			float a = L.angle[f];
+			float target = (a >= 70 && a <= 130) ? 95 : 170;
+			float rot = target - g[2];
+			ws.angle = faceLeft ? -rot : rot;
 		} else {
 			ws.setFlipped(faceLeft);
 			ws.origin.set(ws.width / 2f, ws.height / 2f);
 			ws.angle = 0;
 		}
 		float ax = (faceLeft ? L.frame - hx : hx) * k;
-		//a shield sits on the forearm, a little above the fist
-		float lift = hold == Hold.SHIELD ? 1.5f : 0;
+		//a shield is strapped to the forearm: centred a good way above the fist, not hanging from it
+		float lift = hold == Hold.SHIELD ? 3.5f : 0;
 		ws.x = owner.x + ax - ws.origin.x;
 		ws.y = owner.y + hy * k - lift - ws.origin.y;
 		ws.alpha(owner.alpha());
@@ -173,6 +182,15 @@ public class HeldWeapon {
 			ws.setFlipped(!faceLeft);
 			ws.origin.set(faceLeft ? ws.width * 0.18f : ws.width * 0.82f, ws.height * 0.82f);
 			ws.angle = faceLeft ? -h[2] : h[2];
+		} else if (hold == Hold.FIST && g != null) {
+			//a glove is worn on the hand: its wrist-to-knuckles line follows the arm, hanging down at
+			//rest and pointing forward while punching
+			ws.setFlipped(faceLeft);
+			ws.origin.set(ws.width / 2f, ws.height / 2f);
+			float a = L.angle[f];
+			float target = (a >= 70 && a <= 130) ? 95 : 170;
+			float rot = target - g[2];
+			ws.angle = faceLeft ? -rot : rot;
 		} else {
 			ws.setFlipped(faceLeft);
 			ws.origin.set(ws.width / 2f, ws.height / 2f);
