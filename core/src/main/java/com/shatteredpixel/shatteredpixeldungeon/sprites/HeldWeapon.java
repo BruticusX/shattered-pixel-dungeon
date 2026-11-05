@@ -53,7 +53,7 @@ public class HeldWeapon {
 		HOLD[18] = rest;
 	}
 
-	private enum Hold { DIAGONAL, SHIELD, FIST, COILED }
+	private enum Hold { DIAGONAL, SHIELD, FIST, COILED, BOOK }
 
 	private ItemSprite ws;
 	private Item shown;
@@ -62,6 +62,7 @@ public class HeldWeapon {
 	private ItemSprite.Glowing shownGlow;
 
 	private static Hold holdOf( Item w ){
+		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) return Hold.BOOK;
 		if (Proficiency.familyOf(w) == Proficiency.Family.SHIELDS) return Hold.SHIELD;
 		if (w instanceof Gloves || w instanceof Gauntlet || w instanceof TigerClaws) return Hold.FIST;
 		if (w instanceof Whip) return Hold.COILED;
@@ -93,6 +94,7 @@ public class HeldWeapon {
 				|| !String.valueOf(w.spriteSheet()).equals(shownSheet) || w.glowing() != shownGlow) {
 			if (ws == null) ws = new ItemSprite();
 			ws.view(w);
+			if (holdOf(w) == Hold.BOOK) ws.view(ItemSpriteSheet.MAGIC_TOME_OPEN, w.glowing());
 			ws.useSmoothFiltering();
 			shown = w;
 			shownImage = w.image();
@@ -107,7 +109,11 @@ public class HeldWeapon {
 		//items on the floor, whatever resolution the hero's own art was drawn at
 		float sc = 2f * ItemSprite.WORLD_SCALE * 0.5f;
 		if (hold == Hold.DIAGONAL || hold == Hold.COILED) sc *= ItemSpriteSheetHD.handScale(w.image());
-		if (hold == Hold.FIST) sc *= 0.4f;     //about the size of the hand it covers
+		if (hold == Hold.FIST) {
+			//a glove covers the fist and stops at the wrist: about 7 art pixels long, like the hand
+			int px = ItemSpriteSheetHD.dim(w.image());
+			sc *= px > 0 ? 7f / px : 0.3f;
+		}
 		//shields are sized against the hero's body: a buckler covers the forearm, a round shield the
 		//torso, a kite shield shoulder to thigh, and a greatshield nearly the whole body
 		float shieldH = 0, shieldC = 0;
@@ -120,8 +126,14 @@ public class HeldWeapon {
 			if (px > 0) sc *= shieldH / (px * 0.01875f);
 			else        sc *= 0.7f;
 		}
+		//an open book about two hands wide, resting on the palm
+		if (hold == Hold.BOOK) sc *= 11f / 32f;
 		ws.scale.set(sc);
-		if (hold == Hold.DIAGONAL && g != null) {
+		if (hold == Hold.BOOK) {
+			ws.setFlipped(faceLeft);
+			ws.origin.set(ws.width / 2f, ws.height * 0.8f);
+			ws.angle = 0;
+		} else if (hold == Hold.DIAGONAL && g != null) {
 			ws.setFlipped(faceLeft);
 			float gx = g[0] / 2f, gy = g[1] / 2f;
 			ws.origin.set(faceLeft ? ws.width - gx : gx, gy);
