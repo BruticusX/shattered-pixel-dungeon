@@ -35,25 +35,23 @@ public class GnollTricksterSprite extends MobSprite {
 	public GnollTricksterSprite() {
 		super();
 
-		texture( Assets.Sprites.GNOLL );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.GNOLL_HD, 62, 15f / 45f );
+		int c = 1 * 16;
 
-		TextureFilm frames = new TextureFilm( texture, 12, 15 );
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		int c = 42;
+		run = new Animation( 10, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		idle = new MovieClip.Animation( 2, true );
-		idle.frames( frames, 0+c, 0+c, 0+c, 1+c, 0+c, 0+c, 1+c, 1+c );
-
-		run = new MovieClip.Animation( 12, true );
-		run.frames( frames, 4+c, 5+c, 6+c, 7+c );
-
-		attack = new MovieClip.Animation( 12, false );
-		attack.frames( frames, 2+c, 3+c, 0+c );
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
 		cast = attack.clone();
 
-		die = new Animation( 12, false );
-		die.frames( frames, 8+c, 9+c, 10+c );
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

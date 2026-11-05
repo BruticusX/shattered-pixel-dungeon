@@ -122,6 +122,24 @@ public class TestLevel extends Level {
 		Mob goo = new ShowGoo();
 		goo.pos = cell(W / 2 + 3, H - 5);
 		mobs.add(goo);
+		//the redrawn sewer creatures and their variants, two tiles apart so they can pace
+		Class<?>[] lineup = {
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Albino.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FetidRat.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollTrickster.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.CausticSlime.class,
+		};
+		for (int i = 0; i < lineup.length; i++) {
+			Mob m = new ShowMob().as( (Class<? extends Mob>) lineup[i] );
+			m.pos = cell(3 + (i % 5) * 7, H - 9 - (i / 5) * 3);
+			mobs.add(m);
+		}
 	}
 
 	//shows off a monster's animations: steps one tile and back, then attacks the air.
@@ -180,6 +198,54 @@ public class TestLevel extends Level {
 		public void onMotionComplete() {
 			//the run loop would otherwise keep playing after the single step
 			if (sprite != null && isAlive()) sprite.idle();
+		}
+	}
+
+	//MOD: a harmless stand-in that looks like (and is named after) any monster, for the test room's
+	//line-up of redrawn creatures
+	public static class ShowMob extends Mob {
+		{
+			HP = HT = 30;
+			EXP = 0; maxLvl = -1;
+			state = PASSIVE;
+		}
+		private Class<? extends Mob> of = com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat.class;
+		private int beat = 0;
+
+		public ShowMob as( Class<? extends Mob> cls ){
+			of = cls;
+			spriteClass = Reflection.newInstance( cls ).spriteClass;
+			return this;
+		}
+		@Override
+		public String name() {
+			return com.shatteredpixel.shatteredpixeldungeon.messages.Messages.get( of, "name" );
+		}
+		@Override
+		public String description() {
+			return com.shatteredpixel.shatteredpixeldungeon.messages.Messages.get( of, "desc" );
+		}
+		@Override
+		protected boolean act() {
+			if (!isAlive()) return super.act();
+			state = PASSIVE;
+			spend( showcase( this, beat++ ) );
+			return true;
+		}
+		@Override
+		public void onMotionComplete() {
+			if (sprite != null && isAlive()) sprite.idle();
+		}
+		@Override
+		public void storeInBundle( com.watabou.utils.Bundle bundle ) {
+			super.storeInBundle( bundle );
+			bundle.put( "of", of );
+		}
+		@Override
+		public void restoreFromBundle( com.watabou.utils.Bundle bundle ) {
+			super.restoreFromBundle( bundle );
+			Class<?> c = bundle.getClass( "of" );
+			if (c != null) as( (Class<? extends Mob>) c );
 		}
 	}
 

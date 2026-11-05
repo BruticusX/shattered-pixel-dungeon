@@ -29,23 +29,21 @@ public class CausticSlimeSprite extends MobSprite {
 	public CausticSlimeSprite() {
 		super();
 		
-		texture( Assets.Sprites.SLIME );
-		
-		TextureFilm frames = new TextureFilm( texture, 14, 12 );
-		
-		int c = 9;
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SLIME_HD, 63, 11f / 36f );
+		int c = 1 * 16;
+
 		idle = new Animation( 3, true );
-		idle.frames( frames, c+0, c+1, c+1, c+0 );
-		
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
+
 		run = new Animation( 10, true );
-		run.frames( frames, c+0, c+2, c+3, c+3, c+2, c+0 );
-		
-		attack = new Animation( 15, false );
-		attack.frames( frames, c+2, c+3, c+4, c+6, c+5 );
-		
-		die = new Animation( 10, false );
-		die.frames( frames, c+0, c+5, c+6, c+7 );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 		
 		play(idle);
 	}
