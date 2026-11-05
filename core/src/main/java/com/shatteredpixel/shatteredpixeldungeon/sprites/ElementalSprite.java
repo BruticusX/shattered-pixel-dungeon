@@ -51,7 +51,7 @@ public abstract class ElementalSprite extends MobSprite {
 		int c = texOffset();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.ELEMENTAL_HD, 51, 13f / 42f );
+		TextureFilm frames = hdFilm( Assets.Sprites.ELEMENTAL_HD, 57, 13f / 42f );
 
 		idle = new Animation( 6, true );
 		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );

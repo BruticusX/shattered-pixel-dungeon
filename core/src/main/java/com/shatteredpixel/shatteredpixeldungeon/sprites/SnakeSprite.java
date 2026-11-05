@@ -30,7 +30,7 @@ public class SnakeSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.SNAKE_HD, 60, 11f / 40f );
+		TextureFilm frames = hdFilm( Assets.Sprites.SNAKE_HD, 63, 11f / 40f );
 		int c = 0 * 16;
 
 		idle = new Animation( 3, true );

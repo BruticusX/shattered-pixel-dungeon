@@ -30,7 +30,7 @@ public class BruteSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.BRUTE_HD, 59, 15f / 48f );
+		TextureFilm frames = hdFilm( Assets.Sprites.BRUTE_HD, 64, 15f / 48f );
 		int c = 0;
 
 		idle = new Animation( 3, true );

@@ -30,7 +30,7 @@ public class SwarmSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.SWARM_HD, 60, 13f / 42f );
+		TextureFilm frames = hdFilm( Assets.Sprites.SWARM_HD, 67, 13f / 42f );
 		int c = 0 * 16;
 
 		idle = new Animation( 12, true );

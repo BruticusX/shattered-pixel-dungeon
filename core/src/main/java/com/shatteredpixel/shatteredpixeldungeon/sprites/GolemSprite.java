@@ -40,7 +40,7 @@ public class GolemSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.GOLEM_HD, 68, 18f / 54f );
+		TextureFilm frames = hdFilm( Assets.Sprites.GOLEM_HD, 73, 18f / 54f );
 		int c = 0;
 
 		idle = new Animation( 3, true );

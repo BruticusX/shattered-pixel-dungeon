@@ -38,7 +38,7 @@ public class SpinnerSprite extends MobSprite {
 		perspectiveRaise = 0f;
 
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.SPINNER_HD, 60, 11f / 34f );
+		TextureFilm frames = hdFilm( Assets.Sprites.SPINNER_HD, 64, 11f / 34f );
 		int c = 0;
 
 		idle = new Animation( 3, true );

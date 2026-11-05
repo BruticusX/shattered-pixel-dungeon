@@ -32,7 +32,7 @@ public class GhoulSprite extends MobSprite {
 		super();
 		
 		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
-		TextureFilm frames = hdFilm( Assets.Sprites.GHOUL_HD, 57, 13f / 42f );
+		TextureFilm frames = hdFilm( Assets.Sprites.GHOUL_HD, 62, 13f / 42f );
 		int c = 0;
 
 		idle = new Animation( 3, true );
