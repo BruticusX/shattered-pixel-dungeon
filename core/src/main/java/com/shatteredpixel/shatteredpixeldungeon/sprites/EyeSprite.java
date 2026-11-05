@@ -75,7 +75,7 @@ public class EyeSprite extends MobSprite {
 		chargeParticles.pour(MagicMissile.MagicParticle.ATTRACTING, 0.05f);
 		chargeParticles.on = false;
 		
-		if (((Eye)ch).beamCharged) play(charging);
+		if (ch instanceof Eye && ((Eye)ch).beamCharged) play(charging);
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class EyeSprite extends MobSprite {
 				parent.add(new Beam.DeathRay(center(), DungeonTilemap.raisedTileCenterToWorld(zapPos)));
 			}
 			Sample.INSTANCE.play( Assets.Sounds.RAY );
-			((Eye)ch).deathGaze();
+			if (ch instanceof Eye) ((Eye)ch).deathGaze();
 			ch.next();
 		} else if (anim == die){
 			chargeParticles.killAndErase();

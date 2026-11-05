@@ -81,7 +81,7 @@ public class FungalSpinnerSprite extends MobSprite {
 				new Callback() {
 					@Override
 					public void call() {
-						((Spinner)ch).shootWeb();
+						if (ch instanceof Spinner) ((Spinner)ch).shootWeb();
 					}
 				} );
 		Sample.INSTANCE.play( Assets.Sounds.MISS );
