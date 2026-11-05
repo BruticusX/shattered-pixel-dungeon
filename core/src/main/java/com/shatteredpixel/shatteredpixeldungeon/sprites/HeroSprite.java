@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HeroDisguise;
@@ -130,6 +132,22 @@ public class HeroSprite extends CharSprite {
 	private int[] idleF, runF, attackF, deathF, operateF, flyF, readF;
 	private HeroClass hdClass;
 	private HeroHD.Layout L;
+	private Animation shoot, zapNormal;
+	private int[] shootF;
+	private Item bowShot;
+
+	//MOD: the next zap is a bow shot: the bow is raised in the outstretched hand instead of a punch
+	public void readyBow( Item bow ){
+		bowShot = bow;
+	}
+
+	@Override
+	public synchronized void zap( int cell, com.watabou.utils.Callback callback ) {
+		if (hd && shoot != null) {
+			zap = bowShot != null ? shoot : zapNormal;
+		}
+		super.zap( cell, callback );
+	}
 
 	private void updateArmorHD( HeroClass cls ){
 		hdClass = cls;
@@ -157,6 +175,15 @@ public class HeroSprite extends CharSprite {
 		attack = new Animation( 22, false );
 		attack.frames( film, keys(attackF, row) );
 		zap = attack.clone();
+		zapNormal = zap;
+		//shooting a bow: hold the pose where the weapon hand is furthest forward (arm outstretched)
+		int best = attackF[0];
+		for (int af : attackF) if (L.handX[af] > L.handX[best]) best = af;
+		int nextF = best;
+		for (int i = 0; i < attackF.length - 1; i++) if (attackF[i] == best) nextF = attackF[i + 1];
+		shootF = new int[]{best, best, best, best, best, nextF};
+		shoot = new Animation( 14, false );
+		shoot.frames( film, keys(shootF, row) );
 		operate = new Animation( 8, false );
 		operate.frames( film, keys(operateF, row) );
 		fly = new Animation( 1, true );
@@ -190,6 +217,7 @@ public class HeroSprite extends CharSprite {
 	private int shownFrameHD(){
 		int[] f = null;
 		if (curAnim == idle) f = idleF;
+		else if (shoot != null && curAnim == shoot) f = shootF;
 		else if (curAnim == run) f = runF;
 		else if (curAnim == die) f = deathF;
 		else if (curAnim == attack || curAnim == zap) f = attackF;
@@ -296,7 +324,12 @@ public class HeroSprite extends CharSprite {
 			boolean behind = false;
 			if (show && behind) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, null, L);
 			super.draw();
-			if (show && !behind) held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass), L);
+			if (show && bowShot != null && curAnim == shoot) {
+				held.drawBowHD(this, bowShot, f, hdScale, HeroHD.hands(hdClass), L);
+			} else if (show && !behind) {
+				if (curAnim != shoot) bowShot = null;
+				held.drawHD(this, Dungeon.hero.belongings.weapon(), f, hdScale, HeroHD.hands(hdClass), L);
+			}
 			return;
 		}
 		super.draw();

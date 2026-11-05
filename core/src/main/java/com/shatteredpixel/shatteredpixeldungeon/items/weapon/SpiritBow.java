@@ -393,6 +393,9 @@ public class SpiritBow extends Weapon {
 		public void cast(final Hero user, final int dst) {
 			final int cell = throwPos( user, dst );
 			SpiritBow.this.targetPos = cell;
+			if (user.sprite instanceof com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite) {
+				((com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite) user.sprite).readyBow(SpiritBow.this);
+			}
 			if (sniperSpecial && SpiritBow.this.augment == Augment.SPEED){
 				if (flurryCount == -1) flurryCount = 3;
 				
