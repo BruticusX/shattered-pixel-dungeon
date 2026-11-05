@@ -83,7 +83,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
 		//all regular or exotic scrolls, except itself (unless un-ided, in which case it was already consumed)
 		} else if (item instanceof Scroll) {
-			if (item instanceof ScrollOfArsenal) return false; //MOD: has no transmuted form
+			if (item instanceof ScrollOfArsenal || item instanceof ScrollOfMending || item instanceof ScrollOfFocus || item instanceof ScrollOfSmelting) return false; //MOD: has no transmuted form
 			return item != this || item.quantity() > 1 || identifiedByUse;
 
 		//all non-unique artifacts (no holy tome or cloak of shadows, basically)

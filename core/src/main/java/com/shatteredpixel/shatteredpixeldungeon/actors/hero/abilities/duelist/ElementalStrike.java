@@ -131,6 +131,9 @@ public class ElementalStrike extends ArmorAbility {
 		effectTypes.put(Vorpal.class,       MagicMissile.BLOOD_CONE);
 		effectTypes.put(Corrupting.class,   MagicMissile.SHADOW_CONE);
 		effectTypes.put(Crystal.class,      MagicMissile.SPECK + Speck.LIGHT);
+		effectTypes.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering.class, MagicMissile.FORCE_CONE); //MOD
+		effectTypes.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class,  MagicMissile.FIRE_CONE);  //MOD
+		effectTypes.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class,  MagicMissile.SPECK + Speck.LIGHT); //MOD
 		effectTypes.put(Grim.class,         MagicMissile.SHADOW_CONE);
 		effectTypes.put(Vampiric.class,     MagicMissile.BLOOD_CONE);
 
@@ -519,6 +522,25 @@ public class ElementalStrike extends ArmorAbility {
 						AllyBuff.affectAndLoot((Mob) ch, hero, Corruption.class);
 					}
 				}
+			}
+
+		//*** Sundering (MOD) ***
+		} else if (ench instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering){
+			for (Char ch : affected){
+				if (ch != primaryTarget && ch.isAlive()) {
+					Buff.prolong(ch, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable.class, 3f*powerMulti);
+				}
+			}
+
+		//*** Frenzied (MOD) ***
+		} else if (ench instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied){
+			com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.Frenzy f = Buff.affect(hero, com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.Frenzy.class);
+			f.stacks = com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.MAX_STACKS;
+
+		//*** Enduring (MOD) ***
+		} else if (ench instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring){
+			if (hero.belongings.attackingWeapon() instanceof Weapon) {
+				((Weapon) hero.belongings.attackingWeapon()).repair(2f*powerMulti*Math.max(1, affected.size()));
 			}
 
 		//*** Crystal **

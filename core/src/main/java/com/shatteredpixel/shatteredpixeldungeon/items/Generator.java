@@ -440,8 +440,10 @@ public class Generator {
 					Gloves.class,
 					Rapier.class,
 					Cudgel.class,
+					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sling.class, //MOD
+					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BoStaff.class, //MOD
 			};
-			WEP_T1.defaultProbs = new float[]{ 2, 0, 2, 2, 2, 2 };
+			WEP_T1.defaultProbs = new float[]{ 2, 0, 2, 2, 2, 2, 2, 2 };
 			WEP_T1.probs = WEP_T1.defaultProbs.clone();
 			
 			WEP_T2.classes = new Class<?>[]{
@@ -471,9 +473,10 @@ public class Generator {
 					Khopesh.class,
 					Falchion.class,
 					BeardedAxe.class,
-					Kusarigama.class
+					Kusarigama.class,
+					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarPick.class //MOD
 			};
-			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 }; //MOD: scimitar cut, +Phase 4 types
+			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 }; //MOD: scimitar cut, +Phase 4 types
 			WEP_T3.probs = WEP_T3.defaultProbs.clone();
 			
 			WEP_T4.classes = new Class<?>[]{
@@ -487,9 +490,10 @@ public class Generator {
 					MorningStar.class,
 					IronShodStaff.class,
 					MeteorHammer.class,
-					Halberd.class
+					Halberd.class,
+					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Estoc.class //MOD
 			};
-			WEP_T4.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+			WEP_T4.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
 			WEP_T4.probs = WEP_T4.defaultProbs.clone();
 			
 			WEP_T5.classes = new Class<?>[]{
@@ -768,9 +772,13 @@ public class Generator {
 					}
 				}
 
-				//MOD: 1 in 8 scroll drops is a scroll of arsenal
-				if (cat == Category.SCROLL && Random.Int(8) == 0){
-					itemCls = ScrollOfArsenal.class;
+				//MOD: 1 in 8 scroll drops is a scroll of arsenal, 1 in 24 each mending, focus and smelting
+				if (cat == Category.SCROLL){
+					int r = Random.Int(24);
+					if (r < 3)       itemCls = ScrollOfArsenal.class;
+					else if (r == 3) itemCls = com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMending.class;
+					else if (r == 4) itemCls = com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfFocus.class;
+					else if (r == 5) itemCls = com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfSmelting.class;
 				}
 
 				return ((Item) Reflection.newInstance(itemCls)).random();

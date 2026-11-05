@@ -59,6 +59,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Sacrificial;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wondrous;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blooming;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
@@ -647,12 +650,14 @@ abstract public class Weapon extends KindOfWeapon {
 	public static abstract class Enchantment implements Bundlable {
 
 		public static final Class<?>[] common = new Class<?>[]{
-				Blazing.class, Chilling.class, Kinetic.class, Shocking.class, Venomous.class
+				Blazing.class, Chilling.class, Kinetic.class, Shocking.class, Venomous.class,
+				Sundering.class //MOD
 		};
 
 		public static final Class<?>[] uncommon = new Class<?>[]{
 				Blocking.class, Blooming.class, Eldritch.class, Elastic.class,
-				Lucky.class, Projecting.class, Unstable.class, Vorpal.class
+				Lucky.class, Projecting.class, Unstable.class, Vorpal.class,
+				Frenzied.class, Enduring.class //MOD
 		};
 
 		public static final Class<?>[] rare = new Class<?>[]{

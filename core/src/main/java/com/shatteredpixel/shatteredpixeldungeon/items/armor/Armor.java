@@ -200,6 +200,18 @@ public class Armor extends EquipableItem {
 		return armorKg() / 80f;
 	}
 
+	//MOD: 1 light, 2 medium, 3 heavy, 4 very heavy
+	public int weightClass() {
+		if (material() == null) return Math.max(1, Math.min(4, tier - 1));
+		if (this instanceof ClothArmor)   return 1;
+		if (this instanceof LeatherArmor) return 2;
+		float p = weightPenalty();
+		if (p <= 0.05f) return 1;
+		if (p <= 0.1f)  return 2;
+		if (p <= 0.2f)  return 3;
+		return 4;
+	}
+
 	public String weightLabel() {
 		if (material() == null) return Messages.get(Armor.class, "tier_label", tier);
 		float p = weightPenalty();

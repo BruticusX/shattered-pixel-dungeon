@@ -89,6 +89,9 @@ public class ItemAura extends Emitter {
 		FACTORIES.put(Projecting.class, Speck.factory(Speck.STAR));
 		FACTORIES.put(Unstable.class,   RainbowParticle.BURST);
 		FACTORIES.put(Crystal.class,    Speck.factory(Speck.DISCOVER));
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering.class, Speck.factory(Speck.ROCK)); //MOD
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class,  FlameParticle.FACTORY);     //MOD
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class,  EnergyParticle.FACTORY);    //MOD
 
 		//armor glyphs
 		FACTORIES.put(Obfuscation.class, SmokeParticle.FACTORY);
