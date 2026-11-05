@@ -53,7 +53,7 @@ public class HeldWeapon {
 		HOLD[18] = rest;
 	}
 
-	private enum Hold { DIAGONAL, SHIELD, FIST, COILED }
+	private enum Hold { DIAGONAL, SHIELD, FIST, COILED, BOOK }
 
 	private ItemSprite ws;
 	private Item shown;
@@ -62,6 +62,7 @@ public class HeldWeapon {
 	private ItemSprite.Glowing shownGlow;
 
 	private static Hold holdOf( Item w ){
+		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) return Hold.BOOK;
 		if (Proficiency.familyOf(w) == Proficiency.Family.SHIELDS) return Hold.SHIELD;
 		if (w instanceof Gloves || w instanceof Gauntlet || w instanceof TigerClaws) return Hold.FIST;
 		if (w instanceof Whip) return Hold.COILED;
@@ -93,6 +94,7 @@ public class HeldWeapon {
 				|| !String.valueOf(w.spriteSheet()).equals(shownSheet) || w.glowing() != shownGlow) {
 			if (ws == null) ws = new ItemSprite();
 			ws.view(w);
+			if (holdOf(w) == Hold.BOOK) ws.view(ItemSpriteSheet.MAGIC_TOME_OPEN, w.glowing());
 			ws.useSmoothFiltering();
 			shown = w;
 			shownImage = w.image();
@@ -107,7 +109,11 @@ public class HeldWeapon {
 		//items on the floor, whatever resolution the hero's own art was drawn at
 		float sc = 2f * ItemSprite.WORLD_SCALE * 0.5f;
 		if (hold == Hold.DIAGONAL || hold == Hold.COILED) sc *= ItemSpriteSheetHD.handScale(w.image());
-		if (hold == Hold.FIST) sc *= 0.6f;     //about the size of the hand it covers
+		if (hold == Hold.FIST) {
+			//a glove covers the fist and stops at the wrist: about 7 art pixels long, like the hand
+			int px = ItemSpriteSheetHD.dim(w.image());
+			sc *= px > 0 ? 8f / px : 0.3f;
+		}
 		//shields are sized against the hero's body: a buckler covers the forearm, a round shield the
 		//torso, a kite shield shoulder to thigh, and a greatshield nearly the whole body
 		float shieldH = 0, shieldC = 0;
@@ -120,8 +126,14 @@ public class HeldWeapon {
 			if (px > 0) sc *= shieldH / (px * 0.01875f);
 			else        sc *= 0.7f;
 		}
+		//an open book about two hands wide, resting on the palm
+		if (hold == Hold.BOOK) sc *= 20f / 32f;
 		ws.scale.set(sc);
-		if (hold == Hold.DIAGONAL && g != null) {
+		if (hold == Hold.BOOK) {
+			ws.setFlipped(faceLeft);
+			ws.origin.set(ws.width / 2f, ws.height * 0.8f);
+			ws.angle = 0;
+		} else if (hold == Hold.DIAGONAL && g != null) {
 			ws.setFlipped(faceLeft);
 			float gx = g[0] / 2f, gy = g[1] / 2f;
 			ws.origin.set(faceLeft ? ws.width - gx : gx, gy);
@@ -156,9 +168,64 @@ public class HeldWeapon {
 		ws.camera = owner.camera();
 		ws.draw();
 
+		//gloves come in pairs: the other one goes on the other hand, wherever it's visible
+		if (hold == Hold.FIST) {
+			float[][] far = HeroHD.farHands(L);
+			if (far != null && f < far[0].length && far[0][f] >= 0) {
+				float fx = (faceLeft ? L.frame - far[0][f] : far[0][f]) * k;
+				ws.x = owner.x + fx - ws.origin.x;
+				ws.y = owner.y + far[1][f] * k - ws.origin.y;
+				ws.draw();
+			}
+		}
+
 		//only gripped weapons get the fingers drawn over them: a shield hides the hand, and fist
 		//weapons are worn over it
 		if (hands != null && hold == Hold.DIAGONAL) {
+			if (handsImg == null || !hands.equals(handsTx)) {
+				handsImg = new HeroHD.FitImage(hands);
+				handsTx = hands;
+				handsFilm = new com.watabou.noosa.TextureFilm(handsImg.texture, L.frame, L.frame);
+			}
+			handsImg.flipHorizontal = faceLeft;
+			handsImg.frame(handsFilm.get(f));
+			handsImg.fit(L.frame * k, L.frame * k);
+			handsImg.x = owner.x;
+			handsImg.y = owner.y;
+			handsImg.alpha(owner.alpha());
+			handsImg.camera = owner.camera();
+			handsImg.draw();
+		}
+	}
+
+	//MOD: a bow raised in the forward hand while shooting: upright, gripped in the middle
+	public void drawBowHD( CharSprite owner, Item bow, int f, float k, String hands, HeroHD.Layout L ){
+		if (bow == null || !owner.visible) return;
+		float hx = L.handX[f], hy = L.handY[f];
+		if (hx < 0) return;
+		if (ws == null || bow != shown || bow.image() != shownImage
+				|| !String.valueOf(bow.spriteSheet()).equals(shownSheet) || bow.glowing() != shownGlow) {
+			if (ws == null) ws = new ItemSprite();
+			ws.view(bow);
+			ws.useSmoothFiltering();
+			shown = bow;
+			shownImage = bow.image();
+			shownSheet = String.valueOf(bow.spriteSheet());
+			shownGlow = bow.glowing();
+		}
+		boolean faceLeft = owner.flipHorizontal;
+		ws.scale.set(ItemSprite.WORLD_SCALE * 1.1f);
+		ws.setFlipped(faceLeft);
+		ws.origin.set(ws.width / 2f, ws.height / 2f);
+		//item art runs corner to corner; turn it upright
+		ws.angle = faceLeft ? 45 : -45;
+		float ax = (faceLeft ? L.frame - hx : hx) * k;
+		ws.x = owner.x + ax - ws.origin.x;
+		ws.y = owner.y + hy * k - ws.origin.y;
+		ws.alpha(owner.alpha());
+		ws.camera = owner.camera();
+		ws.draw();
+		if (hands != null) {
 			if (handsImg == null || !hands.equals(handsTx)) {
 				handsImg = new HeroHD.FitImage(hands);
 				handsTx = hands;

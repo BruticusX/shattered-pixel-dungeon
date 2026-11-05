@@ -71,6 +71,17 @@ public class HeroHD {
 		return frames[Math.max(0, Math.min(curFrame, frames.length - 1))];
 	}
 
+	//the hand that doesn't hold the weapon ({x[], y[]}, -1 = hidden), for gloves worn on both hands
+	private static final java.util.HashMap<Layout, float[][]> FAR = new java.util.HashMap<>();
+	public static float[][] farHands( Layout L ){
+		if (!FAR.containsKey(L)) {
+			float[][] v = null;
+			for (HeroClass c : HeroClass.values()) if (layout(c) == L) v = HeroHDFarHands.of(key(c));
+			FAR.put(L, v);
+		}
+		return FAR.get(L);
+	}
+
 	public static Layout layout( HeroClass cls ){
 		switch (cls) {
 			case WARRIOR:  return HeroHDWarrior.LAYOUT;

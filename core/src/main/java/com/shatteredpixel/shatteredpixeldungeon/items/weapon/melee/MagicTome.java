@@ -109,7 +109,7 @@ public class MagicTome extends MeleeWeapon {
 	public float[] cooldowns = new float[Spell.values().length];
 
 	{
-		image = ItemSpriteSheet.ARTIFACT_SPELLBOOK; //placeholder art until its own sprite is made
+		image = ItemSpriteSheet.MAGIC_TOME; //placeholder art until its own sprite is made
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1.1f;
 

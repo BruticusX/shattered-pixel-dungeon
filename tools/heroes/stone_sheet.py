@@ -6,18 +6,22 @@ import sys
 from PIL import Image
 
 cls = sys.argv[1] if len(sys.argv) > 1 else "warrior"
-src = Image.open(f"core/src/main/assets/sprites/hero_hd_{cls}.png").convert("RGBA")
 DARK, LIGHT = (58, 56, 52), (222, 218, 200)
-px = src.load()
-out = Image.new("RGBA", src.size)
-op = out.load()
-for y in range(src.height):
-    for x in range(src.width):
-        r, g, b, a = px[x, y]
-        if not a:
-            continue
-        lum = (0.3 * r + 0.59 * g + 0.11 * b) / 255
-        t = min(1.0, max(0.0, (lum - 0.08) / 0.8)) ** 0.85   # a little more contrast in the mid tones
-        op[x, y] = tuple(round(DARK[i] + (LIGHT[i] - DARK[i]) * t) for i in range(3)) + (a,)
-out.save(f"core/src/main/assets/sprites/hero_hd_{cls}_stone.png", optimize=True)
-print("wrote stone sheet for", cls)
+def stone(name, outname):
+  src = Image.open(f"core/src/main/assets/sprites/{name}.png").convert("RGBA")
+  px = src.load()
+  out = Image.new("RGBA", src.size)
+  op = out.load()
+  for y in range(src.height):
+      for x in range(src.width):
+          r, g, b, a = px[x, y]
+          if not a:
+              continue
+          lum = (0.3 * r + 0.59 * g + 0.11 * b) / 255
+          t = min(1.0, max(0.0, (lum - 0.08) / 0.8)) ** 0.85   # a little more contrast in the mid tones
+          op[x, y] = tuple(round(DARK[i] + (LIGHT[i] - DARK[i]) * t) for i in range(3)) + (a,)
+  out.save(f"core/src/main/assets/sprites/{outname}.png", optimize=True)
+
+stone(f"hero_hd_{cls}", f"hero_hd_{cls}_stone")
+stone(f"hero_hd_{cls}_hands", f"hero_hd_{cls}_hands_stone")
+print("wrote stone sheets for", cls)

@@ -78,9 +78,10 @@ public class StatueSprite extends MobSprite {
 		else if (curAnim == run) f = HeroHD.shown(runF, curFrame);
 		else if (curAnim == attack) f = HeroHD.shown(attackF, curFrame);
 		else f = -1;
-		//the weapon is in the far hand: drawn first so the body covers its grip
-		if (f >= 0) held.drawHD(this, ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) ch).weapon(), f, hdScale, null, L);
+		//held like the hero holds it: in the near hand, in front of the body, stone fingers over the grip
 		super.draw();
+		if (f >= 0) held.drawHD(this, ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue) ch).weapon(), f, hdScale,
+				"sprites/hero_hd_warrior_hands_stone.png", L);
 	}
 
 	@Override
