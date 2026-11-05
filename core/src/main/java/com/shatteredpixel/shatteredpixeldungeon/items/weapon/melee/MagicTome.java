@@ -152,7 +152,7 @@ public class MagicTome extends MeleeWeapon {
 	@Override
 	public boolean doEquip(Hero hero) {
 		if (!canUse(hero)){
-			GLog.w(Messages.get(this, "cant_read"));
+			GLog.w(Messages.get(MagicTome.class, "cant_read"));
 			return false;
 		}
 		return super.doEquip(hero);
@@ -168,8 +168,8 @@ public class MagicTome extends MeleeWeapon {
 
 	@Override
 	public String actionName(String action, Hero hero) {
-		if (action.equals(AC_CAST)) return Messages.get(this, "ac_cast");
-		if (action.equals(AC_DECIPHER)) return Messages.get(this, "ac_decipher");
+		if (action.equals(AC_CAST)) return Messages.get(MagicTome.class, "ac_cast");
+		if (action.equals(AC_DECIPHER)) return Messages.get(MagicTome.class, "ac_decipher");
 		return super.actionName(action, hero);
 	}
 
@@ -178,7 +178,7 @@ public class MagicTome extends MeleeWeapon {
 		super.execute(hero, action);
 		if (action.equals(AC_CAST)) {
 			if (!isEquipped(hero)) {
-				GLog.i(Messages.get(this, "need_equip"));
+				GLog.i(Messages.get(MagicTome.class, "need_equip"));
 			} else if (hero.subClass == HeroSubClass.BATTLEMAGE && !battlemageChosen()) {
 				chooseBattlemageSpell(hero);
 			} else {
@@ -196,7 +196,7 @@ public class MagicTome extends MeleeWeapon {
 	}
 
 	public void chooseBattlemageSpell(Hero hero){
-		GameScene.show(new WndOptions(Messages.titleCase(name()), Messages.get(this, "bm_choose"),
+		GameScene.show(new WndOptions(Messages.titleCase(name()), Messages.get(MagicTome.class, "bm_choose"),
 				Spell.DISINT_RAY.title(), Spell.DISINT_AURA.title()) {
 			@Override
 			protected void onSelect(int index) {
@@ -213,7 +213,7 @@ public class MagicTome extends MeleeWeapon {
 		if (hero.heroClass == HeroClass.MAGE) {
 			MagicTome main = hero.belongings.weapon() instanceof MagicTome ? (MagicTome) hero.belongings.weapon() : null;
 			if (main == null || main == this) {
-				GLog.w(Messages.get(this, "decipher_need_main"));
+				GLog.w(Messages.get(MagicTome.class, "decipher_need_main"));
 				return;
 			}
 			ArrayList<Spell> unlearned = new ArrayList<>();
@@ -221,18 +221,18 @@ public class MagicTome extends MeleeWeapon {
 			ArrayList<Spell> upgradable = new ArrayList<>();
 			for (Spell s : Spell.values()) if (main.ranks[s.ordinal()] > 0 && main.ranks[s.ordinal()] < MAX_RANK) upgradable.add(s);
 			if (unlearned.isEmpty() && upgradable.isEmpty()) {
-				GLog.w(Messages.get(this, "decipher_nothing"));
+				GLog.w(Messages.get(MagicTome.class, "decipher_nothing"));
 				return;
 			}
 			detach(hero.belongings.backpack);
 			if (!unlearned.isEmpty() && (upgradable.isEmpty() || Random.Int(2) == 0)) {
 				Spell s = Random.element(unlearned);
 				main.ranks[s.ordinal()] = 1;
-				GLog.p(Messages.get(this, "learned", s.title()));
+				GLog.p(Messages.get(MagicTome.class, "learned", s.title()));
 			} else {
 				Spell s = Random.element(upgradable);
 				main.ranks[s.ordinal()]++;
-				GLog.p(Messages.get(this, "improved", s.title(), main.ranks[s.ordinal()]));
+				GLog.p(Messages.get(MagicTome.class, "improved", s.title(), main.ranks[s.ordinal()]));
 			}
 			hero.sprite.operate(hero.pos);
 			Sample.INSTANCE.play(Assets.Sounds.READ);
@@ -240,7 +240,7 @@ public class MagicTome extends MeleeWeapon {
 		} else {
 			detach(hero.belongings.backpack);
 			Proficiency.grantLevel(hero.heroClass, Proficiency.Family.WANDS);
-			GLog.p(Messages.get(this, "deciphered", Proficiency.level(hero.heroClass, Proficiency.Family.WANDS)));
+			GLog.p(Messages.get(MagicTome.class, "deciphered", Proficiency.level(hero.heroClass, Proficiency.Family.WANDS)));
 			hero.sprite.operate(hero.pos);
 			Sample.INSTANCE.play(Assets.Sounds.READ);
 			hero.spendAndNext(10f);
@@ -281,14 +281,14 @@ public class MagicTome extends MeleeWeapon {
 	public String spellDesc(Spell s){
 		int p = power(s);
 		switch (s) {
-			case MAGIC_MISSILES:  return Messages.get(this, "desc_magic_missiles", 2 + p, 4 + 2*p);
-			case FIREBALL:        return Messages.get(this, "desc_fireball", 6 + 2*p, 12 + 4*p, 30 + 10*(rank(s)-1));
-			case RAY_OF_FROST:    return Messages.get(this, "desc_ray_of_frost", 3 + p, 6 + 2*p, 15 + 5*(rank(s)-1));
-			case CHAIN_LIGHTNING: return Messages.get(this, "desc_chain_lightning", 4 + p, 9 + 2*p, 1 + rank(s));
-			case ARCANE_WARD:     return Messages.get(this, "desc_arcane_ward", 6 + 3*p);
-			case BLINK:           return Messages.get(this, "desc_blink", 3 + rank(s));
-			case DISINT_RAY:      return Messages.get(this, "desc_disint_ray", 6 + 2*p, 14 + 5*p);
-			case DISINT_AURA:     return Messages.get(this, "desc_disint_aura", 3 + rank(s));
+			case MAGIC_MISSILES:  return Messages.get(MagicTome.class, "desc_magic_missiles", 2 + p, 4 + 2*p);
+			case FIREBALL:        return Messages.get(MagicTome.class, "desc_fireball", 6 + 2*p, 12 + 4*p, 30 + 10*(rank(s)-1));
+			case RAY_OF_FROST:    return Messages.get(MagicTome.class, "desc_ray_of_frost", 3 + p, 6 + 2*p, 15 + 5*(rank(s)-1));
+			case CHAIN_LIGHTNING: return Messages.get(MagicTome.class, "desc_chain_lightning", 4 + p, 9 + 2*p, 1 + rank(s));
+			case ARCANE_WARD:     return Messages.get(MagicTome.class, "desc_arcane_ward", 6 + 3*p);
+			case BLINK:           return Messages.get(MagicTome.class, "desc_blink", 3 + rank(s));
+			case DISINT_RAY:      return Messages.get(MagicTome.class, "desc_disint_ray", 6 + 2*p, 14 + 5*p);
+			case DISINT_AURA:     return Messages.get(MagicTome.class, "desc_disint_aura", 3 + rank(s));
 		}
 		return "";
 	}
@@ -328,7 +328,7 @@ public class MagicTome extends MeleeWeapon {
 		switch (s) {
 			case MAGIC_MISSILES: {
 				Char target = visibleEnemyAt(cell);
-				if (target == null) { GLog.w(Messages.get(this, "no_target")); return; }
+				if (target == null) { GLog.w(Messages.get(MagicTome.class, "no_target")); return; }
 				startCooldown(s);
 				hero.sprite.zap(cell);
 				hero.busy();
@@ -336,7 +336,7 @@ public class MagicTome extends MeleeWeapon {
 				return;
 			}
 			case FIREBALL: {
-				if (cell == hero.pos) { GLog.w(Messages.get(this, "no_target")); return; }
+				if (cell == hero.pos) { GLog.w(Messages.get(MagicTome.class, "no_target")); return; }
 				startCooldown(s);
 				final Ballistica path = new Ballistica(hero.pos, cell, Ballistica.PROJECTILE);
 				final int impact = path.collisionPos;
@@ -356,7 +356,7 @@ public class MagicTome extends MeleeWeapon {
 			}
 			case RAY_OF_FROST: {
 				Char target = visibleEnemyAt(cell);
-				if (target == null) { GLog.w(Messages.get(this, "no_target")); return; }
+				if (target == null) { GLog.w(Messages.get(MagicTome.class, "no_target")); return; }
 				startCooldown(s);
 				FrostChannel fc = Buff.affect(hero, FrostChannel.class);
 				fc.target = target.id();
@@ -369,7 +369,7 @@ public class MagicTome extends MeleeWeapon {
 			}
 			case CHAIN_LIGHTNING: {
 				Char target = visibleEnemyAt(cell);
-				if (target == null) { GLog.w(Messages.get(this, "no_target")); return; }
+				if (target == null) { GLog.w(Messages.get(MagicTome.class, "no_target")); return; }
 				startCooldown(s);
 				chainLightning(hero, target, power(s), 1 + rank(s));
 				hero.sprite.zap(cell);
@@ -389,7 +389,7 @@ public class MagicTome extends MeleeWeapon {
 				int range = 3 + rank(s);
 				if (!Dungeon.level.heroFOV[cell] || !Dungeon.level.passable[cell] || Actor.findChar(cell) != null
 						|| Dungeon.level.distance(hero.pos, cell) > range) {
-					GLog.w(Messages.get(this, "blink_bad"));
+					GLog.w(Messages.get(MagicTome.class, "blink_bad"));
 					return;
 				}
 				startCooldown(s);
@@ -402,7 +402,7 @@ public class MagicTome extends MeleeWeapon {
 				return;
 			}
 			case DISINT_RAY: {
-				if (cell == hero.pos) { GLog.w(Messages.get(this, "no_target")); return; }
+				if (cell == hero.pos) { GLog.w(Messages.get(MagicTome.class, "no_target")); return; }
 				startCooldown(s);
 				disintRay(hero, cell, power(s));
 				hero.spendAndNext(1f);
@@ -510,7 +510,7 @@ public class MagicTome extends MeleeWeapon {
 			if (ch instanceof Mob && Random.Int(10) == 0 && !ch.properties().contains(Char.Property.BOSS)
 					&& !ch.properties().contains(Char.Property.MINIBOSS)) {
 				ch.sprite.emitter().burst(PurpleParticle.BURST, 20);
-				GLog.p(Messages.get(this, "disintegrated", ch.name()));
+				GLog.p(Messages.get(MagicTome.class, "disintegrated", ch.name()));
 				ch.die(this);
 			} else {
 				ch.damage(Random.NormalIntRange(6 + 2*p, 14 + 5*p), this);
@@ -549,7 +549,7 @@ public class MagicTome extends MeleeWeapon {
 		for (Spell s : Spell.values()) {
 			if (rank(s) > 0) sb.append("\n- ").append(s.title()).append(" ").append(rank(s)).append("/").append(MAX_RANK);
 		}
-		return info + "\n\n" + Messages.get(this, "spells_known") + sb;
+		return info + "\n\n" + Messages.get(MagicTome.class, "spells_known") + sb;
 	}
 
 	// ---- saving ----
@@ -675,6 +675,11 @@ public class MagicTome extends MeleeWeapon {
 		@Override
 		public float iconFadePercent() {
 			return Math.max(0, (10f - visualcooldown()) / 10f);
+		}
+
+		@Override
+		public String desc() {
+			return Messages.get(this, "desc", dispTurns());
 		}
 
 		private static final String POWER = "power";
