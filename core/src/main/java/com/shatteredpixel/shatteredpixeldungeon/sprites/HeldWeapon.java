@@ -112,10 +112,10 @@ public class HeldWeapon {
 		//torso, a kite shield shoulder to thigh, and a greatshield nearly the whole body
 		float shieldH = 0, shieldC = 0;
 		if (hold == Hold.SHIELD) {
-			if (w instanceof Buckler)          { shieldH = 0.36f; shieldC = 0.50f; }
-			else if (w instanceof KiteShield)  { shieldH = 0.64f; shieldC = 0.52f; }
-			else if (w instanceof Greatshield) { shieldH = 0.88f; shieldC = 0.54f; }
-			else                               { shieldH = 0.52f; shieldC = 0.48f; }
+			if (w instanceof Buckler)          { shieldH = 0.31f; shieldC = 0.50f; }
+			else if (w instanceof KiteShield)  { shieldH = 0.54f; shieldC = 0.52f; }
+			else if (w instanceof Greatshield) { shieldH = 0.82f; shieldC = 0.54f; }
+			else                               { shieldH = 0.44f; shieldC = 0.48f; }
 			int px = ItemSpriteSheetHD.dim(w.image());
 			if (px > 0) sc *= shieldH / (px * 0.01875f);
 			else        sc *= 0.7f;
