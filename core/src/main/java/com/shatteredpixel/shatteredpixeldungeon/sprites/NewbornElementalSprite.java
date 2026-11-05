@@ -32,23 +32,21 @@ public class NewbornElementalSprite extends MobSprite{
 	public NewbornElementalSprite() {
 		super();
 
-		texture( Assets.Sprites.ELEMENTAL );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.ELEMENTAL_HD, 57, 13f / 42f );
+		int c = 16;
 
-		int ofs = 21;
-
-		TextureFilm frames = new TextureFilm( texture, 12, 14 );
-
-		idle = new MovieClip.Animation( 10, true );
-		idle.frames( frames, ofs+0, ofs+1, ofs+2 );
+		idle = new MovieClip.Animation( 6, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
 		run = new MovieClip.Animation( 12, true );
-		run.frames( frames, ofs+0, ofs+1, ofs+3 );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		attack = new MovieClip.Animation( 15, false );
-		attack.frames( frames, ofs+4, ofs+5, ofs+6 );
+		attack = new MovieClip.Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		die = new MovieClip.Animation( 15, false );
-		die.frames( frames, ofs+7, ofs+8, ofs+9, ofs+10, ofs+11, ofs+12, ofs+13, ofs+12 );
+		die = new MovieClip.Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

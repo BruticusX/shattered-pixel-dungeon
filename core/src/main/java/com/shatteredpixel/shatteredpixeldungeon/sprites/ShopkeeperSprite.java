@@ -32,19 +32,20 @@ public class ShopkeeperSprite extends MobSprite {
 	public ShopkeeperSprite() {
 		super();
 		
-		texture( Assets.Sprites.KEEPER );
-		TextureFilm film = new TextureFilm( texture, 14, 14 );
-		
-		idle = new Animation( 10, true );
-		idle.frames( film, 1, 1, 1, 1, 1, 0, 0, 0, 0 );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm film = hdFilm( Assets.Sprites.KEEPER_HD, 53, 14f / 44f );
+		int c = 0;
 
-		die = new Animation( 20, false );
-		die.frames( film, 0 );
+		idle = new Animation( 3, true );
+		idle.frames( film, row( c, 0, 0, 0, 0, 4, 5, 6, 5 ) );
 
-		run = idle.clone();
+		die = new Animation( 10, false );
+		die.frames( film, row( c, 8, 9, 10, 11 ) );
 
+		run = new Animation( 10, true );
+		run.frames( film, row( c, 0, 1, 2, 3 ) );
 		attack = idle.clone();
-		
+
 		idle();
 	}
 	
@@ -57,7 +58,7 @@ public class ShopkeeperSprite extends MobSprite {
 				coin = new PixelParticle();
 				parent.add( coin );
 			}
-			coin.reset( x + (flipHorizontal ? 0 : 13), y + 7, 0xFFFF00, 1, 0.5f );
+			coin.reset( x + (flipHorizontal ? width * 0.1f : width * 0.9f), y + height * 0.5f, 0xFFFF00, 1, 0.5f );
 			coin.speed.y = -40;
 			coin.acc.y = +160;
 		}

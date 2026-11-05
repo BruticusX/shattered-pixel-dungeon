@@ -62,21 +62,22 @@ public class RatKingSprite extends MobSprite {
 			if (parent != null) aura(0xFFFF00, 5);
 		}
 
-		texture( Assets.Sprites.RATKING );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.RATKING_HD, 54, 15f / 46f );
 
-		TextureFilm frames = new TextureFilm( texture, 16, height );
+		c = 0;   //MOD: one redrawn look for every occasion
 
-		idle = new Animation( 2, true );
-		idle.frames( frames, c+0, c+0, c+0, c+1 );
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		run = new Animation( 10, true );
-		run.frames( frames, c+2, c+3, c+4, c+5, c+6 );
+		run = new Animation( 8, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		attack = new Animation( 15, false );
-		attack.frames( frames, c+0 );
+		attack = new Animation( 10, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		die = new Animation( 10, false );
-		die.frames( frames, c+0 );
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 

@@ -34,24 +34,24 @@ public class ScorpioSprite extends MobSprite {
 	public ScorpioSprite() {
 		super();
 		
-		texture( Assets.Sprites.SCORPIO );
-		
-		TextureFilm frames = new TextureFilm( texture, 17, 17 );
-		
-		idle = new Animation( 12, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2 );
-		
-		run = new Animation( 8, true );
-		run.frames( frames, 5, 5, 6, 6 );
-		
-		attack = new Animation( 15, false );
-		attack.frames( frames, 0, 3, 4 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SCORPIO_HD, 65, 13f / 40f );
+		int c = 0;
+
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
+
+		run = new Animation( 10, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
 		zap = attack.clone();
-		
-		die = new Animation( 12, false );
-		die.frames( frames, 0, 7, 8, 9, 10 );
-		
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
 		play( idle );
 	}
 	

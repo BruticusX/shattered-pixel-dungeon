@@ -37,23 +37,23 @@ public class FungalSpinnerSprite extends MobSprite {
 
 		perspectiveRaise = 0f;
 
-		texture( Assets.Sprites.FUNGAL_SPINNER );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SPINNER_HD, 64, 11f / 34f );
+		int c = 16;
 
-		TextureFilm frames = new TextureFilm( texture, 16, 16 );
+		idle = new MovieClip.Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		idle = new MovieClip.Animation( 10, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 1, 0, 1 );
+		run = new MovieClip.Animation( 12, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		run = new MovieClip.Animation( 15, true );
-		run.frames( frames, 0, 2, 0, 3 );
-
-		attack = new MovieClip.Animation( 12, false );
-		attack.frames( frames, 0, 4, 5, 0 );
+		attack = new MovieClip.Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
 		zap = attack.clone();
 
-		die = new MovieClip.Animation( 12, false );
-		die.frames( frames, 6, 7, 8, 9 );
+		die = new MovieClip.Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

@@ -43,23 +43,22 @@ public abstract class CrystalWispSprite extends MobSprite {
 
 		int c = texOffset();
 
-		texture( Assets.Sprites.CRYSTAL_WISP );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.CRYSTAL_WISP_HD, 53, 12f / 36f );
 
-		TextureFilm frames = new TextureFilm( texture, 12, 14 );
+		idle = new Animation( 4, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		idle = new Animation( 1, true );
-		idle.frames( frames, c+0 );
+		run = new Animation( 8, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		run = new Animation( 12, true );
-		run.frames( frames, c+0, c+0, c+0, c+1 );
-
-		attack = new Animation( 16, false );
-		attack.frames( frames, c+2, c+3, c+4, c+5 );
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
 		zap = attack.clone();
 
-		die = new Animation( 15, false );
-		die.frames( frames, c+6, c+7, c+8, c+9, c+10, c+11, c+12, c+11 );
+		die = new Animation( 10, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}
@@ -181,7 +180,7 @@ public abstract class CrystalWispSprite extends MobSprite {
 	public static class Green extends CrystalWispSprite {
 		@Override
 		protected int texOffset() {
-			return 13;
+			return 16;
 		}
 		@Override
 		public int blood() {
@@ -192,7 +191,7 @@ public abstract class CrystalWispSprite extends MobSprite {
 	public static class Red extends CrystalWispSprite {
 		@Override
 		protected int texOffset() {
-			return 26;
+			return 32;
 		}
 		@Override
 		public int blood() {

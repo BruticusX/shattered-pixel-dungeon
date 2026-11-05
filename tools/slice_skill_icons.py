@@ -121,12 +121,56 @@ def pick(groups, n):
     return [groups[i] for i in best]
 
 
+#MOD: exact frame finder. The frame lines are the longest straight runs of bronze; pick the edge
+#groups that make n spans of equal size with small gaps between them (the old grid() guessed the
+#row offset and often cut icons off-centre)
+def _groups(run, thr):
+    idx = [i for i, v in enumerate(run) if v >= thr]; G = []
+    for i in idx:
+        if G and i - G[-1][-1] <= 2: G[-1].append(i)
+        else: G.append([i])
+    return [(g[0], g[-1]) for g in G]
+
+
+def _spans(run, n, size_rng=None):
+    import itertools
+    best = None
+    for fr in (0.7, 0.6, 0.5, 0.4, 0.3, 0.22):
+        G = _groups(run, fr * run.max())
+        if len(G) > 16: continue
+        for combo in itertools.combinations(range(len(G)), 2 * n):
+            sp = [(G[combo[2 * i]][0], G[combo[2 * i + 1]][1]) for i in range(n)]
+            w = [b - a for a, b in sp]; gaps = [sp[i + 1][0] - sp[i][1] for i in range(n - 1)]
+            if min(w) < 15 or (gaps and (min(gaps) < 1 or max(gaps) > 14)): continue
+            if max(w) - min(w) > max(4, 0.06 * max(w)): continue
+            if size_rng and not (size_rng[0] <= np.mean(w) <= size_rng[1]): continue
+            sc = (fr, np.mean(w))
+            if best is None or sc > best[0]: best = (sc, sp)
+        if best: return best[1]
+    return None
+
+
+def frames(path):
+    a = np.array(Image.open(path).convert('RGB')).astype(int)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    m = ((r > 70) & (r - b > 20)).astype(int)
+    cs = _spans(longest_runs(m, 0), 3)
+    cw = np.mean([x1 - x0 for x0, x1 in cs])
+    rr = longest_runs(m, 1)
+    rs = _spans(rr, 2, (cw * 0.85, cw * 1.5))
+    if rs is None:   # only the outer edges and one middle edge found: rows are the same height
+        G = _groups(rr, 0.3 * rr.max())
+        th = G[-1][1] - G[-2][0]
+        rs = [(G[0][0], G[0][0] + th), (G[-2][0], G[-1][1])]
+    return [(x0, y0, x1, y1) for (y0, y1) in rs for (x0, x1) in cs]
+
+
 def main():
     out, size, sheets = sys.argv[1], int(sys.argv[2]), sys.argv[3:]
     atlas = Image.new('RGBA', (5 * size, len(sheets) * size), (0, 0, 0, 0))
     for row, path in enumerate(sheets):
         im = Image.open(path).convert('RGBA')
-        for c, (x0, y0, x1, y1) in enumerate(grid(path)[:5]):
+        for c, (x0, y0, x1, y1) in enumerate(frames(path)[:5]):
             atlas.paste(im.crop((x0, y0, x1 + 1, y1 + 1)).resize((size, size), Image.BOX), (c * size, row * size))
     atlas.save(out)
 

@@ -39,23 +39,21 @@ public class PhantomPiranhaSprite extends MobSprite {
 		renderShadow = false;
 		perspectiveRaise = 0.2f;
 
-		texture( Assets.Sprites.PIRANHA );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.PIRANHA_HD, 51, 10f / 30f );
+		int c = 16;
 
-		TextureFilm frames = new TextureFilm( texture, 12, 16 );
+		idle = new MovieClip.Animation( 6, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		int c = 21;
+		run = new MovieClip.Animation( 14, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		idle = new MovieClip.Animation( 8, true );
-		idle.frames( frames, c+0, c+1, c+2, c+1 );
+		attack = new MovieClip.Animation( 16, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		run = new MovieClip.Animation( 20, true );
-		run.frames( frames, c+0, c+1, c+2, c+1 );
-
-		attack = new MovieClip.Animation( 20, false );
-		attack.frames( frames, c+3, c+4, c+5, c+6, c+7, c+8, c+9, c+10, c+11 );
-
-		die = new MovieClip.Animation( 4, false );
-		die.frames( frames, c+12, c+13, c+14 );
+		die = new MovieClip.Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		play( idle );
 	}

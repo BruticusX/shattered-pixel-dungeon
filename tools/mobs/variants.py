@@ -60,7 +60,7 @@ VARIANTS = {
     "bat": [],
     "brute": [shift(200, 0.35, 0.75)],                               # armored brute
     "shaman": [shift(215, 1.0, 0.95), shift(270, 0.9, 0.95), shift(110, 0.8, 0.95)],  # blue, purple, vault
-    "spinner": [],
+    "spinner": [shift(110, 0.55, 1.05)],                             # fungal spinner
     "dm200": [shift(180, 0.8, 0.95), shift(90, 0.7, 0.8)],           # vault DM-200, DM-201
     "gnollguard": [],
     "gnollsapper": [],
@@ -69,6 +69,27 @@ VARIANTS = {
     "warlock": [],
     "monk": [shift(-30, 1.0, 0.8)],                                  # senior monk
     "golem": [],
+    "ripper": [],
+    "spawner": [],
+    "wraith": [],
+    "piranha": [shift(190, 0.45, 1.15)],                             # phantom piranha
+    "mimic": [shift(18, 1.35, 1.15), shift(185, 0.7, 1.15), shift(0, 0.25, 0.5)],  # golden, crystal, ebony
+    "bee": [],
+    "succubus": [],
+    "eye": [],
+    "scorpio": [shift(100, 0.9, 1.0)],                               # acidic scorpio
+    "sheep": [],
+    "crystalguardian": [shift(25), shift(-35), shift(195)],          # blue, green, red
+    "crystalwisp": [shift(-80), shift(170)],                         # green, red
+    "fungalsentry": [],
+    "sentry": [shift(190), shift(-25, 1.2, 1.0)],                    # vault scan, vault laser
+    "earthguardian": [],
+    "shopkeeper": [],
+    "ghost": [shift(150, 0.8, 0.85)],                                # tormented spirit
+    "wandmaker": [],
+    "blacksmith": [],
+    "imp": [],
+    "ratking": [],
 }
 
 import sys

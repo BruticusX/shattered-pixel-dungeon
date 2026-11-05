@@ -11,7 +11,9 @@ import numpy as np
 from scipy import ndimage
 
 MOB, H = sys.argv[1], int(sys.argv[2])
-LOOSE = len(sys.argv) > 3 and sys.argv[3] == 'loose'
+LOOSE = len(sys.argv) > 3 and sys.argv[3] in ('loose', 'soft')
+# 'soft' is for see-through creatures (ghosts): keeps their translucency instead of a hard cutout
+SOFT = len(sys.argv) > 3 and sys.argv[3] == 'soft'
 SRC = f"tools/spritecook/mobs/{MOB}_frames_raw.png"
 OUTLINE = (22, 18, 24, 255)
 
@@ -31,7 +33,7 @@ C = raw.width // 4
 
 def clean(cell):
     a = np.array(cell)
-    solid = a[..., 3] >= 180            # drops motion-blur smears and soft shadows
+    solid = a[..., 3] >= (40 if SOFT else 180)   # drops motion-blur smears and soft shadows
     lab, n = ndimage.label(solid)
     if n == 0:
         return None
@@ -41,12 +43,14 @@ def clean(cell):
     for i, s in enumerate(sizes, 1):
         if s >= (12 if LOOSE else big * 0.04):   # main body plus real detached bits (droplets, tail)
             keep |= lab == i
-    a[..., 3] = np.where(keep, 255, 0)
+    a[..., 3] = np.where(keep, a[..., 3] if SOFT else 255, 0)
     im = Image.fromarray(a.astype(np.uint8))
     return im.crop(im.getbbox())
 
 
 cells = [clean(raw.crop((c * C, r * C, c * C + C, r * C + C))) for r in range(4) for c in range(4)]
+# a frame that faded out completely (the end of a vanish) stays blank
+cells = [im if im is not None and im.getbbox() else Image.new('RGBA', (1, 1)) for im in cells]
 ref = cells[12]
 s = H / ref.height
 small = []
@@ -59,7 +63,7 @@ for im in cells:
     al = im.getchannel("A").resize((w, h), Image.BOX)
     p = np.array(pm).astype(float); al = np.array(al).astype(float)
     rgb = np.where(al[..., None] > 0, p[..., :3] * 255 / np.maximum(al[..., None], 1), 0)
-    out = np.dstack([np.clip(rgb, 0, 255), np.where(al >= 110, 255, 0)]).astype(np.uint8)
+    out = np.dstack([np.clip(rgb, 0, 255), np.where(al >= 110, (al if SOFT else 255), 0)]).astype(np.uint8)
     o = Image.fromarray(out)
     # 1px outline like the items and heroes
     pad = Image.new("RGBA", (w + 2, h + 2)); pad.paste(o, (1, 1))
@@ -79,12 +83,15 @@ for im in cells:
 # frames are centred on their mass, so leave room for the far side of a lunge (otherwise it spills
 # into the neighbouring frame)
 def _half(im):
-    cx = np.nonzero(np.array(im)[..., 3] > 0)[1].mean()
+    xs = np.nonzero(np.array(im)[..., 3] > 0)[1]
+    if len(xs) == 0: return 0
+    cx = xs.mean()
     return max(cx, im.width - cx)
 F = int(max(max(2 * _half(im), im.height) for im in small)) + 4
 sheet = Image.new("RGBA", (F * 16, F))
 for i, im in enumerate(small):
     a = np.array(im)[..., 3] > 0
+    if not a.any(): continue
     cx = (np.nonzero(a)[1].mean())  # centre of mass keeps the body still between frames
     sheet.paste(im, (i * F + round(F / 2 - cx), F - 2 - im.height), im)
 sheet.save(f"tools/spritecook/mobs/{MOB}_frames.png")

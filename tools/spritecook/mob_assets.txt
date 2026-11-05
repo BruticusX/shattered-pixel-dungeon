@@ -14,3 +14,13 @@ golem fcde7461-03a6-4f2f-83a0-15782b292da0
 jobs: bat 149733aa-55ce-43b5-a9a0-f1268d6ffd86 brute 8c177c97-5570-4103-9609-f3086a3244e0 shaman db3bac13-e4a6-4121-b245-cafaf2815b0e spinner be1aa395-0128-4889-b9e8-911630e8dfb7 dm200 5372ae07-1930-4062-94c9-0e5f052aff1a gnollguard 10904382-66d3-49a8-8d42-402152b09e5b
 jobs2: gnollsapper abd2f7e9-ed75-4631-aecc-5a23da498321 ghoul 7dbb95b1-4e90-4c5a-866e-c54f04e567e9 elemental 1b691f32-357e-4031-b85c-d767f714b4b6 warlock eaf03628-8d6b-4a0c-9ac9-ea8b4fff589d monk 5c85d89c-4859-464f-a4d3-8dc59bf09ace
 jobs3: golem 322df0e3-7c48-4b0c-a1f3-b042c83a481f
+sheet4 (halls/leftovers stills) 42eeed1e-3d0d-4317-a740-fa1fad8a0931
+sheet5 (npcs stills) 9dc4558a-f680-416b-a0f0-3d3721600ad0
+ripper 2ad659eb-cd31-4e24-b838-c7a4bd16591e spawner e09dc886-60c6-432d-9c15-582d8c7290f6 wraith b08a90bf-1f66-41f6-b552-2b86fe014996 piranha 592d24a2-16c7-4b26-bdd4-ed29974b42cb mimic a86a1779-f274-4f19-90b1-2f6f7954f877
+jobs4: ripper 48297ca4-f411-45ca-b470-d4500baeef81 spawner 9d134af9-32d5-4fd6-9fe4-27c600a50356 wraith 43acf6d0-ab57-4498-bc6c-d1e70d0001f2 piranha 8bdf7b28-6199-4422-b0a3-b951817b3881 mimic 8fb25e52-3916-498d-83b0-daa4f57420a4
+bee 40c9e0fa-f9d8-4572-b312-90a2f4141bb8 crystalguardian 04c78726-25a6-430d-90bf-54aefe3520d1 crystalwisp f82da6e0-c27b-431f-a05b-706c25493cef fungalsentry 98f55489-4d8b-4593-92d9-928fd00691b1 sentry c4fcc295-94ee-43ef-a128-0e289120f5f9
+jobs5: bee 97f58de2-f826-4ac6-8c83-f4c20bda98fb crystalguardian 10ba37fd-34d0-428b-9933-6a448d3af579 crystalwisp fd872aa8-4732-428a-b661-3e8ba579ac9c fungalsentry 27cdf4c5-7000-40f6-99d1-888e1a885327 sentry 7bbc355d-96c9-4c4b-8d30-2ca2b9bd90e2
+earthguardian 196719ad-0beb-4f06-aa65-8c67899cd7c6 shopkeeper 3f26f9e6-0072-4825-85a3-9e2fbaeb4a68 ghost 8c6493ab-007b-4ab0-94dd-fc984cb59174 wandmaker 2782b3eb-74bd-4492-8510-b522720bbad5 blacksmith 206f9f14-ea00-4fed-bf6a-c43df33fac7c
+jobs6: earthguardian c1f561e3-d225-4724-85d8-74dab75097c2 shopkeeper bf6ace26-ad0b-4d4a-983a-87ab0888bc88 ghost 1629c533-b3f7-4723-b813-a6f017bd3ed8 wandmaker 41e59e0b-d163-4d74-b4ff-7c779f760ba3 blacksmith 580a4945-b021-4ed0-bb23-3e6cbce0313b
+imp 16026e0c-0da6-4ebe-9ca2-a5623d34a9f3 ratking 2686c7c7-9200-49f7-980f-b58416a1f376 succubus 0cc62a93-0ad9-485b-8a85-5f3393e1b056 eye 676a3dd7-5f9f-4ee9-aa83-9196728138de scorpio e77bfb62-7511-4ca9-968b-b3dd317745ff
+jobs7: imp 6d8bbf0c-53b5-4db6-864f-d9ed0136fd3f ratking b50681ac-1f10-4c3b-8b12-6ac7c7b8120e succubus ba4dbaac-2522-48d3-89ee-8e8eb205299c eye e1dabee8-2e8d-4c96-8414-ca25d1b3e55f scorpio 1fc6895f-21d6-4682-8468-450d01420666

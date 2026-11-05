@@ -34,28 +34,23 @@ public abstract class CrystalGuardianSprite extends MobSprite {
 	public CrystalGuardianSprite() {
 		super();
 
-		texture( Assets.Sprites.CRYSTAL_GUARDIAN );
-
-		TextureFilm frames = new TextureFilm( texture, 12, 15 );
-
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.CRYSTAL_GUARDIAN_HD, 67, 19f / 54f );
 		int c = texOffset();
 
-		idle = new MovieClip.Animation( 2, true );
-		idle.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 1+c );
+		idle = new MovieClip.Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
 
-		run = new MovieClip.Animation( 15, true );
-		run.frames( frames, 2+c, 3+c, 4+c, 5+c, 6+c, 7+c );
+		run = new MovieClip.Animation( 8, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		attack = new MovieClip.Animation( 12, false );
-		attack.frames( frames, 8+c, 9+c, 10+c );
+		attack = new MovieClip.Animation( 10, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		die = new MovieClip.Animation( 5, false );
-		die.frames( frames, 11+c, 12+c, 13+c, 14+c, 15+c, 15+c );
+		die = new MovieClip.Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 
 		crumple = die.clone();
-
-		//this is temporary, as ideally the sprite itself should be scaled to 15x19 or so
-		scale.set(1.25f);
 
 		play( idle );
 	}
@@ -83,7 +78,7 @@ public abstract class CrystalGuardianSprite extends MobSprite {
 	public static class Blue extends CrystalGuardianSprite {
 		@Override
 		protected int texOffset() {
-			return 0;
+			return 16;
 		}
 		@Override
 		public int blood() {
@@ -94,7 +89,7 @@ public abstract class CrystalGuardianSprite extends MobSprite {
 	public static class Green extends CrystalGuardianSprite {
 		@Override
 		protected int texOffset() {
-			return 21;
+			return 32;
 		}
 		@Override
 		public int blood() {
@@ -105,7 +100,7 @@ public abstract class CrystalGuardianSprite extends MobSprite {
 	public static class Red extends CrystalGuardianSprite {
 		@Override
 		protected int texOffset() {
-			return 42;
+			return 48;
 		}
 		@Override
 		public int blood() {

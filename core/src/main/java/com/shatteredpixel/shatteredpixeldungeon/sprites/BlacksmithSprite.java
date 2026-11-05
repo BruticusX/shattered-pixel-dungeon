@@ -37,19 +37,19 @@ public class BlacksmithSprite extends MobSprite {
 	public BlacksmithSprite() {
 		super();
 		
-		texture( Assets.Sprites.TROLL );
-		
-		TextureFilm frames = new TextureFilm( texture, 13, 16 );
-		
-		idle = new Animation( 15, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 3 );
-		
-		run = new Animation( 20, true );
-		run.frames( frames, 0 );
-		
-		die = new Animation( 20, false );
-		die.frames( frames, 0 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.TROLL_HD, 57, 15f / 46f );
+		int c = 0;
+
+		idle = new Animation( 5, true );
+		idle.frames( frames, row( c, 12, 13, 14, 15, 4, 5, 6, 7, 4, 5, 6, 7 ) );
+
+		run = new Animation( 8, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
 		play( idle );
 	}
 	

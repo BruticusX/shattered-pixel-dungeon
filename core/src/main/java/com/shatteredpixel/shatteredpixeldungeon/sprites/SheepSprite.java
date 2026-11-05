@@ -30,19 +30,19 @@ public class SheepSprite extends MobSprite {
 	public SheepSprite() {
 		super();
 		
-		texture( Assets.Sprites.SHEEP );
-		
-		TextureFilm frames = new TextureFilm( texture, 16, 15 );
-		
-		idle = new Animation( 8, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SHEEP_HD, 52, 12f / 38f );
+		int c = 0;
+
+		idle = new Animation( 4, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15, 4, 5, 6, 7 ) );
+
 		run = idle.clone();
 		attack = idle.clone();
-		
-		die = new Animation( 20, false );
-		die.frames( frames, 0 );
-		
+
+		die = new Animation( 12, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
 		play( idle );
 		curFrame = Random.Int( curAnim.frames.length );
 	}
