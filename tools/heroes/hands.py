@@ -116,3 +116,60 @@ def front_hand(im, f):
             near = [p for p in pts if p[0] >= xr - 3]
             best = (sum(p[0] for p in near) / len(near), sum(p[1] for p in near) / len(near), near)
     return best
+
+
+def back_hand(im, f):
+    """The off hand: the leftmost skin blob at arm height (the arm on the back side of the body)."""
+    fr = im.crop((f * FS, 0, f * FS + FS, FS))
+    bb = fr.getchannel("A").getbbox()
+    top, bottom = bb[1], bb[3]
+    h = bottom - top
+    midx = (bb[0] + bb[2]) / 2
+    best = None
+    for comp in blobs(im, f):
+        if len(comp) < 4 or len(comp) > 0.10 * FS * FS:
+            continue
+        cy = sum(p[1] for p in comp) / len(comp)
+        cx = sum(p[0] for p in comp) / len(comp)
+        if not (top + h * 0.3 <= cy <= top + h * 0.75) or cx >= midx:
+            continue
+        if best is None or cx < best[0]:
+            best = (cx, cy, comp)
+    if best is None:
+        pts = [(x, y) for y in range(top + int(h * 0.35), top + int(h * 0.62))
+               for x in range(bb[0], int(midx)) if face_skin(fr.getpixel((x, y)))]
+        if pts:
+            xl = min(p[0] for p in pts)
+            near = [p for p in pts if p[0] <= xl + 3]
+            best = (sum(p[0] for p in near) / len(near), sum(p[1] for p in near) / len(near), near)
+    return best
+
+
+def thicken_arms(im, frames):
+    """Widens thin arms by a pixel: skin below the head grows sideways into the outline/background,
+    and the outline is pushed out to keep it closed. Used for heroes drawn with very slender arms."""
+    px = im.load()
+    for f in range(frames):
+        x0 = f * FS
+        fr = im.crop((x0, 0, x0 + FS, FS))
+        bb = fr.getchannel("A").getbbox()
+        if not bb:
+            continue
+        top, h = bb[1], bb[3] - bb[1]
+        skin = [(x, y) for y in range(top + int(h * 0.28), top + int(h * 0.66))
+                for x in range(FS) if face_skin(fr.getpixel((x, y)))]
+        sset = set(skin)
+        for (x, y) in skin:
+            for dx in (-1, 1):
+                nx = x + dx
+                if not (0 <= nx < FS) or (nx, y) in sset:
+                    continue
+                q = px[x0 + nx, y]
+                dark = q[3] > 0 and max(q[:3]) < 60
+                if q[3] == 0 or dark:
+                    edge = q
+                    c = px[x0 + x, y]
+                    px[x0 + nx, y] = (int(c[0] * 0.85), int(c[1] * 0.85), int(c[2] * 0.85), 255)
+                    ox = nx + dx
+                    if 0 <= ox < FS and px[x0 + ox, y][3] == 0:
+                        px[x0 + ox, y] = edge if dark else (30, 20, 16, 255)
