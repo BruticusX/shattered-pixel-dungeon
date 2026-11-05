@@ -112,7 +112,7 @@ public class HeldWeapon {
 		if (hold == Hold.FIST) {
 			//a glove covers the fist and stops at the wrist: about 7 art pixels long, like the hand
 			int px = ItemSpriteSheetHD.dim(w.image());
-			sc *= px > 0 ? 7f / px : 0.3f;
+			sc *= px > 0 ? 8f / px : 0.3f;
 		}
 		//shields are sized against the hero's body: a buckler covers the forearm, a round shield the
 		//torso, a kite shield shoulder to thigh, and a greatshield nearly the whole body
@@ -127,7 +127,7 @@ public class HeldWeapon {
 			else        sc *= 0.7f;
 		}
 		//an open book about two hands wide, resting on the palm
-		if (hold == Hold.BOOK) sc *= 11f / 32f;
+		if (hold == Hold.BOOK) sc *= 20f / 32f;
 		ws.scale.set(sc);
 		if (hold == Hold.BOOK) {
 			ws.setFlipped(faceLeft);
