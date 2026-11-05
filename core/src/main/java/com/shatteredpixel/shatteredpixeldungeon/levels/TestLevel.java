@@ -467,6 +467,16 @@ public class TestLevel extends Level {
 		placeAll(Generator.Category.SCROLL.classes);
 		placeAll(ExoticScroll.regToExo.values().toArray(new Class<?>[0]));
 		place(new ScrollOfArsenal());
+		//MOD: the new scrolls, and a sword with each new enchantment
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMending().quantity(5));
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfFocus().quantity(5));
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfSmelting().quantity(5));
+		for (Class<?> e : new Class<?>[]{com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering.class, com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class, com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class}) {
+			com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword s = new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword();
+			s.enchant((com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment) com.watabou.utils.Reflection.newInstance(e));
+			s.identify();
+			place(s);
+		}
 		newRow();
 		placeAll(Generator.Category.STONE.classes);
 		placeAll(Generator.Category.SEED.classes);

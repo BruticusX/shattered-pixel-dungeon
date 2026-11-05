@@ -62,15 +62,15 @@ public class Proficiency {
 	static {
 		fam(Family.DAGGERS,  Dagger.class, Dirk.class, AssassinsBlade.class, Stiletto.class, Kris.class);
 		fam(Family.SWORDS,   WornShortsword.class, Shortsword.class, Sword.class, Longsword.class, Greatsword.class,
-				Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class);
+				Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class, Estoc.class);
 		fam(Family.AXES,     HandAxe.class, BattleAxe.class, Greataxe.class, BeardedAxe.class);
-		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class);
+		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class, WarPick.class);
 		fam(Family.POLEARMS, Spear.class, Glaive.class, Sickle.class, WarScythe.class, Halberd.class, Pike.class);
-		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class, IronShodStaff.class);
+		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class, IronShodStaff.class, BoStaff.class);
 		fam(Family.FIST,     Gloves.class, Gauntlet.class, Sai.class, Katar.class, TigerClaws.class);
 		fam(Family.SHIELDS,  RoundShield.class, Greatshield.class, Buckler.class, KiteShield.class);
 		fam(Family.FLEXIBLE, Whip.class, Flail.class, Kusarigama.class, MeteorHammer.class);
-		fam(Family.RANGED,   Crossbow.class, SpiritBow.class);
+		fam(Family.RANGED,   Crossbow.class, SpiritBow.class, Sling.class);
 	}
 
 	public static Family familyOf(Object weapon) {
@@ -203,6 +203,7 @@ public class Proficiency {
 		float base = 1 + Math.max(0, mob.EXP) / 5;
 		if (mob.buff(Elite.class) != null) base *= 2;
 		base *= classBonus(hero.heroClass, f);
+		if (hero.buff(com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfFocus.Focused.class) != null) base *= 2; //MOD
 		//fractional xp is kept as a chance of an extra point
 		int gain = (int) base + (Random.Float() < base - (int) base ? 1 : 0);
 
