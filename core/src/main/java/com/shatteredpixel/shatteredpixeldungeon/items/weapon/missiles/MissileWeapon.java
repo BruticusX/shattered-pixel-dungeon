@@ -539,9 +539,6 @@ abstract public class MissileWeapon extends Weapon {
 			usages = Math.min(usages/2f, 30); //cannot exceed 30 uses with crystal enchant
 		}
 
-		//MOD: a sling in hand means throwing stones are never lost
-		if (this instanceof ThrowingStone && com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sling.equipped(Dungeon.hero)) usages = 100f;
-
 		//at 100 uses, items just last forever.
 		if (usages >= 100f) return 0;
 
@@ -608,9 +605,6 @@ abstract public class MissileWeapon extends Weapon {
 			int exStr = 0 /*MOD: no strength*/;
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
-			}
-			if (com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sling.equipped((Hero) owner)) {
-				damage = Math.round(damage * com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sling.THROWN_BOOST); //MOD
 			}
 			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
 				damage = Math.round(damage * (1f + 0.15f * ((Hero) owner).pointsInTalent(Talent.PROJECTILE_MOMENTUM)));

@@ -440,10 +440,8 @@ public class Generator {
 					Gloves.class,
 					Rapier.class,
 					Cudgel.class,
-					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sling.class, //MOD
-					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BoStaff.class, //MOD
 			};
-			WEP_T1.defaultProbs = new float[]{ 2, 0, 2, 2, 2, 2, 2, 2 };
+			WEP_T1.defaultProbs = new float[]{ 2, 0, 2, 2, 2, 2 };
 			WEP_T1.probs = WEP_T1.defaultProbs.clone();
 			
 			WEP_T2.classes = new Class<?>[]{
@@ -473,10 +471,9 @@ public class Generator {
 					Khopesh.class,
 					Falchion.class,
 					BeardedAxe.class,
-					Kusarigama.class,
-					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarPick.class //MOD
+					Kusarigama.class
 			};
-			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 }; //MOD: scimitar cut, +Phase 4 types
+			WEP_T3.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 }; //MOD: scimitar cut, +Phase 4 types
 			WEP_T3.probs = WEP_T3.defaultProbs.clone();
 			
 			WEP_T4.classes = new Class<?>[]{
@@ -490,10 +487,9 @@ public class Generator {
 					MorningStar.class,
 					IronShodStaff.class,
 					MeteorHammer.class,
-					Halberd.class,
-					com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Estoc.class //MOD
+					Halberd.class
 			};
-			WEP_T4.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+			WEP_T4.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
 			WEP_T4.probs = WEP_T4.defaultProbs.clone();
 			
 			WEP_T5.classes = new Class<?>[]{

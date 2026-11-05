@@ -62,15 +62,15 @@ public class Proficiency {
 	static {
 		fam(Family.DAGGERS,  Dagger.class, Dirk.class, AssassinsBlade.class, Stiletto.class, Kris.class);
 		fam(Family.SWORDS,   WornShortsword.class, Shortsword.class, Sword.class, Longsword.class, Greatsword.class,
-				Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class, Estoc.class);
+				Katana.class, Rapier.class, RunicBlade.class, Bloodletter.class, Khopesh.class, Falchion.class);
 		fam(Family.AXES,     HandAxe.class, BattleAxe.class, Greataxe.class, BeardedAxe.class);
-		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class, WarPick.class);
+		fam(Family.BLUNT,    Cudgel.class, Mace.class, WarHammer.class, MorningStar.class, Maul.class);
 		fam(Family.POLEARMS, Spear.class, Glaive.class, Sickle.class, WarScythe.class, Halberd.class, Pike.class);
-		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class, IronShodStaff.class, BoStaff.class);
+		fam(Family.STAVES,   Quarterstaff.class, MagesStaff.class, IronShodStaff.class);
 		fam(Family.FIST,     Gloves.class, Gauntlet.class, Sai.class, Katar.class, TigerClaws.class);
 		fam(Family.SHIELDS,  RoundShield.class, Greatshield.class, Buckler.class, KiteShield.class);
 		fam(Family.FLEXIBLE, Whip.class, Flail.class, Kusarigama.class, MeteorHammer.class);
-		fam(Family.RANGED,   Crossbow.class, SpiritBow.class, Sling.class);
+		fam(Family.RANGED,   Crossbow.class, SpiritBow.class);
 	}
 
 	public static Family familyOf(Object weapon) {
@@ -125,7 +125,22 @@ public class Proficiency {
 	public static int xp(HeroClass cls, Family f) {
 		if (Dungeon.testRoom) return THRESHOLDS[MAX_LEVEL - 1];
 		load();
-		return data.contains(key(cls, f)) ? data.getInt(key(cls, f)) : 0;
+		int xp = data.contains(key(cls, f)) ? data.getInt(key(cls, f)) : 0;
+		//MOD: every hero starts at level 1 with the weapon families of their starting gear
+		if (startsWith(cls, f)) xp = Math.max(xp, THRESHOLDS[0]);
+		return xp;
+	}
+
+	public static boolean startsWith(HeroClass cls, Family f) {
+		switch (cls) {
+			case WARRIOR:  return f == Family.SWORDS;
+			case MAGE:     return f == Family.WANDS;   //the magic tome
+			case ROGUE:    return f == Family.DAGGERS;
+			case HUNTRESS: return f == Family.RANGED || f == Family.FIST;
+			case DUELIST:  return f == Family.SWORDS;
+			case CLERIC:   return f == Family.BLUNT;
+			default:       return false;
+		}
 	}
 
 	public static int level(HeroClass cls, Family f) {
@@ -153,7 +168,8 @@ public class Proficiency {
 
 	public static float accuracyFactor(Hero hero, Object weapon) {
 		if (familyOf(weapon) == null) return 1f;
-		return 0.85f + 0.05f * level(hero, weapon);
+		//MOD: 0.70 at level 0 up to 1.30 at level 10: proficiency matters more
+		return 0.70f + 0.06f * level(hero, weapon);
 	}
 
 	public static float damageFactor(Hero hero, Object weapon) {
@@ -169,7 +185,8 @@ public class Proficiency {
 		Hero hero = (Hero) attacker;
 		KindOfWeapon wep = hero.belongings.attackingWeapon();
 		if (familyOf(wep) == null) return false;
-		return Random.Float() < 0.40f + 0.03f * level(hero, wep);
+		//MOD: 20% at level 0 up to 70% at level 10
+		return Random.Float() < 0.20f + 0.05f * level(hero, wep);
 	}
 
 	public static final float GLANCING_DAMAGE = 0.4f;
