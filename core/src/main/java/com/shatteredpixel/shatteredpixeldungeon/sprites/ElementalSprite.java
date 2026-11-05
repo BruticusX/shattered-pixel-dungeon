@@ -50,24 +50,23 @@ public abstract class ElementalSprite extends MobSprite {
 		
 		int c = texOffset();
 		
-		texture( Assets.Sprites.ELEMENTAL );
-		
-		TextureFilm frames = new TextureFilm( texture, 12, 14 );
-		
-		idle = new Animation( 10, true );
-		idle.frames( frames, c+0, c+1, c+2 );
-		
-		run = new Animation( 12, true );
-		run.frames( frames, c+0, c+1, c+3 );
-		
-		attack = new Animation( 15, false );
-		attack.frames( frames, c+4, c+5, c+6 );
-		
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.ELEMENTAL_HD, 51, 13f / 42f );
+
+		idle = new Animation( 6, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
+
+		run = new Animation( 10, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
 		zap = attack.clone();
-		
-		die = new Animation( 15, false );
-		die.frames( frames, c+7, c+8, c+9, c+10, c+11, c+12, c+13, c+12 );
-		
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
 		play( idle );
 	}
 	
@@ -161,7 +160,7 @@ public abstract class ElementalSprite extends MobSprite {
 		
 		@Override
 		protected int texOffset() {
-			return 14;
+			return 16;
 		}
 		
 		@Override
@@ -185,7 +184,7 @@ public abstract class ElementalSprite extends MobSprite {
 		
 		@Override
 		protected int texOffset() {
-			return 28;
+			return 32;
 		}
 		
 		@Override
@@ -215,7 +214,7 @@ public abstract class ElementalSprite extends MobSprite {
 		
 		@Override
 		protected int texOffset() {
-			return 42;
+			return 48;
 		}
 		
 		@Override
@@ -242,7 +241,7 @@ public abstract class ElementalSprite extends MobSprite {
 
 		@Override
 		protected int texOffset() {
-			return 56;
+			return 64;
 		}
 		
 		@Override

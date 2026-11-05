@@ -57,9 +57,23 @@ VARIANTS = {
     "rotlasher": [],
     "snake": [],
     "swarm": [],
+    "bat": [],
+    "brute": [shift(200, 0.35, 0.75)],                               # armored brute
+    "shaman": [shift(215, 1.0, 0.95), shift(270, 0.9, 0.95), shift(110, 0.8, 0.95)],  # blue, purple, vault
+    "spinner": [],
+    "dm200": [shift(180, 0.8, 0.95), shift(90, 0.7, 0.8)],           # vault DM-200, DM-201
+    "gnollguard": [],
+    "gnollsapper": [],
+    "ghoul": [],
+    "elemental": [shift(18, 0.8, 1.15), shift(180, 0.9, 1.0), shift(40, 0.45, 1.2), shift(270, 0.9, 0.95)],  # newborn, frost, shock, chaos
+    "warlock": [],
+    "monk": [shift(-30, 1.0, 0.8)],                                  # senior monk
+    "golem": [],
 }
 
+import sys
 for mob, variants in VARIANTS.items():
+    if len(sys.argv) > 1 and mob not in sys.argv[1:]: continue
     base = Image.open(SRC + f"{mob}_frames.png").convert("RGBA")
     sheet = Image.new("RGBA", (base.width, base.height * (1 + len(variants))))
     sheet.paste(base, (0, 0))
