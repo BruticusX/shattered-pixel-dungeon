@@ -37,21 +37,21 @@ public class RotHeartSprite extends MobSprite {
 
 		perspectiveRaise = 0.2f;
 
-		texture( Assets.Sprites.ROT_HEART );
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.ROT_HEART_HD, 50, 14f / 42f );
+		int c = 0;
 
-		TextureFilm frames = new TextureFilm( texture, 16, 16 );
+		idle = new MovieClip.Animation( 4, true );
+		idle.frames( frames, row( c, 0, 1, 2, 3, 12, 13, 14, 15 ) );
 
-		idle = new MovieClip.Animation( 1, true );
-		idle.frames( frames, 0);
+		run = new MovieClip.Animation( 4, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		run = new MovieClip.Animation( 1, true );
-		run.frames( frames, 0 );
-
-		attack = new MovieClip.Animation( 1, false );
-		attack.frames( frames, 0 );
+		attack = new MovieClip.Animation( 10, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 0 ) );
 
 		die = new MovieClip.Animation( 8, false );
-		die.frames( frames, 1, 2, 3, 4, 5, 6, 7, 7, 7 );
+		die.frames( frames, row( c, 8, 9, 10, 11, 11 ) );
 
 		play( idle );
 	}

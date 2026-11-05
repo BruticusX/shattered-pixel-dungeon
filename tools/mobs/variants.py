@@ -48,6 +48,13 @@ VARIANTS = {
     "gnoll": [shift(230, 0.8, 0.9), grey()],                         # trickster, exile
     "crab":  [shift(-25, 1.0, 0.7), shift(25, 0.75, 0.8)],           # great crab, hermit crab
     "slime": [shift(160, 1.0, 0.95)],                                # caustic slime
+    "skeleton": [shift(190, 0.5, 0.9)],                             # vault skeleton
+    "thief": [shift(-150, 0.9, 1.0)],                                # bandit
+    "dm100": [shift(180, 0.8, 0.95)],                                # vault DM-100
+    "guard": [],
+    "necromancer": [shift(170, 0.8, 1.15)],                          # spectral necromancer
+    "rotheart": [],
+    "rotlasher": [],
     "snake": [],
     "swarm": [],
 }

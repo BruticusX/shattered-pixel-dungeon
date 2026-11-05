@@ -36,26 +36,24 @@ public class DM100Sprite extends MobSprite {
 	public DM100Sprite () {
 		super();
 		
-		texture( Assets.Sprites.DM100 );
-		
-		TextureFilm frames = new TextureFilm( texture, 16, 14 );
-
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.DM100_HD, 55, 13f / 40f );
 		int c = texOffset();
 
-		idle = new Animation( 1, true );
-		idle.frames( frames, 0+c, 1+c );
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 13, 14, 15 ) );
 
-		run = new Animation( 12, true );
-		run.frames( frames, 6+c, 7+c, 8+c, 9+c );
-		
-		attack = new Animation( 12, false );
-		attack.frames( frames, 2+c, 3+c, 4+c, 0+c );
+		run = new Animation( 8, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
 
-		zap = new Animation( 8, false );
-		zap.frames( frames, 5+c, 5+c, 1+c );
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
 
-		die = new Animation( 12, false );
-		die.frames( frames, 10+c, 11+c, 12+c, 13+c, 14+c, 15+c );
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
+
+		zap = new Animation( 10, false );
+		zap.frames( frames, row( c, 4, 5, 6, 6, 7 ) );
 		
 		play( idle );
 	}
@@ -125,7 +123,7 @@ public class DM100Sprite extends MobSprite {
 
 		@Override
 		protected int texOffset() {
-			return 16;
+			return 16; //second row of the redrawn sheet
 		}
 
 	}

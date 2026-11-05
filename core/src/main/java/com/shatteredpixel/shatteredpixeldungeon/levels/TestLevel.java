@@ -127,16 +127,25 @@ public class TestLevel extends Level {
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Albino.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll.class,
-				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm.class,
+				ShowSwarm.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FetidRat.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollTrickster.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.CausticSlime.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Thief.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bandit.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectralNecromancer.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RotHeart.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RotLasher.class,
 		};
 		for (int i = 0; i < lineup.length; i++) {
-			Mob m = new ShowMob().as( (Class<? extends Mob>) lineup[i] );
+			Mob m = lineup[i] == ShowSwarm.class ? new ShowSwarm() : new ShowMob().as( (Class<? extends Mob>) lineup[i] );
 			m.pos = cell(3 + (i % 5) * 7, H - 9 - (i / 5) * 3);
 			mobs.add(m);
 		}
@@ -246,6 +255,27 @@ public class TestLevel extends Level {
 			super.restoreFromBundle( bundle );
 			Class<?> c = bundle.getClass( "of" );
 			if (c != null) as( (Class<? extends Mob>) c );
+		}
+	}
+
+	//the real swarm, so hitting it splits it like in the dungeon, but harmless like the others
+	public static class ShowSwarm extends com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm {
+		{ state = PASSIVE; EXP = 0; maxLvl = -1; }
+		private int beat = 0;
+		@Override
+		protected boolean act() {
+			if (!isAlive()) return super.act();
+			state = PASSIVE;
+			spend( showcase( this, beat++ ) );
+			return true;
+		}
+		@Override
+		protected com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm newClone() {
+			return new ShowSwarm();
+		}
+		@Override
+		public void onMotionComplete() {
+			if (sprite != null && isAlive()) sprite.idle();
 		}
 	}
 

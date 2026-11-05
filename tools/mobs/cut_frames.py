@@ -16,6 +16,16 @@ SRC = f"tools/spritecook/mobs/{MOB}_frames_raw.png"
 OUTLINE = (22, 18, 24, 255)
 
 raw = Image.open(SRC).convert("RGBA")
+# some sheets come back on a flat grey card instead of a transparent background: flood-fill it away
+_a = np.array(raw)
+if _a[0, 0, 3] > 200 and _a[-1, -1, 3] > 200:
+    bgc = _a[2:12, 2:12, :3].reshape(-1, 3).mean(0)
+    near = (np.abs(_a[..., :3].astype(int) - bgc).sum(2) < 40) & (_a[..., 3] > 0)
+    lab, n = ndimage.label(near)
+    edge = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+    for l in edge:
+        _a[lab == l, 3] = 0
+    raw = Image.fromarray(_a)
 C = raw.width // 4
 
 

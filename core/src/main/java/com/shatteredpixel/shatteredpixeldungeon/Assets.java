@@ -301,8 +301,10 @@ public class Assets {
 		public static final String SWARM    = "sprites/swarm.png";
 		public static final String SWARM_HD = "sprites/swarm_hd.png";   //MOD: redrawn
 		public static final String SKELETON = "sprites/skeleton.png";
+		public static final String SKELETON_HD = "sprites/skeleton_hd.png";   //MOD: redrawn
 		public static final String SHAMAN   = "sprites/shaman.png";
 		public static final String THIEF    = "sprites/thief.png";
+		public static final String THIEF_HD = "sprites/thief_hd.png";   //MOD: redrawn
 		public static final String TENGU    = "sprites/tengu.png";
 		public static final String SHEEP    = "sprites/sheep.png";
 		public static final String KEEPER   = "sprites/shopkeeper.png";
@@ -329,8 +331,11 @@ public class Assets {
 		public static final String BEE      = "sprites/bee.png";
 		public static final String MIMIC    = "sprites/mimic.png";
 		public static final String ROT_LASH = "sprites/rot_lasher.png";
+		public static final String ROT_LASH_HD = "sprites/rotlasher_hd.png";   //MOD: redrawn
 		public static final String ROT_HEART= "sprites/rot_heart.png";
+		public static final String ROT_HEART_HD = "sprites/rotheart_hd.png";   //MOD: redrawn
 		public static final String GUARD    = "sprites/guard.png";
+		public static final String GUARD_HD = "sprites/guard_hd.png";   //MOD: redrawn
 		public static final String WARDS    = "sprites/wards.png";
 		public static final String GUARDIAN = "sprites/guardian.png";
 		public static final String SLIME    = "sprites/slime.png";
@@ -338,10 +343,12 @@ public class Assets {
 		public static final String SNAKE    = "sprites/snake.png";
 		public static final String SNAKE_HD = "sprites/snake_hd.png";   //MOD: redrawn
 		public static final String NECRO    = "sprites/necromancer.png";
+		public static final String NECRO_HD = "sprites/necromancer_hd.png";   //MOD: redrawn
 		public static final String GHOUL    = "sprites/ghoul.png";
 		public static final String RIPPER   = "sprites/ripper.png";
 		public static final String SPAWNER  = "sprites/spawner.png";
 		public static final String DM100    = "sprites/dm100.png";
+		public static final String DM100_HD = "sprites/dm100_hd.png";   //MOD: redrawn
 		public static final String PYLON    = "sprites/pylon.png";
 		public static final String DM200    = "sprites/dm200.png";
 		public static final String LOTUS    = "sprites/lotus.png";

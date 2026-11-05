@@ -31,23 +31,21 @@ public class SkeletonSprite extends MobSprite {
 	public SkeletonSprite() {
 		super();
 		
-		texture( Assets.Sprites.SKELETON );
-		
-		TextureFilm frames = new TextureFilm( texture, 12, texHeight() );
-
+		//MOD: redrawn (tools/mobs). Rows of 16 frames: move 0-3, attack 4-7, death 8-11, idle 12-15
+		TextureFilm frames = hdFilm( Assets.Sprites.SKELETON_HD, 54, 14f / 44f );
 		int c = texOffset();
 
-		idle = new Animation( 12, true );
-		idle.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 2+c, 3+c );
-		
-		run = new Animation( 15, true );
-		run.frames( frames, 4+c, 5+c, 6+c, 7+c, 8+c, 9+c );
-		
-		attack = new Animation( 15, false );
-		attack.frames( frames, 14+c, 15+c, 16+c );
-		
-		die = new Animation( 12, false );
-		die.frames( frames, 10+c, 11+c, 12+c, 13+c );
+		idle = new Animation( 3, true );
+		idle.frames( frames, row( c, 12, 12, 13, 12, 14, 15 ) );
+
+		run = new Animation( 10, true );
+		run.frames( frames, row( c, 0, 1, 2, 3 ) );
+
+		attack = new Animation( 14, false );
+		attack.frames( frames, row( c, 4, 5, 6, 7, 12 ) );
+
+		die = new Animation( 8, false );
+		die.frames( frames, row( c, 8, 9, 10, 11 ) );
 		
 		play( idle );
 	}
@@ -77,12 +75,7 @@ public class SkeletonSprite extends MobSprite {
 
 		@Override
 		protected int texOffset() {
-			return 21;
-		}
-
-		@Override
-		protected int texHeight() {
-			return 16; //1px taller due to beard
+			return 16; //second row of the redrawn sheet
 		}
 	}
 
