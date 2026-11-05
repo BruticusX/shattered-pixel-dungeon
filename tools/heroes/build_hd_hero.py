@@ -12,7 +12,7 @@ Armor looks are made from the SpriteCook body by restyling the tunic pixels in e
   0 none   1 cloth (neutral robe, takes cloth tints)   2 leather   3 mail (from the SpriteCook mail still)
   4 scale  5 plate   6 class armor (plate with a coloured tabard)
 """
-import colorsys, math, sys
+import colorsys, math, os, sys
 from PIL import Image
 sys.path.insert(0, "tools/heroes"); sys.path.insert(0, "tools")
 import hands
@@ -28,10 +28,13 @@ ANIMS = [("idle", 8), ("run", 10), ("attack", 8), ("death", 12)]
 
 # per frame: blade angle (degrees from straight up, + = forward) and whether the weapon goes behind
 # the body. None = weapon not shown.
+THICKEN = {"duelist"}   # heroes drawn with very slender arms
+
 POSE = {
-    "idle":   [(55, False)] * 8,
-    "run":    [(62, False), (56, False), (46, True), (42, False), (52, False),
-               (62, False), (56, True), (46, False), (42, False), (52, False)],
+    # walking and standing, the blade points forward and down, swinging a little with the stride
+    "idle":   [(68, False)] * 8,
+    "run":    [(100, False), (106, False), (112, True), (106, False), (100, False),
+               (96, False), (102, True), (110, False), (104, False), (98, False)],
     # the attack animations are punches: the weapon hand draws back and drives forward, so the blade
     # is raised over the shoulder on the draw and swept down through the punch
     "attack": [(55, False), (15, False), (-15, False), (-25, False), (75, False), (115, False), (95, False), (65, False)],
@@ -172,7 +175,10 @@ def main():
         im = Image.open(SRC + f"{CLS}_{name}_sheet.png").convert("RGBA")
         start = len(allframes)
         prev = None
-        found = [hands.front_hand(im, f) for f in range(k)]
+        if CLS in THICKEN:
+            hands.thicken_arms(im, k)
+        finder = hands.back_hand if os.environ.get("HAND") == "back" else hands.front_hand
+        found = [finder(im, f) for f in range(k)]
         if name == "attack":
             # a punching fist can be missed by the skin test (sleeves, shading): when the arm sticks out
             # past the idle silhouette, the fist is its far end
