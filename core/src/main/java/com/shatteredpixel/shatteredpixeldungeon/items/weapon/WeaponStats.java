@@ -123,11 +123,6 @@ public class WeaponStats {
 		melee(KiteShield.class,     3.5f, 0.60f);
 		melee(Pike.class,           3.6f, 0.80f); //reach 3
 		melee(Maul.class,           4.5f, 1.00f); //the slowest weapon, the biggest hits
-		//new weapons
-		melee(Sling.class,          0.3f, 0.55f); //weak up close; boosts thrown weapons
-		melee(BoStaff.class,        1.1f, 0.80f); //blocks like a quarterstaff, can daze
-		melee(WarPick.class,        1.8f, 0.90f); //ignores half of the target's armor
-		melee(Estoc.class,          1.7f, 0.95f); //+50% against wounded enemies
 
 		//thrown (metal ones; stones, clubs, bolas, darts and the force cube keep their own stats)
 		thrown(Shuriken.class,       0.10f, 1.00f);

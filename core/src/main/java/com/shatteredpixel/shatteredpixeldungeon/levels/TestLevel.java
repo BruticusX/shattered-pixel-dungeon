@@ -452,6 +452,8 @@ public class TestLevel extends Level {
 			}
 		}
 		place(new MagesStaff());
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome().identify());
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome().identify());
 		newRow();
 
 		//a worn-out sword and armor to test durability and repair kits

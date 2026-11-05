@@ -154,6 +154,11 @@ public class ElementalBlast extends ArmorAbility {
 			wandCls = hero.belongings.getItem(MagesStaff.class).wandClass();
 		}
 
+		//MOD: with the magic tome, the blast is pure arcane (magic missile)
+		if (wandCls == null && hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome.class) != null){
+			wandCls = com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile.class;
+		}
+
 		if (wandCls == null){
 			GLog.w(Messages.get(this, "no_staff"));
 			return;

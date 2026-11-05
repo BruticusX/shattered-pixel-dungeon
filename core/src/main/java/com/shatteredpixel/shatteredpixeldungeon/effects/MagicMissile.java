@@ -74,6 +74,8 @@ public class MagicMissile extends Emitter {
 	public static final int ELMO            = 15;
 	public static final int POISON          = 16;
 	public static final int LIGHT_MISSILE   = 17;
+	public static final int ARCANE          = 18; //MOD: tome magic missiles
+	public static final int BIG_FIRE        = 19; //MOD: tome fireball
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -149,6 +151,14 @@ public class MagicMissile extends Emitter {
 			case FIRE:
 				size( 4 );
 				pour( FlameParticle.FACTORY, 0.01f );
+				break;
+			case ARCANE: //MOD: a bright pink-purple orb with a dense trail
+				size( 6 );
+				pour( PurpleParticle.MISSILE, 0.004f );
+				break;
+			case BIG_FIRE: //MOD: a big, thick fireball
+				size( 10 );
+				pour( FlameParticle.FACTORY, 0.003f );
 				break;
 			case CORROSION:
 				size( 3 );

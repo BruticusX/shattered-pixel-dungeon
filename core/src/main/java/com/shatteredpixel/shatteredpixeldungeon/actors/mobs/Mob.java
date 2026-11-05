@@ -148,9 +148,10 @@ public abstract class Mob extends Char {
 			HT = Math.round(HT * AscensionChallenge.statModifier(this));
 			//MOD: early enemies are tougher so they aren't one-shot as often
 			// (x1.5 on floors 1-5, x1.3 on 6-10, x1.15 on 11-15, normal deeper; bosses unchanged)
+			// and every enemy has 20% more health on top of that
 			if (alignment == Alignment.ENEMY && !properties.contains(Property.BOSS)) {
 				float early = Dungeon.depth <= 5 ? 1.5f : Dungeon.depth <= 10 ? 1.3f : Dungeon.depth <= 15 ? 1.15f : 1f;
-				HT = Math.round(HT * early);
+				HT = Math.round(HT * early * 1.2f);
 			}
 			HP = Math.round(HT * percent);
 			firstAdded = false;

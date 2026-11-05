@@ -36,6 +36,8 @@ public class Beam extends Image {
 	
 	private float timeLeft;
 
+	protected float baseScaleY = 1f; //MOD: thicker beams
+
 	private Beam(PointF s, PointF e, Effects.Type asset, float duration) {
 		super( Effects.get( asset ) );
 		
@@ -71,6 +73,23 @@ public class Beam extends Image {
 		}
 	}
 
+	//MOD: tome ray of frost, an icy blue beam
+	public static class IceRay extends Beam{
+		public IceRay(PointF s, PointF e){
+			super(s, e, Effects.Type.LIGHT_RAY, 0.9f);
+			tint(0.45f, 0.85f, 1f, 1);
+		}
+	}
+
+	//MOD: battlemage disintegration ray, a thick purple death ray
+	public static class ThickDeathRay extends Beam{
+		public ThickDeathRay(PointF s, PointF e){
+			super(s, e, Effects.Type.DEATH_RAY, 0.8f);
+			scale.y = 2.5f;
+			baseScaleY = 2.5f;
+		}
+	}
+
 	public static class HealthRay extends Beam{
 		public HealthRay(PointF s, PointF e){
 			super(s, e, Effects.Type.HEALTH_RAY, 0.75f);
@@ -83,7 +102,7 @@ public class Beam extends Image {
 		
 		float p = timeLeft / duration;
 		alpha( p );
-		scale.set( scale.x, p );
+		scale.set( scale.x, p * baseScaleY );
 		
 		if ((timeLeft -= Game.elapsed) <= 0) {
 			killAndErase();

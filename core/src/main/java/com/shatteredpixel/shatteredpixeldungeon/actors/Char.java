@@ -410,6 +410,11 @@ public abstract class Char extends Actor {
 			}
 			
 			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
+			//MOD: enemies block 25% more (bosses unchanged)
+			if (enemy instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob && enemy.alignment == Alignment.ENEMY
+					&& !enemy.properties().contains(Property.BOSS) && dr > 0) {
+				dr = Math.round(dr * 1.25f);
+			}
 			
 			if (this instanceof Hero){
 				Hero h = (Hero)this;
