@@ -177,7 +177,8 @@ def main():
         prev = None
         if CLS in THICKEN:
             hands.thicken_arms(im, k)
-        finder = hands.back_hand if os.environ.get("HAND") == "back" else hands.front_hand
+        # the weapon goes in the off hand, drawn in front of the body (HAND=front for the old far-hand look)
+        finder = hands.front_hand if os.environ.get("HAND") == "front" else hands.back_hand
         found = [finder(im, f) for f in range(k)]
         if name == "attack":
             # a punching fist can be missed by the skin test (sleeves, shading): when the arm sticks out
