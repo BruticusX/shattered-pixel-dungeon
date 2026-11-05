@@ -25,6 +25,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gauntlet;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Buckler;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatshield;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KiteShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.TigerClaws;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
@@ -105,7 +108,18 @@ public class HeldWeapon {
 		float sc = 2f * ItemSprite.WORLD_SCALE * 0.5f;
 		if (hold == Hold.DIAGONAL || hold == Hold.COILED) sc *= ItemSpriteSheetHD.handScale(w.image());
 		if (hold == Hold.FIST) sc *= 0.6f;     //about the size of the hand it covers
-		if (hold == Hold.SHIELD) sc *= 0.7f;   //strapped to the forearm, not as wide as the body
+		//shields are sized against the hero's body: a buckler covers the forearm, a round shield the
+		//torso, a kite shield shoulder to thigh, and a greatshield nearly the whole body
+		float shieldH = 0, shieldC = 0;
+		if (hold == Hold.SHIELD) {
+			if (w instanceof Buckler)          { shieldH = 0.36f; shieldC = 0.50f; }
+			else if (w instanceof KiteShield)  { shieldH = 0.64f; shieldC = 0.52f; }
+			else if (w instanceof Greatshield) { shieldH = 0.88f; shieldC = 0.54f; }
+			else                               { shieldH = 0.52f; shieldC = 0.48f; }
+			int px = ItemSpriteSheetHD.dim(w.image());
+			if (px > 0) sc *= shieldH / (px * 0.01875f);
+			else        sc *= 0.7f;
+		}
 		ws.scale.set(sc);
 		if (hold == Hold.DIAGONAL && g != null) {
 			ws.setFlipped(faceLeft);
@@ -129,7 +143,13 @@ public class HeldWeapon {
 		}
 		float ax = (faceLeft ? L.frame - hx : hx) * k;
 		//a shield is strapped to the forearm: centred a good way above the fist, not hanging from it
-		float lift = hold == Hold.SHIELD ? 3.5f : 0;
+		float lift = 0;
+		if (hold == Hold.SHIELD) {
+			//held at a fixed height on the body (it would cover the face if it rose with the hand
+			//while running); it still moves forward and back with the arm
+			float want = L.avatar[1] + shieldC * L.bodyHeight;
+			lift = (hy - want) * k;
+		}
 		ws.x = owner.x + ax - ws.origin.x;
 		ws.y = owner.y + hy * k - lift - ws.origin.y;
 		ws.alpha(owner.alpha());

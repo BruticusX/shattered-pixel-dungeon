@@ -240,7 +240,10 @@ def main():
     # the avatar crop: head to knees of the first idle frame, 4:5 like the old 12x15 avatar
     bb = allframes[0].getchannel("A").getbbox()
     aw = round((bb[3] - bb[1]) * 0.85 * 0.8); ah = round((bb[3] - bb[1]) * 0.85)
-    acx = (bb[0] + bb[2]) // 2
+    # centre on the body's mass, not its bounding box (a ponytail or a swung arm skews the box)
+    a0 = allframes[0].getchannel("A").load(); W0, H0 = allframes[0].size
+    pts = [x for y in range(bb[1], bb[1] + ah) for x in range(W0) if a0[x, y] > 128]
+    acx = round(sum(pts) / len(pts))
     avatar = (acx - aw // 2, bb[1], aw, ah)
     height = bb[3] - bb[1]
 
