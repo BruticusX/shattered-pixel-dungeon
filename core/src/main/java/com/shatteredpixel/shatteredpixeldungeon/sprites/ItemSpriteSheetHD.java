@@ -72,6 +72,11 @@ public class ItemSpriteSheetHD {
 	//how big a weapon is drawn in the hand, relative to its size on the floor. Sprites squeeze real
 	//lengths into 24..32px so small things stay readable on the floor; in a hand that makes a dagger
 	//look nearly as long as a sword, so this undoes the squeeze.
+	//longest side of the sprite in 32px sprite pixels, 0 if unknown
+	public static int dim( int image ){
+		return image >= 0 && image < DIM.length ? DIM[image] : 0;
+	}
+
 	public static float handScale( int image ){
 		if (image < 0 || image >= DIM.length || DIM[image] == 0) return 0.8f;
 		float px = DIM[image];
