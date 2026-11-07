@@ -107,6 +107,15 @@ public class DisintegrationRay extends Buff implements ActionIndicator.Action {
 		return true;
 	}
 
+	public void recharge( float turns ){
+		if (cooldown <= 0) return;
+		cooldown -= turns;
+		if (cooldown <= 0) {
+			cooldown = 0;
+			ActionIndicator.setAction( this );
+		}
+	}
+
 	// ---- the ability button ----
 
 	@Override
@@ -170,12 +179,21 @@ public class DisintegrationRay extends Buff implements ActionIndicator.Action {
 				if (ch.sprite != null) ch.sprite.emitter().burst( PurpleParticle.BURST, 25 );
 				GLog.p( Messages.get( DisintegrationRay.class, "disintegrated", ch.name() ) );
 				ch.die( this );
+				//excess charge: the released energy shields the battlemage, 4 / 8 / 12
+				if (hero.hasTalent( com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent.EXCESS_CHARGE )) {
+					int sh = 4 * hero.pointsInTalent( com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent.EXCESS_CHARGE );
+					Buff.affect( hero, Barrier.class ).incShield( sh );
+					hero.sprite.showStatusWithIcon( com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite.POSITIVE, Integer.toString( sh ), com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText.SHIELDING );
+				}
 			} else {
 				ch.damage( Random.NormalIntRange( minDamage( hero ), maxDamage( hero ) ), this );
 				if (ch.sprite != null) ch.sprite.centerEmitter().burst( PurpleParticle.BURST, 10 );
 			}
 		}
 		Dungeon.observe();
+		if (hero.hasTalent( com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent.EMPOWERED_STRIKE )) {
+			Buff.affect( hero, com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent.EmpoweredStrikeTracker.class, 10f );
+		}
 		cooldown = COOLDOWN;
 		ActionIndicator.clearAction( this );
 		hero.spendAndNext( 1f );

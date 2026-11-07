@@ -103,7 +103,12 @@ public enum Skill {
 	ELEMENTAL_INFUSION(Family.WANDS,   Kind.ACTIVE,   true, 30, 27, 24),
 	ATTUNEMENT       (Family.WANDS,    Kind.PASSIVE,  true),
 	RESONANCE        (Family.WANDS,    Kind.PASSIVE,  true),
-	SPELL_FUSION     (Family.WANDS,    Kind.ULTIMATE, true, 60);
+	SPELL_FUSION     (Family.WANDS,    Kind.ULTIMATE, true, 60),
+
+	//MOD: tome skills (magic family, added after the original set so the icon rows stay in order)
+	SPELL_WEAVING    (Family.WANDS,    Kind.PASSIVE,  true),
+	QUICKENED_CAST   (Family.WANDS,    Kind.ACTIVE,   true, 40, 35, 30),
+	ARCANE_MASTERY   (Family.WANDS,    Kind.PASSIVE,  true);
 
 	public enum Kind { ACTIVE, PASSIVE, ULTIMATE }
 
@@ -153,7 +158,9 @@ public enum Skill {
 
 	public static ArrayList<Skill> of(Family f) {
 		ArrayList<Skill> list = new ArrayList<>();
-		for (Skill s : values()) if (s.family == f) list.add(s);
+		for (Skill s : values()) if (s.family == f && s.kind != Kind.ULTIMATE) list.add(s);
+		//the ultimate always comes last
+		for (Skill s : values()) if (s.family == f && s.kind == Kind.ULTIMATE) list.add(s);
 		return list;
 	}
 }
