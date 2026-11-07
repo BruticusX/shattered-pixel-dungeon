@@ -401,7 +401,6 @@ public class MeleeWeapon extends Weapon {
 		return damage;
 	}
 	
-	@Override
 	//MOD: armor piercing, and whether you've trained enough to handle a weapon this heavy
 	public static String proficiencyInfo(com.shatteredpixel.shatteredpixeldungeon.items.Item w) {
 		com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.Family f =
@@ -418,6 +417,7 @@ public class MeleeWeapon extends Weapon {
 		return s;
 	}
 
+	@Override
 	public String info() {
 
 		String info = super.info();
