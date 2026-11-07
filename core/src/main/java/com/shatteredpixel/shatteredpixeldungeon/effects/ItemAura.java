@@ -72,45 +72,45 @@ public class ItemAura extends Emitter {
 	private static final HashMap<Class<?>, Factory> FACTORIES = new HashMap<>();
 	static {
 		//weapon enchantments
-		FACTORIES.put(Blazing.class,    FlameParticle.FACTORY);
-		FACTORIES.put(Chilling.class,   SnowParticle.FACTORY);
-		FACTORIES.put(Shocking.class,   SparkParticle.FACTORY);
-		FACTORIES.put(Kinetic.class,    Speck.factory(Speck.LIGHT));
-		FACTORIES.put(Venomous.class,   PoisonParticle.MISSILE);
-		FACTORIES.put(Vampiric.class,   BloodParticle.FACTORY);
-		FACTORIES.put(Vorpal.class,     BloodParticle.FACTORY);
-		FACTORIES.put(Grim.class,       ShadowParticle.UP);
-		FACTORIES.put(Eldritch.class,   ShadowParticle.MISSILE);
-		FACTORIES.put(Corrupting.class, PurpleParticle.MISSILE);
+		FACTORIES.put(Blazing.class,    ElementalVfx.factory(ElementalVfx.FIRE, 7));
+		FACTORIES.put(Chilling.class,   ElementalVfx.factory(ElementalVfx.FROST, 6));
+		FACTORIES.put(Shocking.class,   ElementalVfx.factory(ElementalVfx.LIGHTNING, 7));
+		FACTORIES.put(Kinetic.class,    ElementalVfx.factory(ElementalVfx.GLINT, 6));
+		FACTORIES.put(Venomous.class,   ElementalVfx.factory(ElementalVfx.POISON, 5));
+		FACTORIES.put(Vampiric.class,   ElementalVfx.factory(ElementalVfx.BLOOD, 5));
+		FACTORIES.put(Vorpal.class,     ElementalVfx.factory(ElementalVfx.BLOOD, 5));
+		FACTORIES.put(Grim.class,       ElementalVfx.factory(ElementalVfx.SMOKE, 7));
+		FACTORIES.put(Eldritch.class,   ElementalVfx.factory(ElementalVfx.SMOKE, 7));
+		FACTORIES.put(Corrupting.class, ElementalVfx.factory(ElementalVfx.ARCANE, 6));
 		FACTORIES.put(Blooming.class,   LeafParticle.GENERAL);
-		FACTORIES.put(Lucky.class,      Speck.factory(Speck.YELLOW_LIGHT));
-		FACTORIES.put(Blocking.class,   Speck.factory(Speck.BLUE_LIGHT));
+		FACTORIES.put(Lucky.class,      ElementalVfx.factory(ElementalVfx.GLINT, 6));
+		FACTORIES.put(Blocking.class,   ElementalVfx.factory(ElementalVfx.GLINT, 6));
 		FACTORIES.put(Elastic.class,    Speck.factory(Speck.BUBBLE));
-		FACTORIES.put(Projecting.class, Speck.factory(Speck.STAR));
+		FACTORIES.put(Projecting.class, ElementalVfx.factory(ElementalVfx.GLINT, 7));
 		FACTORIES.put(Unstable.class,   RainbowParticle.BURST);
-		FACTORIES.put(Crystal.class,    Speck.factory(Speck.DISCOVER));
+		FACTORIES.put(Crystal.class,    ElementalVfx.factory(ElementalVfx.FROST, 5));
 		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering.class, Speck.factory(Speck.ROCK)); //MOD
-		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class,  FlameParticle.FACTORY);     //MOD
-		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class,  EnergyParticle.FACTORY);    //MOD
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class,  ElementalVfx.factory(ElementalVfx.FIRE, 7)); //MOD
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class,  ElementalVfx.factory(ElementalVfx.GLINT, 6)); //MOD
 
 		//armor glyphs
-		FACTORIES.put(Obfuscation.class, SmokeParticle.FACTORY);
-		FACTORIES.put(Swiftness.class,   Speck.factory(Speck.LIGHT));
-		FACTORIES.put(Viscosity.class,   PurpleParticle.MISSILE);
-		FACTORIES.put(Potential.class,   EnergyParticle.FACTORY);
+		FACTORIES.put(Obfuscation.class, ElementalVfx.factory(ElementalVfx.SMOKE, 7));
+		FACTORIES.put(Swiftness.class,   ElementalVfx.factory(ElementalVfx.GLINT, 5));
+		FACTORIES.put(Viscosity.class,   ElementalVfx.factory(ElementalVfx.ARCANE, 6));
+		FACTORIES.put(Potential.class,   ElementalVfx.factory(ElementalVfx.LIGHTNING, 7));
 		FACTORIES.put(Affection.class,   Speck.factory(Speck.HEART));
-		FACTORIES.put(AntiMagic.class,   Speck.factory(Speck.BLUE_LIGHT));
-		FACTORIES.put(Brimstone.class,   FlameParticle.FACTORY);
+		FACTORIES.put(AntiMagic.class,   ElementalVfx.factory(ElementalVfx.GLINT, 6));
+		FACTORIES.put(Brimstone.class,   ElementalVfx.factory(ElementalVfx.FIRE, 7));
 		FACTORIES.put(Camouflage.class,  LeafParticle.GENERAL);
 		FACTORIES.put(Entanglement.class,EarthParticle.SMALL);
 		FACTORIES.put(Flow.class,        Speck.factory(Speck.BUBBLE));
-		FACTORIES.put(Repulsion.class,   Speck.factory(Speck.LIGHT));
+		FACTORIES.put(Repulsion.class,   ElementalVfx.factory(ElementalVfx.GLINT, 6));
 		FACTORIES.put(Stone.class,       EarthParticle.SMALL);
-		FACTORIES.put(Thorns.class,      BloodParticle.FACTORY);
+		FACTORIES.put(Thorns.class,      ElementalVfx.factory(ElementalVfx.BLOOD, 5));
 	}
 
 	private static Factory factoryFor(Object effect, boolean curse) {
-		if (curse) return ShadowParticle.CURSE;
+		if (curse) return ElementalVfx.factory(ElementalVfx.SMOKE, 7);
 		Factory f = FACTORIES.get(effect.getClass());
 		return f != null ? f : Speck.factory(Speck.LIGHT);
 	}
@@ -139,16 +139,31 @@ public class ItemAura extends Emitter {
 		this.pixels = pixels;
 	}
 
+	//world size of one item pixel on the sprite this aura follows
+	public float unit() {
+		return target == null ? 1f : Math.abs(target.scale.x);
+	}
+
 	@Override
 	protected void emit(int index) {
 		if (target == null) {
 			super.emit(index);
 			return;
 		}
-		//spawn on a random blade/outline pixel of the sprite the aura is attached to
+		//spawn on a random blade/outline pixel of the sprite the aura is attached to, following the
+		//sprite's flip and rotation (a weapon held in a hero's hand is turned to the swing)
 		int p = pixels[Random.Int(pixels.length)];
-		float px = target.x + ((p % 16) + Random.Float()) * target.scale.x;
-		float py = target.y + ((p / 16) + Random.Float()) * target.scale.y;
-		factory.emit(this, index, px, py);
+		float lx = (p % 16) + Random.Float(), ly = (p / 16) + Random.Float();
+		float ox = 0, oy = 0, ang = 0;
+		if (target instanceof com.watabou.noosa.Image) {
+			com.watabou.noosa.Image im = (com.watabou.noosa.Image) target;
+			if (im.flipHorizontal) lx = im.width - lx;
+			ox = im.origin.x; oy = im.origin.y; ang = im.angle;
+		}
+		float dx = (lx - ox) * target.scale.x, dy = (ly - oy) * target.scale.y;
+		double a = Math.toRadians(ang);
+		float rx = (float)(dx * Math.cos(a) - dy * Math.sin(a));
+		float ry = (float)(dx * Math.sin(a) + dy * Math.cos(a));
+		factory.emit(this, index, target.x + ox + rx, target.y + oy + ry);
 	}
 }
