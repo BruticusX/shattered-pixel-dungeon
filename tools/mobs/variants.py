@@ -90,6 +90,15 @@ VARIANTS = {
     "blacksmith": [],
     "imp": [],
     "ratking": [],
+    # bosses
+    "tengu": [],
+    "dm300": [shift(-18, 1.3, 1.2)],                                 # supercharged
+    "king": [],
+    "yog": [],
+    "larva": [],
+    "undead": [],
+    "geomancer": [grey()],                                          # in rock armor (statue)
+    "pylon": [],
 }
 
 import sys

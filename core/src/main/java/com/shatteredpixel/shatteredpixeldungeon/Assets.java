@@ -303,6 +303,18 @@ public class Assets {
 		public static final String CRAB_HD = "sprites/crab_hd.png";   //MOD: redrawn
 		public static final String GOO      = "sprites/goo.png";
 		public static final String GOO_HD   = "sprites/goo_hd.png";   //MOD: redrawn
+		//MOD: redrawn bosses and their helpers. One row of 16 frames per look: move 0-3, attack 4-7,
+		//death 8-11, idle 12-15
+		public static final String TENGU_HD     = "sprites/tengu_hd.png";
+		public static final String DM300_HD     = "sprites/dm300_hd.png";     //row 2: supercharged
+		public static final String KING_HD      = "sprites/king_hd.png";
+		public static final String YOG_HD       = "sprites/yog_hd.png";
+		public static final String LARVA_HD     = "sprites/larva_hd.png";
+		public static final String UNDEAD_HD    = "sprites/undead_hd.png";
+		public static final String GEOMANCER_HD = "sprites/geomancer_hd.png"; //row 2: in rock armor
+		public static final String PYLON_HD     = "sprites/pylon_hd.png";     //move = dormant, attack = active
+		public static final String FISTS_HD     = "sprites/fists_hd.png";     //one row per fist
+		public static final String FUNGAL_CORE_HD = "sprites/fungalcore_hd.png";
 		public static final String SWARM    = "sprites/swarm.png";
 		public static final String SWARM_HD = "sprites/swarm_hd.png";   //MOD: redrawn
 		public static final String SKELETON = "sprites/skeleton.png";

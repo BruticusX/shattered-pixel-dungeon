@@ -31,21 +31,20 @@ public class UndeadSprite extends MobSprite {
 	public UndeadSprite() {
 		super();
 		
-		texture( Assets.Sprites.UNDEAD );
+		//MOD: redrawn
+		TextureFilm frames = hdFilm( Assets.Sprites.UNDEAD_HD, 54, 14f / 42f );
 		
-		TextureFilm frames = new TextureFilm( texture, 12, 16 );
+		idle = new Animation( 5, true );
+		idle.frames( frames, 12, 13, 14, 15 );
 		
-		idle = new Animation( 12, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3 );
-		
-		run = new Animation( 15, true );
-		run.frames( frames, 4, 5, 6, 7, 8, 9 );
+		run = new Animation( 10, true );
+		run.frames( frames, 0, 1, 2, 3 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 14, 15, 16 );
+		attack.frames( frames, 4, 5, 6, 7 );
 		
-		die = new Animation( 12, false );
-		die.frames( frames, 10, 11, 12, 13 );
+		die = new Animation( 10, false );
+		die.frames( frames, 8, 9, 10, 11 );
 		
 		play( idle );
 	}

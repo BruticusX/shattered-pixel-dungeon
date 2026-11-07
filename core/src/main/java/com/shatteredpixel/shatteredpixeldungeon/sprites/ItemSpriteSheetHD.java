@@ -142,7 +142,7 @@ public class ItemSpriteSheetHD {
 		r(100, 24, 24, 2.5f, 18.5f, 45.0f);
 		r(101, 28, 32, 2.9f, 24.8f, 41.6f);
 		r(102, 28, 29); //MOD: magic tome
-		r(103, 32, 16); //MOD: magic tome, held open
+		r(103, 32, 24); //MOD: magic tome, held open
 		r(104, 26, 28, 2.9f, 21.1f, 45.0f);
 		r(105, 26, 24, 2.9f, 18.8f, 53.1f);
 		r(106, 30, 32, 3.4f, 25.5f, 44.0f);

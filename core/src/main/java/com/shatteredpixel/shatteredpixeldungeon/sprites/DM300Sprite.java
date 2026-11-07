@@ -44,40 +44,40 @@ public class DM300Sprite extends MobSprite {
 	public DM300Sprite() {
 		super();
 		
-		texture( Assets.Sprites.DM300 );
-		
 		updateChargeState(false);
 	}
 
 	public void updateChargeState( boolean enraged ){
 		if (superchargeSparks != null) superchargeSparks.on = enraged;
 
-		int c = enraged ? 10 : 0;
+		//MOD: redrawn. Row 1 normal, row 2 supercharged (16 frames each)
+		int c = enraged ? 16 : 0;
 
-		TextureFilm frames = new TextureFilm( texture, 25, 22 );
+		TextureFilm frames = hdFilm( Assets.Sprites.DM300_HD, 87, 22f / 60f );
 
-		idle = new Animation( enraged ? 15 : 10, true );
-		idle.frames( frames, c+0, c+1 );
+		idle = new Animation( enraged ? 8 : 5, true );
+		idle.frames( frames, c+12, c+13, c+14, c+15 );
 
-		run = new Animation( enraged ? 15 : 10, true );
-		run.frames( frames, c+0, c+2 );
+		run = new Animation( enraged ? 12 : 8, true );
+		run.frames( frames, c+0, c+1, c+2, c+3 );
 
 		attack = new Animation( 15, false );
-		attack.frames( frames, c+3, c+4, c+5 );
+		attack.frames( frames, c+4, c+5, c+6, c+7 );
 
 		//unaffected by enrage state
 
 		if (charge == null) {
+			//flickering between its normal and supercharged look while it charges up
 			charge = new Animation(4, true);
-			charge.frames(frames, 0, 10);
+			charge.frames(frames, 12, 16+12);
 
 			slam = attack.clone();
 
-			zap = new Animation(15, false);
-			zap.frames(frames, 6, 7, 7, 6);
+			zap = new Animation(12, false);
+			zap.frames(frames, 4, 5, 5, 4);
 
-			die = new Animation(20, false);
-			die.frames(frames, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10);
+			die = new Animation(6, false);
+			die.frames(frames, 8, 9, 10, 11);
 		}
 
 		if (curAnim != charge) play(idle);

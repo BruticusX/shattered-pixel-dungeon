@@ -33,21 +33,20 @@ public class YogSprite extends MobSprite {
 
 		perspectiveRaise = 5 / 16f;
 
-		texture( Assets.Sprites.YOG );
+		//MOD: redrawn
+		TextureFilm frames = hdFilm( Assets.Sprites.YOG_HD, 68, 20f / 56f );
 		
-		TextureFilm frames = new TextureFilm( texture, 20, 19 );
+		idle = new Animation( 6, true );
+		idle.frames( frames, 12, 13, 14, 15, 0, 1, 2, 3 );
 		
-		idle = new Animation( 10, true );
-		idle.frames( frames, 0, 1, 2, 2, 1, 0, 3, 4, 4, 3, 0, 5, 6, 6, 5 );
+		run = new Animation( 6, true );
+		run.frames( frames, 0, 1, 2, 3 );
 		
-		run = new Animation( 12, true );
-		run.frames( frames, 0 );
+		attack = new Animation( 10, false );
+		attack.frames( frames, 4, 5, 6, 7 );
 		
-		attack = new Animation( 12, false );
-		attack.frames( frames, 0 );
-		
-		die = new Animation( 10, false );
-		die.frames( frames, 0, 7, 8, 9 );
+		die = new Animation( 6, false );
+		die.frames( frames, 8, 9, 10, 11 );
 		
 		play( idle );
 	}

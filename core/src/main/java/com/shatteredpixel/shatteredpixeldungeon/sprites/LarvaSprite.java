@@ -30,21 +30,20 @@ public class LarvaSprite extends MobSprite {
 	public LarvaSprite() {
 		super();
 		
-		texture( Assets.Sprites.LARVA );
-		
-		TextureFilm frames = new TextureFilm( texture, 12, 8 );
+		//MOD: redrawn
+		TextureFilm frames = hdFilm( Assets.Sprites.LARVA_HD, 47, 8f / 22f );
 		
 		idle = new Animation( 5, true );
-		idle.frames( frames, 4, 4, 4, 4, 4, 5, 5 );
+		idle.frames( frames, 12, 13, 14, 15 );
 		
 		run = new Animation( 12, true );
 		run.frames( frames, 0, 1, 2, 3 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 6, 5, 7 );
+		attack.frames( frames, 4, 5, 6, 7 );
 		
 		die = new Animation( 10, false );
-		die.frames( frames, 8 );
+		die.frames( frames, 8, 9, 10, 11 );
 		
 		play( idle );
 	}

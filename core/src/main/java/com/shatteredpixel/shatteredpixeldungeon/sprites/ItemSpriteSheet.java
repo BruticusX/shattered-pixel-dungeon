@@ -234,7 +234,7 @@ public class ItemSpriteSheet {
 		assignItemRect(DAGGER,          12, 13);
 		assignItemRect(MAGES_STAFF,     15, 16);
 		assignItemRect(MAGIC_TOME,      14, 15);
-		assignItemRect(MAGIC_TOME_OPEN, 16, 8);
+		assignItemRect(MAGIC_TOME_OPEN, 16, 12);
 	}
 
 	private static final int WEP_TIER2      =                               xy(9, 7);   //8 slots
