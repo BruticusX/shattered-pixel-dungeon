@@ -151,7 +151,7 @@ public abstract class Mob extends Char {
 			// and every enemy has 20% more health on top of that
 			if (alignment == Alignment.ENEMY && !properties.contains(Property.BOSS)) {
 				float early = Dungeon.depth <= 5 ? 1.5f : Dungeon.depth <= 10 ? 1.3f : Dungeon.depth <= 15 ? 1.15f : 1f;
-				HT = Math.round(HT * early * 1.2f);
+				HT = Math.round(HT * early * 1.1f); //MOD: tougher mostly through armor now (see Char.attack)
 			}
 			HP = Math.round(HT * percent);
 			firstAdded = false;
