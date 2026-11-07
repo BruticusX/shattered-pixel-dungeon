@@ -295,12 +295,7 @@ public class Dungeon {
 
 		//MOD: the test room starts at the level cap so every talent tier can be tried
 		if (testRoom) {
-			int gained = Hero.MAX_LEVEL - hero.lvl;
-			hero.lvl = Hero.MAX_LEVEL;
-			hero.attackSkill += gained;
-			hero.defenseSkill += gained;
-			hero.updateHT( true );
-			hero.HP = hero.HT;
+			hero.jumpToMaxLevel();
 		}
 	}
 

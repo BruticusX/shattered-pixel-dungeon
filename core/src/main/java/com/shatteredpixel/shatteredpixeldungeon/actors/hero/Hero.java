@@ -402,6 +402,16 @@ public class Hero extends Char {
 		return total;
 	}
 
+	//MOD: the test room starts at the level cap, with the accuracy, evasion and health that brings
+	public void jumpToMaxLevel(){
+		int gained = MAX_LEVEL - lvl;
+		lvl = MAX_LEVEL;
+		attackSkill += gained;
+		defenseSkill += gained;
+		updateHT( true );
+		HP = HT;
+	}
+
 	public int talentPointsAvailable(int tier){
 		if (lvl < (Talent.tierLevelThresholds[tier] - 1)
 			|| (tier == 3 && subClass == HeroSubClass.NONE)
