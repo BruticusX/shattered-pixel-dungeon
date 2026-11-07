@@ -40,7 +40,16 @@ public class Beam extends Image {
 
 	private Beam(PointF s, PointF e, Effects.Type asset, float duration) {
 		super( Effects.get( asset ) );
-		
+		aim( s, e, duration );
+	}
+
+	//MOD: a beam drawn from its own texture, stretched from end to end
+	private Beam(PointF s, PointF e, String texture, float duration) {
+		super( texture );
+		aim( s, e, duration );
+	}
+
+	private void aim( PointF s, PointF e, float duration ){
 		origin.set( 0, height / 2 );
 		
 		x = s.x - origin.x;
@@ -76,8 +85,10 @@ public class Beam extends Image {
 	//MOD: tome ray of frost, an icy blue beam
 	public static class IceRay extends Beam{
 		public IceRay(PointF s, PointF e){
-			super(s, e, Effects.Type.LIGHT_RAY, 0.9f);
-			tint(0.45f, 0.85f, 1f, 1);
+			super(s, e, "effects/ice_beam.png", 0.9f);
+			//about half a tile thick
+			baseScaleY = 8f / height;
+			scale.y = baseScaleY;
 		}
 	}
 

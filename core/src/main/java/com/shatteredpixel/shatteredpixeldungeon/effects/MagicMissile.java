@@ -132,6 +132,17 @@ public class MagicMissile extends Emitter {
 		sy = speed.y;
 		time = d.length() / SPEED;
 
+		//MOD: the tome's big spells fly as a painted projectile, with the particles as their trail
+		head = null;
+		if (type == ARCANE || type == BIG_FIRE) {
+			head = new com.watabou.noosa.Image(type == ARCANE ? "effects/arcane_missile.png" : "effects/fireball_hd.png");
+			float len = type == ARCANE ? 15f : 22f;   //world units; a tile is 16
+			head.scale.set(len / head.width);
+			//the orb is at the front (right) end of the art, the tail streams back from it
+			head.origin.set(head.width * (type == ARCANE ? 0.88f : 0.85f), head.height / 2f);
+			head.angle = (float) Math.toDegrees(Math.atan2(sy, sx));
+		}
+
 		//for now all specks share the same size and volume, this can easily be customized later if needed
 		if (type >= SPECK){
 			size( 10 );
@@ -152,13 +163,13 @@ public class MagicMissile extends Emitter {
 				size( 4 );
 				pour( FlameParticle.FACTORY, 0.01f );
 				break;
-			case ARCANE: //MOD: a bright pink-purple orb with a dense trail
-				size( 6 );
-				pour( PurpleParticle.MISSILE, 0.004f );
+			case ARCANE: //MOD: a bright pink-purple orb (drawn as `head`) shedding sparks
+				size( 4 );
+				pour( PurpleParticle.MISSILE, 0.012f );
 				break;
-			case BIG_FIRE: //MOD: a big, thick fireball
-				size( 10 );
-				pour( FlameParticle.FACTORY, 0.003f );
+			case BIG_FIRE: //MOD: a big fireball (drawn as `head`) shedding flames
+				size( 8 );
+				pour( FlameParticle.FACTORY, 0.008f );
 				break;
 			case CORROSION:
 				size( 3 );
@@ -311,6 +322,21 @@ public class MagicMissile extends Emitter {
 	}
 
 	@Override
+	private com.watabou.noosa.Image head;
+
+	@Override
+	public void draw() {
+		super.draw();
+		if (head != null && on) {
+			head.x = x - head.origin.x;
+			head.y = y - head.origin.y;
+			head.camera = camera();
+			com.watabou.glwrap.Blending.setLightMode();
+			head.draw();
+			com.watabou.glwrap.Blending.setNormalMode();
+		}
+	}
+
 	public void update() {
 		super.update();
 		if (on) {

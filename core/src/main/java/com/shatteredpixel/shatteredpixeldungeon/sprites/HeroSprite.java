@@ -129,7 +129,8 @@ public class HeroSprite extends CharSprite {
 
 	private boolean hd = false;
 	private float hdScale = 1f;
-	private int[] idleF, runF, attackF, deathF, operateF, flyF, readF;
+	private int[] idleF, runF, attackF, deathF, operateF, flyF, readF, tomeF;
+	private Animation tomeIdle;
 	private HeroClass hdClass;
 	private HeroHD.Layout L;
 	private Animation shoot, zapNormal;
@@ -168,6 +169,13 @@ public class HeroSprite extends CharSprite {
 
 		idle = new Animation( 6, true );
 		idle.frames( film, keys(idleF, row) );
+		//MOD: standing with a tome held open on the palm, reading
+		tomeF = L.tomeIdle();
+		tomeIdle = null;
+		if (tomeF != null) {
+			tomeIdle = new Animation( 5, true );
+			tomeIdle.frames( film, keys(tomeF, row) );
+		}
 		run = new Animation( RUN_FRAMERATE, true );
 		run.frames( film, keys(runF, row) );
 		die = new Animation( 15, false );
@@ -217,6 +225,7 @@ public class HeroSprite extends CharSprite {
 	private int shownFrameHD(){
 		int[] f = null;
 		if (curAnim == idle) f = idleF;
+		else if (tomeIdle != null && curAnim == tomeIdle) f = tomeF;
 		else if (shoot != null && curAnim == shoot) f = shootF;
 		else if (curAnim == run) f = runF;
 		else if (curAnim == die) f = deathF;
@@ -243,9 +252,15 @@ public class HeroSprite extends CharSprite {
 		Camera.main.panFollow(this, 20f);
 	}
 
+	private boolean holdingTome(){
+		return ch instanceof Hero && ((Hero) ch).belongings.weapon()
+				instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome;
+	}
+
 	@Override
 	public void idle() {
 		super.idle();
+		if (tomeIdle != null && holdingTome() && curAnim == idle) play( tomeIdle );
 		if (ch != null && ch.flying) {
 			play( fly );
 		}
@@ -284,7 +299,14 @@ public class HeroSprite extends CharSprite {
 	@Override
 	public void update() {
 		sleeping = ch.isAlive() && ((Hero)ch).resting;
-		
+
+		//MOD: stand reading when a tome is in hand, plainly otherwise (switches as soon as it changes)
+		if (tomeIdle != null) {
+			boolean tome = holdingTome();
+			if (tome && curAnim == idle) play( tomeIdle );
+			else if (!tome && curAnim == tomeIdle) play( idle );
+		}
+
 		super.update();
 		held.update();
 	}

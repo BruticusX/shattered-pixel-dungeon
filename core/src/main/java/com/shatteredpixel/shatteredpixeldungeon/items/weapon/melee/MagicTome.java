@@ -446,6 +446,8 @@ public class MagicTome extends MeleeWeapon {
 				if (target.isAlive()) {
 					target.damage(amp(target, Random.NormalIntRange(2 + p, 4 + 2*p), Spell.MAGIC_MISSILES), MagicTome.this);
 					target.sprite.burst(0xFFCC66FF, 4);
+					target.sprite.parent.add(new com.shatteredpixel.shatteredpixeldungeon.effects.SpellBurst(
+							"effects/arcane_burst.png", target.sprite.center(), 14f));
 				}
 				if (left > 1) {
 					Char next = target.isAlive() ? target : nearestEnemy(hero);

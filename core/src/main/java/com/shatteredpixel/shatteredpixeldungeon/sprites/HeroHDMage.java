@@ -28,11 +28,11 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 public class HeroHDMage {
 
 	public static final HeroHD.Layout LAYOUT = new HeroHD.Layout(
-			54, 38, 48,
+			54, 46, 48,
 			new int[]{0, 8, 8, 10, 18, 8, 26, 12},
 			new int[]{11, 6, 33, 41},
-			new float[]{23.1f, 24.5f, 26.3f, 27.5f, 26.5f, 25.4f, 24.5f, 23.1f, 15.2f, 18.0f, 24.6f, 19.0f, 20.3f, 19.7f, 22.7f, 25.1f, 19.0f, 17.1f, 23.1f, 16.3f, 11.4f, 5.8f, 26.4f, 47.0f, 44.0f, 33.5f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{36.1f, 35.0f, 33.1f, 32.2f, 35.0f, 34.2f, 35.0f, 36.1f, 28.5f, 32.0f, 29.4f, 28.5f, 31.0f, 29.8f, 31.7f, 32.3f, 32.0f, 28.1f, 36.1f, 32.9f, 27.9f, 26.8f, 23.9f, 21.0f, 22.0f, 29.0f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f},
-			new float[]{68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 100.0f, 106.0f, 112.0f, 106.0f, 100.0f, 96.0f, 102.0f, 110.0f, 104.0f, 98.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
-			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false});
+			new float[]{23.1f, 24.5f, 26.3f, 27.5f, 26.5f, 25.4f, 24.5f, 23.1f, 15.2f, 18.0f, 24.6f, 19.0f, 20.3f, 19.7f, 22.7f, 25.1f, 19.0f, 17.1f, 23.1f, 16.3f, 11.4f, 5.8f, 26.4f, 47.0f, 44.0f, 33.5f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, 37.1f, 38.3f, 37.1f, 37.1f, 37.1f, 37.1f, 37.1f, 38.3f},
+			new float[]{36.1f, 35.0f, 33.1f, 32.2f, 35.0f, 34.2f, 35.0f, 36.1f, 28.5f, 32.0f, 29.4f, 28.5f, 31.0f, 29.8f, 31.7f, 32.3f, 32.0f, 28.1f, 36.1f, 32.9f, 27.9f, 26.8f, 23.9f, 21.0f, 22.0f, 29.0f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, 25.0f, 25.0f, 26.0f, 26.0f, 26.0f, 26.0f, 26.0f, 25.0f},
+			new float[]{68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 100.0f, 106.0f, 112.0f, 106.0f, 100.0f, 96.0f, 102.0f, 110.0f, 104.0f, 98.0f, 55.0f, 15.0f, -15.0f, -25.0f, 75.0f, 115.0f, 95.0f, 65.0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f, 68.0f},
+			new boolean[]{false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}).withTomeIdle(38, 8);
 }
