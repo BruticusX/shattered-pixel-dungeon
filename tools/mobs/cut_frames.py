@@ -28,6 +28,16 @@ if _a[0, 0, 3] > 200 and _a[-1, -1, 3] > 200:
     for l in edge:
         _a[lab == l, 3] = 0
     raw = Image.fromarray(_a)
+# others come back on a see-through white wash: knock out everything close to the wash colour,
+# including the pockets between legs and arms that a flood fill can't reach
+_a = np.array(raw)
+if 20 < _a[0, 0, 3] < 200 and 20 < _a[-1, -1, 3] < 200:
+    # the wash darkens into a grey shadow near the figure: any light grey that isn't fully opaque
+    _c = _a[..., :3].astype(int)
+    _mx = _c.max(2); _mn = _c.min(2)
+    grey = ((_mx - _mn) < 0.12 * np.maximum(_mx, 1)) & (_mx > 140) & (_a[..., 3] < 255)
+    _a[grey, 3] = 0
+    raw = Image.fromarray(_a)
 C = raw.width // 4
 
 
