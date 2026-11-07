@@ -96,7 +96,8 @@ public class HeldWeapon {
 		//the enchantment aura only runs while the weapon is actually being drawn
 		if (aura != null) {
 			aura.on = auraDrawn;
-			if (!auraDrawn && aura.parent == null) aura = null;
+			//an aura that was hidden long enough to finish and remove itself is made again when needed
+			if (aura.parent == null) { aura = null; auraFor = null; }
 		}
 		auraDrawn = false;
 	}

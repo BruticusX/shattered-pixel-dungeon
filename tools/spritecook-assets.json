@@ -333,5 +333,13 @@
  {
   "asset_id": "aabfc7b9-f27d-4d00-bf64-759ff4ad316f",
   "label": "tome open, side view"
+ },
+ {
+  "asset_id": "53ae85ee-5c9a-466f-9f4c-75f6583e679c",
+  "label": "enchant vfx sheet 1: fire frost lightning poison"
+ },
+ {
+  "asset_id": "780db957-5654-44f3-8158-4e72d55774ac",
+  "label": "enchant vfx sheet 2: smoke glint blood arcane"
  }
 ]
