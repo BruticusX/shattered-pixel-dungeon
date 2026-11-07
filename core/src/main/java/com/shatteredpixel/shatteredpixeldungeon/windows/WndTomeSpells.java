@@ -52,6 +52,7 @@ public class WndTomeSpells extends Window {
 		float y = msg.bottom() + 4;
 		for (MagicTome.Spell s : MagicTome.Spell.values()) {
 			if (tome.rank(s) <= 0) continue;
+			if (s == MagicTome.Spell.DISINT_AURA) continue; //passive, always on
 			String label = s.title() + " " + tome.rank(s) + "/" + MagicTome.MAX_RANK;
 			if (!tome.ready(s)) label += "  (" + Messages.get(this, "turns", tome.cooldownLeft(s)) + ")";
 			RedButton btn = new RedButton(label, 7) {

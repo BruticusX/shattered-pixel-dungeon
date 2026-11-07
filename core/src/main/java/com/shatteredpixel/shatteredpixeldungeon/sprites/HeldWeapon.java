@@ -146,6 +146,30 @@ public class HeldWeapon {
 		//an open book about two hands wide, resting on the palm
 		if (hold == Hold.BOOK) sc *= 20f / 32f;
 		ws.scale.set(sc);
+
+		//gloves: one on each visible hand, placed from that frame's own hand positions
+		if (hold == Hold.FIST) {
+			float[][] gh = HeroHD.gloveHands(L);
+			if (gh != null && f < gh[0].length) {
+				ws.setFlipped(faceLeft);
+				ws.origin.set(ws.width / 2f, ws.height / 2f);
+				ws.alpha(owner.alpha());
+				ws.camera = owner.camera();
+				//only the hand furthest forward throws the punch
+				int lead = gh[2][f] > gh[0][f] ? 1 : 0;
+				for (int h = 0; h < 2; h++) {
+					float gx = gh[h * 2][f], gy = gh[h * 2 + 1][f];
+					if (gx < 0) continue;
+					float target = (h == lead && punching(L, f)) ? 95 : REST_FIST;
+					float rot = target - fistAxis(w, g);
+					ws.angle = faceLeft ? -rot : rot;
+					ws.x = owner.x + (faceLeft ? L.frame - gx : gx) * k - ws.origin.x;
+					ws.y = owner.y + gy * k - ws.origin.y;
+					ws.draw();
+				}
+				return;
+			}
+		}
 		if (hold == Hold.BOOK) {
 			ws.setFlipped(faceLeft);
 			ws.origin.set(ws.width / 2f, ws.height * 0.8f);

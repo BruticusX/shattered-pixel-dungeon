@@ -201,6 +201,7 @@ public class MagicTome extends MeleeWeapon {
 			@Override
 			protected void onSelect(int index) {
 				ranks[(index == 0 ? Spell.DISINT_RAY : Spell.DISINT_AURA).ordinal()] = 1;
+				if (isEquipped(hero)) syncAura(hero, MagicTome.this);
 				GLog.p(Messages.get(MagicTome.class, "learned", (index == 0 ? Spell.DISINT_RAY : Spell.DISINT_AURA).title()));
 				GameScene.show(new WndTomeSpells(MagicTome.this, hero));
 			}
@@ -288,7 +289,7 @@ public class MagicTome extends MeleeWeapon {
 			case ARCANE_WARD:     return Messages.get(MagicTome.class, "desc_arcane_ward", 6 + 3*p);
 			case BLINK:           return Messages.get(MagicTome.class, "desc_blink", 3 + rank(s));
 			case DISINT_RAY:      return Messages.get(MagicTome.class, "desc_disint_ray", 6 + 2*p, 14 + 5*p);
-			case DISINT_AURA:     return Messages.get(MagicTome.class, "desc_disint_aura", 3 + rank(s));
+			case DISINT_AURA:     return Messages.get(MagicTome.class, "desc_disint_aura", 2 + Math.min(4, 1 + power(s) / 2));
 		}
 		return "";
 	}
@@ -427,11 +428,7 @@ public class MagicTome extends MeleeWeapon {
 				return;
 			}
 			case DISINT_AURA: {
-				startCooldown(s);
-				Buff.affect(hero, DisintAura.class, 10f).power = power(s);
-				hero.sprite.emitter().burst(PurpleParticle.BURST, 15);
-				Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
-				hero.spendAndNext(1f);
+				//passive: always on while the tome is held (see Cooldowns), never cast
 				return;
 			}
 		}
@@ -604,9 +601,12 @@ public class MagicTome extends MeleeWeapon {
 		{ revivePersists = true; }
 		@Override
 		public boolean act() {
+			MagicTome tome = null;
 			if (target instanceof Hero && ((Hero) target).belongings.weapon() instanceof MagicTome) {
-				((MagicTome) ((Hero) target).belongings.weapon()).tick(target.buff(Recharging.class) != null ? 2f : 1f);
+				tome = (MagicTome) ((Hero) target).belongings.weapon();
+				tome.tick(target.buff(Recharging.class) != null ? 2f : 1f);
 			}
+			syncAura(target, tome);
 			spend(TICK);
 			return true;
 		}
@@ -659,27 +659,69 @@ public class MagicTome extends MeleeWeapon {
 		}
 	}
 
-	//battlemage aura: magic bolts can't hurt the hero, and adjacent enemies slowly disintegrate
-	public static class DisintAura extends FlavourBuff {
+	//the battlemage's aura is on exactly while a tome that knows it is held
+	public static void syncAura(Char ch, MagicTome tome){
+		DisintAura aura = ch.buff(DisintAura.class);
+		boolean want = tome != null && tome.rank(Spell.DISINT_AURA) > 0;
+		if (want) {
+			if (aura == null) aura = Buff.affect(ch, DisintAura.class);
+			aura.power = tome.power(Spell.DISINT_AURA);
+		} else if (aura != null) {
+			aura.detach();
+		}
+	}
+
+	//battlemage aura: always on. Magic bolts can't hurt the hero, and every enemy in the 3x3 block
+	//around them loses a slice of its maximum health each turn
+	public static class DisintAura extends Buff {
 		public int power = 0;
 		{
 			type = buffType.POSITIVE;
-			announced = true;
+			revivePersists = true;
+		}
+
+		public int percent(){
+			//3% of max health per turn, +1% per rank (up to 6%)
+			return 2 + Math.min(4, 1 + power / 2);
 		}
 
 		@Override
 		public boolean act() {
-			for (int n : PathFinder.NEIGHBOURS8) {
-				Char ch = Actor.findChar(target.pos + n);
-				if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
-					//3% of max health per turn (+1% per rank), at least 1
-					int dmg = Math.max(1, Math.round(ch.HT * (0.02f + 0.01f * Math.min(3, 1 + power / 3))));
-					ch.damage(dmg, this);
-					if (ch.sprite != null) ch.sprite.centerEmitter().burst(PurpleParticle.BURST, 3);
+			if (target.isAlive()) {
+				for (int n : PathFinder.NEIGHBOURS8) {
+					Char ch = Actor.findChar(target.pos + n);
+					if (ch != null && ch.alignment == Char.Alignment.ENEMY && ch.isAlive()) {
+						int dmg = Math.max(1, Math.round(ch.HT * percent() / 100f));
+						ch.damage(dmg, this);
+						if (ch.sprite != null && ch.sprite.visible) ch.sprite.centerEmitter().burst(PurpleParticle.BURST, 4);
+					}
 				}
 			}
-			if (target.sprite != null) target.sprite.emitter().burst(PurpleParticle.BURST, 2);
-			return super.act();
+			spend(TICK);
+			return true;
+		}
+
+		//a field of disintegrating motes over the hero's tile and the eight around it
+		private com.watabou.noosa.particles.Emitter field;
+
+		@Override
+		public void fx(boolean on) {
+			if (on && target.sprite != null && target.sprite.parent != null) {
+				if (field == null || !field.alive) {
+					field = new com.watabou.noosa.particles.Emitter();
+					field.fillTarget = false;
+					com.watabou.noosa.Visual s = target.sprite;
+					//centred on the hero's tile (sprites stand on the bottom of their tile)
+					field.pos(s, s.width() / 2f - 24, s.height() - 40, 48, 48);
+					field.autoKill = false;
+					field.pour(PurpleParticle.MISSILE, 0.05f);
+					target.sprite.parent.add(field);
+				}
+			} else if (field != null) {
+				field.on = false;
+				field.killAndErase();
+				field = null;
+			}
 		}
 
 		@Override
@@ -693,13 +735,8 @@ public class MagicTome extends MeleeWeapon {
 		}
 
 		@Override
-		public float iconFadePercent() {
-			return Math.max(0, (10f - visualcooldown()) / 10f);
-		}
-
-		@Override
 		public String desc() {
-			return Messages.get(this, "desc", dispTurns());
+			return Messages.get(this, "desc", percent());
 		}
 
 		private static final String POWER = "power";
