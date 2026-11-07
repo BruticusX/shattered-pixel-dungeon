@@ -32,9 +32,8 @@ public class FungalCoreSprite extends MobSprite {
 	public FungalCoreSprite(){
 		super();
 
-		texture( Assets.Sprites.FUNGAL_CORE );
-
-		TextureFilm frames = new TextureFilm( texture, 27, 27 );
+		//MOD: redrawn (a single still)
+		TextureFilm frames = hdFilm( Assets.Sprites.FUNGAL_CORE_HD, 54, 27f / 50f );
 
 		idle = new Animation( 0, true );
 		idle.frames( frames, 0);

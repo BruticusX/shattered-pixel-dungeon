@@ -192,6 +192,21 @@ public class TestLevel extends Level {
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp.class,
 				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing.class,
+				//bosses and their helpers
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa.Larva.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist.BurningFist.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist.SoiledFist.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist.RottingFist.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist.RustedFist.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist.BrightFist.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist.DarkFist.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer.class,
+				com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FungalCore.class,
 		};
 		for (int i = 0; i < lineup.length; i++) {
 			Mob m = lineup[i] == ShowSwarm.class ? new ShowSwarm() : new ShowMob().as( (Class<? extends Mob>) lineup[i] );

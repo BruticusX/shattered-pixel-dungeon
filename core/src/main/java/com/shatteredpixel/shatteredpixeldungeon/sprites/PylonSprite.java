@@ -38,22 +38,21 @@ public class PylonSprite extends MobSprite {
 		perspectiveRaise = 5/16f; //1 pixel less
 		renderShadow = false;
 
-		texture( Assets.Sprites.PYLON );
+		//MOD: redrawn: dormant 0-3 / 12-15, active 4-7, destroyed 8-11
+		TextureFilm frames = hdFilm( Assets.Sprites.PYLON_HD, 64, 20f / 54f );
 
-		TextureFilm frames = new TextureFilm( texture, 10, 20 );
+		idle = new Animation( 3, true );
+		idle.frames( frames, 12, 13, 14, 15 );
 
-		idle = new Animation( 1, false );
-		idle.frames( frames, 0 );
-
-		activeIdle = new Animation( 1, false );
-		activeIdle.frames( frames, 1 );
+		activeIdle = new Animation( 8, true );
+		activeIdle.frames( frames, 4, 5, 6, 7 );
 
 		run = idle.clone();
 
 		attack = idle.clone();
 
-		die = new Animation( 1, false );
-		die.frames( frames, 2 );
+		die = new Animation( 8, false );
+		die.frames( frames, 8, 9, 10, 11 );
 
 		play( idle );
 	}

@@ -53,26 +53,25 @@ public abstract class FistSprite extends MobSprite {
 	public FistSprite() {
 		super();
 
-		int c = texOffset();
+		//MOD: redrawn, one row of 16 per fist (texOffset counts the old sheet's 10 per fist)
+		int c = texOffset() / 10 * 16;
 
-		texture( Assets.Sprites.FISTS );
+		TextureFilm frames = hdFilm( Assets.Sprites.FISTS_HD, 69, 17f / 40f );
 
-		TextureFilm frames = new TextureFilm( texture, 24, 17 );
+		idle = new Animation( 4, true );
+		idle.frames( frames, c+12, c+13, c+14, c+15 );
 
-		idle = new Animation( 2, true );
-		idle.frames( frames, c+0, c+0, c+1 );
-
-		run = new Animation( 3, true );
-		run.frames( frames, c+0, c+1 );
+		run = new Animation( 5, true );
+		run.frames( frames, c+0, c+1, c+2, c+3 );
 
 		attack = new Animation( Math.round(1 / SLAM_TIME), false );
-		attack.frames( frames, c+0 );
+		attack.frames( frames, c+6 );
 
-		zap = new Animation( 8, false );
-		zap.frames( frames, c+0, c+5, c+6 );
+		zap = new Animation( 10, false );
+		zap.frames( frames, c+4, c+5, c+6, c+7 );
 
-		die = new Animation( 10, false );
-		die.frames( frames, c+0, c+2, c+3, c+4 );
+		die = new Animation( 8, false );
+		die.frames( frames, c+8, c+9, c+10, c+11 );
 
 		play( idle );
 	}

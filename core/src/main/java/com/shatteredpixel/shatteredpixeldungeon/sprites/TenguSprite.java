@@ -33,23 +33,22 @@ public class TenguSprite extends MobSprite {
 	public TenguSprite() {
 		super();
 		
-		texture( Assets.Sprites.TENGU );
+		//MOD: redrawn
+		TextureFilm frames = hdFilm( Assets.Sprites.TENGU_HD, 73, 16f / 48f );
 		
-		TextureFilm frames = new TextureFilm( texture, 14, 16 );
-		
-		idle = new Animation( 2, true );
-		idle.frames( frames, 0, 0, 0, 1 );
+		idle = new Animation( 4, true );
+		idle.frames( frames, 12, 13, 14, 15 );
 		
 		run = new Animation( 15, false );
-		run.frames( frames, 2, 3, 4, 5, 0 );
+		run.frames( frames, 0, 1, 2, 3, 12 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 6, 7, 7, 0 );
+		attack.frames( frames, 4, 5, 6, 7 );
 		
 		zap = attack.clone();
 		
 		die = new Animation( 8, false );
-		die.frames( frames, 8, 9, 10, 10, 10, 10, 10, 10 );
+		die.frames( frames, 8, 9, 10, 11, 11, 11, 11, 11 );
 		
 		play( run );
 		isMoving = true;
