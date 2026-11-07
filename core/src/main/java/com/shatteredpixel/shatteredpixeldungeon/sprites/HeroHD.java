@@ -108,6 +108,21 @@ public class HeroHD {
 			this.handX = handX; this.handY = handY; this.angle = angle; this.behind = behind;
 		}
 
+		//optional: frames of standing while reading from a tome held open on the palm
+		public int tomeStart = -1, tomeCount = 0;
+
+		public Layout withTomeIdle( int start, int count ){
+			tomeStart = start; tomeCount = count;
+			return this;
+		}
+
+		public int[] tomeIdle(){
+			if (tomeStart < 0) return null;
+			int[] r = new int[tomeCount];
+			for (int k = 0; k < r.length; k++) r[k] = tomeStart + k;
+			return r;
+		}
+
 		public float scale(){
 			return HEIGHT / bodyHeight;
 		}
