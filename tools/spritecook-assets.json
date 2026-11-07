@@ -246,5 +246,20 @@
   "asset_id": "70041b43-1272-4896-b7de-b8c43a55c403",
   "sha12": "fe1fc02ac69a",
   "label": "magic tome: closed icon + open held book"
+ },
+ {
+  "asset_id": "1c6e6eaf-de0d-4bde-85f3-00face22595f",
+  "sha12": "d969a0beafd4",
+  "label": "hero mage base (upload)"
+ },
+ {
+  "asset_id": "69c34b0a-9401-440a-af0f-9b052fb978c8",
+  "sha12": "339ed96f70a3",
+  "label": "mage tome reading idle"
+ },
+ {
+  "asset_id": "1acf958a-cc8a-47c4-8b8b-7c2877cb29bd",
+  "sha12": "a72cff94d4c3",
+  "label": "spell effects: arcane missile, fireball, ice beam, arcane burst"
  }
 ]
