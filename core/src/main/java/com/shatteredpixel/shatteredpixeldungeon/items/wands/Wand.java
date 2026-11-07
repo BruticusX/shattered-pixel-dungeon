@@ -206,6 +206,11 @@ public abstract class Wand extends Item {
 		wandProc(target, buffedLvl(), chargesUsed);
 	}
 
+	//MOD: magic tome spells trigger the same on-hit effects as a wand bolt
+	public static void tomeProc(Char target, int level){
+		wandProc(target, level, 1);
+	}
+
 	//TODO Consider externalizing char awareness buff
 	protected static void wandProc(Char target, int wandLevel, int chargesUsed){
 		if (Dungeon.hero.hasTalent(Talent.ARCANE_VISION)) {

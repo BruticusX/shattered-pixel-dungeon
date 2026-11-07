@@ -218,24 +218,24 @@ public class MagicTome extends MeleeWeapon {
 			ArrayList<Spell> unlearned = new ArrayList<>();
 			for (Spell s : LEARNABLE) if (main.ranks[s.ordinal()] == 0) unlearned.add(s);
 			ArrayList<Spell> upgradable = new ArrayList<>();
-			for (Spell s : Spell.values()) if (main.ranks[s.ordinal()] > 0 && main.ranks[s.ordinal()] < MAX_RANK) upgradable.add(s);
+			for (Spell s : Spell.values()) if (!s.battlemage() && main.ranks[s.ordinal()] > 0 && main.ranks[s.ordinal()] < MAX_RANK) upgradable.add(s);
 			if (unlearned.isEmpty() && upgradable.isEmpty()) {
 				GLog.w(Messages.get(MagicTome.class, "decipher_nothing"));
 				return;
 			}
 			detach(hero.belongings.backpack);
-			if (!unlearned.isEmpty() && (upgradable.isEmpty() || Random.Int(2) == 0)) {
-				Spell s = Random.element(unlearned);
-				main.ranks[s.ordinal()] = 1;
-				GLog.p(Messages.get(MagicTome.class, "learned", s.title()));
-			} else {
-				Spell s = Random.element(upgradable);
-				main.ranks[s.ordinal()]++;
-				GLog.p(Messages.get(MagicTome.class, "improved", s.title(), main.ranks[s.ordinal()]));
+			main.learnOrImprove(unlearned, upgradable);
+			//tome binding: 50% / 100% chance the spare tome teaches a second lesson
+			if (hero.pointsInTalent(Talent.WAND_PRESERVATION) > 0 && Random.Int(2) < hero.pointsInTalent(Talent.WAND_PRESERVATION)) {
+				unlearned.clear(); upgradable.clear();
+				for (Spell s : LEARNABLE) if (main.ranks[s.ordinal()] == 0) unlearned.add(s);
+				for (Spell s : Spell.values()) if (!s.battlemage() && main.ranks[s.ordinal()] > 0 && main.ranks[s.ordinal()] < MAX_RANK) upgradable.add(s);
+				if (!unlearned.isEmpty() || !upgradable.isEmpty()) main.learnOrImprove(unlearned, upgradable);
 			}
 			hero.sprite.operate(hero.pos);
 			Sample.INSTANCE.play(Assets.Sounds.READ);
-			hero.spendAndNext(5f);
+			//scholar's intuition: 5 turns, 3 at +1, 1 at +2
+			hero.spendAndNext(5f - 2f * hero.pointsInTalent(Talent.SCHOLARS_INTUITION));
 		} else {
 			detach(hero.belongings.backpack);
 			Proficiency.grantLevel(hero.heroClass, Proficiency.Family.WANDS);
@@ -247,6 +247,18 @@ public class MagicTome extends MeleeWeapon {
 		updateQuickslot();
 	}
 
+	private void learnOrImprove(ArrayList<Spell> unlearned, ArrayList<Spell> upgradable){
+		if (!unlearned.isEmpty() && (upgradable.isEmpty() || Random.Int(2) == 0)) {
+			Spell s = Random.element(unlearned);
+			ranks[s.ordinal()] = 1;
+			GLog.p(Messages.get(MagicTome.class, "learned", s.title()));
+		} else {
+			Spell s = Random.element(upgradable);
+			ranks[s.ordinal()]++;
+			GLog.p(Messages.get(MagicTome.class, "improved", s.title(), ranks[s.ordinal()]));
+		}
+	}
+
 	// ---- spell numbers ----
 
 	public int rank(Spell s){
@@ -255,7 +267,11 @@ public class MagicTome extends MeleeWeapon {
 
 	//spell power: the tome's level plus extra spell ranks
 	public int power(Spell s){
-		return Math.max(0, buffedLvl()) + Math.max(0, rank(s) - 1);
+		int p = Math.max(0, buffedLvl()) + Math.max(0, rank(s) - 1);
+		//desperate power: +1 / +2 while below half health
+		Hero h = Dungeon.hero;
+		if (h != null && h.HP * 2 < h.HT) p += h.pointsInTalent(Talent.DESPERATE_POWER);
+		return p;
 	}
 
 	public float cooldownFor(Spell s){
@@ -320,7 +336,33 @@ public class MagicTome extends MeleeWeapon {
 
 	private void startCooldown(Spell s){
 		boolean refund = com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.afterTomeUsed(source(s));
+		Hero h = Dungeon.hero;
+		if (h != null) {
+			//quickened cast: this spell skips its cooldown
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.QuickenedCast qc = h.buff(com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.QuickenedCast.class);
+			if (qc != null) { qc.detach(); refund = true; }
+		}
 		cooldowns[s.ordinal()] = refund ? 0 : cooldownFor(s);
+		if (h != null) {
+			//spell weaving: casting one spell hurries the others along by 1 / 2 / 3 turns
+			int weave = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.rank(h.heroClass, com.shatteredpixel.shatteredpixeldungeon.actors.hero.Skill.SPELL_WEAVING);
+			if (weave > 0) for (int i = 0; i < cooldowns.length; i++) {
+				if (i != s.ordinal() && cooldowns[i] > 0) cooldowns[i] = Math.max(0, cooldowns[i] - weave);
+			}
+			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower emp = h.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower.class);
+			if (emp != null && --emp.left <= 0) emp.detach();
+			//lingering magic: the next tome (or any) melee hit after a spell deals bonus damage
+			if (h.hasTalent(Talent.LINGERING_MAGIC)) Buff.affect(h, Talent.LingeringMagicTracker.class, 5f);
+			//backup barrier: shielding when the last ready spell goes on cooldown
+			if (h.hasTalent(Talent.BACKUP_BARRIER)) {
+				boolean anyReady = false;
+				for (Spell o : Spell.values()) if (!o.battlemage() && rank(o) > 0 && ready(o)) anyReady = true;
+				if (!anyReady) {
+					Buff.affect(h, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier.class).setShield(1 + 2 * h.pointsInTalent(Talent.BACKUP_BARRIER));
+					h.sprite.showStatusWithIcon(com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite.POSITIVE, Integer.toString(1 + 2 * h.pointsInTalent(Talent.BACKUP_BARRIER)), com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText.SHIELDING);
+				}
+			}
+		}
 		updateQuickslot();
 	}
 
@@ -338,6 +380,17 @@ public class MagicTome extends MeleeWeapon {
 	}
 
 	private static int amp(Char target, int dmg, Spell s){
+		Hero h = Dungeon.hero;
+		if (h != null) {
+			//empowering meal: bonus damage on the next few spells (shared with wand zaps)
+			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower emp = h.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower.class);
+			if (emp != null) dmg += emp.dmgBoost;
+			//arcane mastery: +5% / 10% / 15% spell damage
+			int mastery = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.rank(h.heroClass, com.shatteredpixel.shatteredpixeldungeon.actors.hero.Skill.ARCANE_MASTERY);
+			if (mastery > 0) dmg = Math.round(dmg * (1f + 0.05f * mastery));
+			//spells mark and reveal like wand bolts do (warlock soul marks, arcane vision)
+			if (target != null && target != h) com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand.tomeProc(target, 1 + s.ordinal() % 3);
+		}
 		return com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.modifyTomeDamage(target, dmg, source(s));
 	}
 
@@ -538,16 +591,6 @@ public class MagicTome extends MeleeWeapon {
 
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
-		//the old staff talents carry over to the tome
-		if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.MYSTICAL_CHARGE)) {
-			Hero hero = (Hero) attacker;
-			ArtifactRecharge.chargeArtifacts(hero, hero.pointsInTalent(Talent.MYSTICAL_CHARGE)/2f);
-		}
-		Talent.EmpoweredStrikeTracker empoweredStrike = attacker.buff(Talent.EmpoweredStrikeTracker.class);
-		if (empoweredStrike != null) {
-			damage = Math.round(damage * (1f + Dungeon.hero.pointsInTalent(Talent.EMPOWERED_STRIKE)/6f));
-			if (!empoweredStrike.delayedDetach) empoweredStrike.detach();
-		}
 		return super.proc(attacker, defender, damage);
 	}
 
@@ -678,8 +721,9 @@ public class MagicTome extends MeleeWeapon {
 		}
 
 		public int percent(){
-			//3% of max health per turn, +1% per rank (up to 6%)
-			return 2 + Math.min(4, 1 + power / 2);
+			//3% of max health per turn, +1% per 2 power (up to 6%), +1% per point of excess charge
+			int excess = target instanceof Hero ? ((Hero) target).pointsInTalent(Talent.EXCESS_CHARGE) : 0;
+			return 2 + Math.min(4, 1 + power / 2) + excess;
 		}
 
 		@Override

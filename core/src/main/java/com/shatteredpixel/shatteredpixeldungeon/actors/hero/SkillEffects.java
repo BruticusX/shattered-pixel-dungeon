@@ -395,6 +395,12 @@ public class SkillEffects {
 				Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
 				finish(hero, s, rank, 1f);
 				break;
+			case QUICKENED_CAST:
+				Buff.affect(hero, QuickenedCast.class);
+				hero.sprite.showStatus(CharSprite.POSITIVE, s.title());
+				Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
+				finish(hero, s, rank, 0f);
+				break;
 			case ELEMENTAL_INFUSION:
 				Buff.affect(hero, Infusion.class, 8f).rank = rank;
 				hero.sprite.showStatus(CharSprite.POSITIVE, s.title());
@@ -931,6 +937,13 @@ public class SkillEffects {
 			any = true;
 		}
 		if (any) Dungeon.observe();
+	}
+
+	//MOD: the next tome spell skips its cooldown
+	public static class QuickenedCast extends Buff {
+		{ type = buffType.POSITIVE; }
+		@Override public int icon() { return com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator.TIME; }
+		@Override public void tintIcon(com.watabou.noosa.Image icon) { icon.hardlight(1f, 0.8f, 0.2f); }
 	}
 
 	public static class LastWand extends Buff {

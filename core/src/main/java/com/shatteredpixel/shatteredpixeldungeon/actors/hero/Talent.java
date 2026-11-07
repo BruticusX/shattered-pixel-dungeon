@@ -608,6 +608,10 @@ public enum Talent {
 		if (hero.hasTalent(ENERGIZING_MEAL)){
 			//5/8 turns of recharging
 			wandChargeTurns += 2 + 3*hero.pointsInTalent(ENERGIZING_MEAL);
+			//MOD: and the held tome's spells come back 4/7 turns sooner
+			if (hero.belongings.weapon() instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) {
+				((com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) hero.belongings.weapon()).tick(1 + 3*hero.pointsInTalent(ENERGIZING_MEAL));
+			}
 		}
 		int artifactChargeTurns = 0;
 		if (hero.hasTalent(MYSTICAL_MEAL)){
@@ -764,6 +768,10 @@ public enum Talent {
 		if (hero.hasTalent(INSCRIBED_POWER)){
 			// 2/3 empowered wand zaps
 			Buff.affect(hero, ScrollEmpower.class).reset((int) (factor * (1 + hero.pointsInTalent(INSCRIBED_POWER))));
+			//MOD: and the held tome's spells come back 3/5 turns sooner
+			if (hero.belongings.weapon() instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) {
+				((com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) hero.belongings.weapon()).tick(factor * (1 + 2*hero.pointsInTalent(INSCRIBED_POWER)));
+			}
 		}
 		if (hero.hasTalent(INSCRIBED_STEALTH)){
 			// 3/5 turns of stealth
@@ -867,6 +875,19 @@ public enum Talent {
 	}
 
 	public static int onAttackProc( Hero hero, Char enemy, int dmg ){
+
+		//MOD: battlemage. Empowered strike: the first melee hit after the disintegration ray deals
+		//+25/50/75%. Mystical charge: melee hits bring the ray back 1/2/3 turns sooner
+		if (hero.subClass == HeroSubClass.BATTLEMAGE) {
+			EmpoweredStrikeTracker es = hero.buff(EmpoweredStrikeTracker.class);
+			if (es != null && hero.hasTalent(EMPOWERED_STRIKE)) {
+				dmg = Math.round(dmg * (1f + hero.pointsInTalent(EMPOWERED_STRIKE) / 4f));
+				es.detach();
+			}
+			com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DisintegrationRay ray =
+					hero.buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DisintegrationRay.class);
+			if (ray != null && hero.hasTalent(MYSTICAL_CHARGE)) ray.recharge(hero.pointsInTalent(MYSTICAL_CHARGE));
+		}
 
 		if (hero.hasTalent(Talent.PROVOKED_ANGER)
 			&& hero.buff(ProvokedAngerTracker.class) != null){
