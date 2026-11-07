@@ -93,6 +93,38 @@ public class HeldWeapon {
 
 	public void update(){
 		if (ws != null) ws.update();
+		//the enchantment aura only runs while the weapon is actually being drawn
+		if (aura != null) {
+			aura.on = auraDrawn;
+			if (!auraDrawn && aura.parent == null) aura = null;
+		}
+		auraDrawn = false;
+	}
+
+	//MOD: the enchantment's painted element effects playing along the held weapon (ItemAura)
+	private com.watabou.noosa.particles.Emitter aura;
+	private Item auraFor;
+	private Object auraEnch;
+	private boolean auraDrawn;
+
+	private void updateAura( CharSprite owner, Item w ){
+		Object ench = w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon
+				? ((com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon) w).enchantment : null;
+		if (aura != null && (w != auraFor || ench != auraEnch || aura.parent != owner.parent)) {
+			aura.on = false;
+			aura = null;
+		}
+		if (aura == null && ench != null && owner.parent != null && (w != auraFor || ench != auraEnch)) {
+			aura = w.emitter();
+			if (aura != null) {
+				aura.pos( ws );
+				owner.parent.add( aura );
+			}
+			auraFor = w;
+			auraEnch = ench;
+		}
+		if (ench == null) { auraFor = w; auraEnch = null; }
+		auraDrawn = true;
 	}
 
 	private HeroHD.FitImage handsImg;
@@ -167,6 +199,7 @@ public class HeldWeapon {
 					ws.y = owner.y + gy * k - ws.origin.y;
 					ws.draw();
 				}
+				updateAura( owner, w );
 				return;
 			}
 		}
@@ -207,6 +240,7 @@ public class HeldWeapon {
 		ws.alpha(owner.alpha());
 		ws.camera = owner.camera();
 		ws.draw();
+		updateAura( owner, w );
 
 		//gloves come in pairs: the other one goes on the other hand, wherever it's visible
 		if (hold == Hold.FIST) {
