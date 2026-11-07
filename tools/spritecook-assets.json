@@ -341,5 +341,13 @@
  {
   "asset_id": "780db957-5654-44f3-8158-4e72d55774ac",
   "label": "enchant vfx sheet 2: smoke glint blood arcane"
+ },
+ {
+  "asset_id": "d160e2b6-5a4a-4921-8ccc-e1f94cbcc6d7",
+  "label": "tome open, end-on side view"
+ },
+ {
+  "asset_id": "21674be8-5aef-4468-8f6c-c61e293f4852",
+  "label": "disintegration ray: beam, flare, impact"
  }
 ]

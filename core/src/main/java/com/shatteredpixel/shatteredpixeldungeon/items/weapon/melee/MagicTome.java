@@ -179,8 +179,6 @@ public class MagicTome extends MeleeWeapon {
 		if (action.equals(AC_CAST)) {
 			if (!isEquipped(hero)) {
 				GLog.i(Messages.get(MagicTome.class, "need_equip"));
-			} else if (hero.subClass == HeroSubClass.BATTLEMAGE && !battlemageChosen()) {
-				chooseBattlemageSpell(hero);
 			} else {
 				GameScene.show(new WndTomeSpells(this, hero));
 			}
@@ -606,7 +604,6 @@ public class MagicTome extends MeleeWeapon {
 				tome = (MagicTome) ((Hero) target).belongings.weapon();
 				tome.tick(target.buff(Recharging.class) != null ? 2f : 1f);
 			}
-			syncAura(target, tome);
 			spend(TICK);
 			return true;
 		}
