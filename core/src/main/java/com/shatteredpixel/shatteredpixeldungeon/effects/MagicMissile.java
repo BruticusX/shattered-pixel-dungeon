@@ -321,7 +321,6 @@ public class MagicMissile extends Emitter {
 		return false; //cannot be frozen
 	}
 
-	@Override
 	private com.watabou.noosa.Image head;
 
 	@Override
@@ -337,6 +336,7 @@ public class MagicMissile extends Emitter {
 		}
 	}
 
+	@Override
 	public void update() {
 		super.update();
 		if (on) {
