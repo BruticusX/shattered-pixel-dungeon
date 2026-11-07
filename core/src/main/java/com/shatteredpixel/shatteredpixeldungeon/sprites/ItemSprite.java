@@ -287,9 +287,11 @@ public class ItemSprite extends MovieClip {
 			frame( item.image() );
 		}
 		//MOD: on the floor, enchanted gear pulses a glow around its edges instead of the particle aura
-		edgeGlow = inWorld ? item.edgeGlow() : null;
+		//MOD: enchanted gear shows its painted element effects everywhere, on the floor too; the
+		//edge glow is only for gear whose effect has no aura of its own
+		Emitter emitter = item.emitter();
+		edgeGlow = inWorld && emitter == null ? item.edgeGlow() : null;
 		if (edgeGlow != null && edgeGlow.color == 0) edgeGlow = null; //a black glow wouldn't show
-		Emitter emitter = edgeGlow != null ? null : item.emitter();
 		if (emitter != null && parent != null) {
 			emitter.pos( this );
 			parent.add( emitter );

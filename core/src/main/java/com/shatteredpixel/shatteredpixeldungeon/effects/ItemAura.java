@@ -72,45 +72,45 @@ public class ItemAura extends Emitter {
 	private static final HashMap<Class<?>, Factory> FACTORIES = new HashMap<>();
 	static {
 		//weapon enchantments
-		FACTORIES.put(Blazing.class,    ElementalVfx.factory(ElementalVfx.FIRE, 7));
-		FACTORIES.put(Chilling.class,   ElementalVfx.factory(ElementalVfx.FROST, 6));
-		FACTORIES.put(Shocking.class,   ElementalVfx.factory(ElementalVfx.LIGHTNING, 7));
-		FACTORIES.put(Kinetic.class,    ElementalVfx.factory(ElementalVfx.GLINT, 6));
-		FACTORIES.put(Venomous.class,   ElementalVfx.factory(ElementalVfx.POISON, 5));
-		FACTORIES.put(Vampiric.class,   ElementalVfx.factory(ElementalVfx.BLOOD, 5));
-		FACTORIES.put(Vorpal.class,     ElementalVfx.factory(ElementalVfx.BLOOD, 5));
-		FACTORIES.put(Grim.class,       ElementalVfx.factory(ElementalVfx.SMOKE, 7));
-		FACTORIES.put(Eldritch.class,   ElementalVfx.factory(ElementalVfx.SMOKE, 7));
-		FACTORIES.put(Corrupting.class, ElementalVfx.factory(ElementalVfx.ARCANE, 6));
+		FACTORIES.put(Blazing.class,    ElementalVfx.factory(ElementalVfx.FIRE, 3.9f));
+		FACTORIES.put(Chilling.class,   ElementalVfx.factory(ElementalVfx.FROST, 3.3f));
+		FACTORIES.put(Shocking.class,   ElementalVfx.factory(ElementalVfx.LIGHTNING, 3.9f));
+		FACTORIES.put(Kinetic.class,    ElementalVfx.factory(ElementalVfx.GLINT, 3.3f));
+		FACTORIES.put(Venomous.class,   ElementalVfx.factory(ElementalVfx.POISON, 2.8f));
+		FACTORIES.put(Vampiric.class,   ElementalVfx.factory(ElementalVfx.BLOOD, 2.8f));
+		FACTORIES.put(Vorpal.class,     ElementalVfx.factory(ElementalVfx.BLOOD, 2.8f));
+		FACTORIES.put(Grim.class,       ElementalVfx.factory(ElementalVfx.SMOKE, 3.9f));
+		FACTORIES.put(Eldritch.class,   ElementalVfx.factory(ElementalVfx.SMOKE, 3.9f));
+		FACTORIES.put(Corrupting.class, ElementalVfx.factory(ElementalVfx.ARCANE, 3.3f));
 		FACTORIES.put(Blooming.class,   LeafParticle.GENERAL);
-		FACTORIES.put(Lucky.class,      ElementalVfx.factory(ElementalVfx.GLINT, 6));
-		FACTORIES.put(Blocking.class,   ElementalVfx.factory(ElementalVfx.GLINT, 6));
+		FACTORIES.put(Lucky.class,      ElementalVfx.factory(ElementalVfx.GLINT, 3.3f));
+		FACTORIES.put(Blocking.class,   ElementalVfx.factory(ElementalVfx.GLINT, 3.3f));
 		FACTORIES.put(Elastic.class,    Speck.factory(Speck.BUBBLE));
-		FACTORIES.put(Projecting.class, ElementalVfx.factory(ElementalVfx.GLINT, 7));
+		FACTORIES.put(Projecting.class, ElementalVfx.factory(ElementalVfx.GLINT, 3.9f));
 		FACTORIES.put(Unstable.class,   RainbowParticle.BURST);
-		FACTORIES.put(Crystal.class,    ElementalVfx.factory(ElementalVfx.FROST, 5));
+		FACTORIES.put(Crystal.class,    ElementalVfx.factory(ElementalVfx.FROST, 2.8f));
 		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Sundering.class, Speck.factory(Speck.ROCK)); //MOD
-		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class,  ElementalVfx.factory(ElementalVfx.FIRE, 7)); //MOD
-		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class,  ElementalVfx.factory(ElementalVfx.GLINT, 6)); //MOD
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Frenzied.class,  ElementalVfx.factory(ElementalVfx.FIRE, 3.9f)); //MOD
+		FACTORIES.put(com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Enduring.class,  ElementalVfx.factory(ElementalVfx.GLINT, 3.3f)); //MOD
 
 		//armor glyphs
-		FACTORIES.put(Obfuscation.class, ElementalVfx.factory(ElementalVfx.SMOKE, 7));
-		FACTORIES.put(Swiftness.class,   ElementalVfx.factory(ElementalVfx.GLINT, 5));
-		FACTORIES.put(Viscosity.class,   ElementalVfx.factory(ElementalVfx.ARCANE, 6));
-		FACTORIES.put(Potential.class,   ElementalVfx.factory(ElementalVfx.LIGHTNING, 7));
+		FACTORIES.put(Obfuscation.class, ElementalVfx.factory(ElementalVfx.SMOKE, 3.9f));
+		FACTORIES.put(Swiftness.class,   ElementalVfx.factory(ElementalVfx.GLINT, 2.8f));
+		FACTORIES.put(Viscosity.class,   ElementalVfx.factory(ElementalVfx.ARCANE, 3.3f));
+		FACTORIES.put(Potential.class,   ElementalVfx.factory(ElementalVfx.LIGHTNING, 3.9f));
 		FACTORIES.put(Affection.class,   Speck.factory(Speck.HEART));
-		FACTORIES.put(AntiMagic.class,   ElementalVfx.factory(ElementalVfx.GLINT, 6));
-		FACTORIES.put(Brimstone.class,   ElementalVfx.factory(ElementalVfx.FIRE, 7));
+		FACTORIES.put(AntiMagic.class,   ElementalVfx.factory(ElementalVfx.GLINT, 3.3f));
+		FACTORIES.put(Brimstone.class,   ElementalVfx.factory(ElementalVfx.FIRE, 3.9f));
 		FACTORIES.put(Camouflage.class,  LeafParticle.GENERAL);
 		FACTORIES.put(Entanglement.class,EarthParticle.SMALL);
 		FACTORIES.put(Flow.class,        Speck.factory(Speck.BUBBLE));
-		FACTORIES.put(Repulsion.class,   ElementalVfx.factory(ElementalVfx.GLINT, 6));
+		FACTORIES.put(Repulsion.class,   ElementalVfx.factory(ElementalVfx.GLINT, 3.3f));
 		FACTORIES.put(Stone.class,       EarthParticle.SMALL);
-		FACTORIES.put(Thorns.class,      ElementalVfx.factory(ElementalVfx.BLOOD, 5));
+		FACTORIES.put(Thorns.class,      ElementalVfx.factory(ElementalVfx.BLOOD, 2.8f));
 	}
 
 	private static Factory factoryFor(Object effect, boolean curse) {
-		if (curse) return ElementalVfx.factory(ElementalVfx.SMOKE, 7);
+		if (curse) return ElementalVfx.factory(ElementalVfx.SMOKE, 3.9f);
 		Factory f = FACTORIES.get(effect.getClass());
 		return f != null ? f : Speck.factory(Speck.LIGHT);
 	}

@@ -38,7 +38,7 @@ public class ElementalVfx extends Image {
 
 	//how long each kind lives, how it drifts (units per second, in item pixels) and whether it glows
 	private static final float[] LIFE  = {0.55f, 0.7f, 0.28f, 0.8f, 0.9f, 0.6f, 0.8f, 0.7f};
-	private static final float[] RISE  = {7f,    0f,   0f,    -6f,  5f,   0f,   -6f,  1f};
+	private static final float[] RISE  = {3.5f,  0f,   0f,    -3f,  2.5f, 0f,   -3f,  0.5f};
 	private static final boolean[] GLOW = {true, true, true,  false, false, true, false, true};
 
 	private int kind;
@@ -59,7 +59,8 @@ public class ElementalVfx extends Image {
 		frame( film.get( kind * 4 ) );
 		float s = size * unit / 48f * 3f;   //the effect fills about a third of its cell
 		scale.set( s );
-		origin.set( 24, kind == POISON || kind == BLOOD ? 16 : 30 );
+		//centred on the blade so the effect hugs it; drips hang from it
+		origin.set( 24, kind == POISON || kind == BLOOD ? 18 : 24 );
 		this.x = x - origin.x;
 		this.y = y - origin.y;
 		//drips and glints keep their own orientation; flames and smoke lean a little
@@ -78,7 +79,7 @@ public class ElementalVfx extends Image {
 		float p = 1f - left / life;              //0 -> 1
 		frame( film.get( kind * 4 + Math.min(3, (int)(p * 4)) ) );
 		//drips speed up as they fall; flames and smoke rise
-		if (kind == POISON || kind == BLOOD) vy += 40f * unit * Game.elapsed;
+		if (kind == POISON || kind == BLOOD) vy += 18f * unit * Game.elapsed;
 		y -= (RISE[kind] * unit - vy) * Game.elapsed;
 		if (p > 0.75f) alpha( (1f - p) * 4f );
 		if ((left -= Game.elapsed) <= 0) kill();

@@ -191,8 +191,18 @@ public class Belongings implements Iterable<Item> {
 		bundleRestoring = true;
 		backpack.clear();
 		backpack.restoreFromBundle( bundle );
+		//MOD: no more mage's staffs, in the pack either
+		for (int i = 0; i < backpack.items.size(); i++) {
+			if (backpack.items.get(i) instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) {
+				backpack.items.set(i, com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff.replaced(backpack.items.get(i), backpack));
+			}
+		}
 		
 		weapon = (KindOfWeapon) bundle.get(WEAPON);
+		//MOD: no more mage's staffs
+		if (weapon instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) {
+			weapon = (KindOfWeapon) com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff.replaced(weapon, backpack);
+		}
 		if (weapon() != null)       weapon().activate(owner);
 		
 		armor = (Armor)bundle.get( ARMOR );
@@ -208,6 +218,9 @@ public class Belongings implements Iterable<Item> {
 		if (ring() != null)         ring().activate( owner );
 
 		secondWep = (KindOfWeapon) bundle.get(SECOND_WEP);
+		if (secondWep instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) {
+			secondWep = (KindOfWeapon) com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff.replaced(secondWep, backpack);
+		}
 		if (secondWep() != null)    secondWep().activate(owner);
 
 		bundleRestoring = false;

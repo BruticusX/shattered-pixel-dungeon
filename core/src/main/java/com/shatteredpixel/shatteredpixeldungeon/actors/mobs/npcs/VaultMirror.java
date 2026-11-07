@@ -75,8 +75,8 @@ public class VaultMirror extends NPC {
 					((BrokenSeal)reward).setGlyph(Armor.Glyph.random());
 					break;
 				case MAGE:
-					reward = new MagesStaff().upgrade(3).identify(false);
-					((MagesStaff)reward).enchant();
+					reward = new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome().upgrade(3).identify(false);
+					((com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon)reward).enchant();
 					break;
 				case ROGUE:
 					reward = new CloakOfShadows().upgrade(8).identify(false);
