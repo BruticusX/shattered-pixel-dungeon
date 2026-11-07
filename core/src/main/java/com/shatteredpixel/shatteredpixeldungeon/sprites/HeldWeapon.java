@@ -74,6 +74,23 @@ public class HeldWeapon {
 		return w != null && holdOf(w) == Hold.SHIELD;
 	}
 
+	private static final float REST_FIST = 175;
+
+	//the direction from wrist to knuckles in the item's art (0 = up, 90 = right)
+	private static float fistAxis( Item w, float[] g ){
+		if (w instanceof TigerClaws) return 135;  //bar at the top left, claws reaching down and right
+		if (w instanceof Gauntlet)   return 45;   //cuff bottom left, fist top right
+		return g != null ? g[2] : 50;
+	}
+
+	//only the strike frames of the attack, with the arm thrown forward
+	private static boolean punching( HeroHD.Layout L, int f ){
+		int start = L.anims[4], count = L.anims[5];
+		if (f < start || f >= start + count) return false;
+		float a = L.angle[f];
+		return a >= 70 && a <= 130;
+	}
+
 	public void update(){
 		if (ws != null) ws.update();
 	}
@@ -139,14 +156,13 @@ public class HeldWeapon {
 			ws.origin.set(faceLeft ? ws.width - gx : gx, gy);
 			float rot = L.angle[f] - g[2];
 			ws.angle = faceLeft ? -rot : rot;
-		} else if (hold == Hold.FIST && g != null) {
-			//a glove is worn on the hand: its wrist-to-knuckles line follows the arm, hanging down at
-			//rest and pointing forward while punching
+		} else if (hold == Hold.FIST) {
+			//a glove is worn on the hand: its wrist-to-knuckles line follows the arm, hanging down
+			//(standing, walking) and pointing forward only on the punch itself
 			ws.setFlipped(faceLeft);
 			ws.origin.set(ws.width / 2f, ws.height / 2f);
-			float a = L.angle[f];
-			float target = (a >= 70 && a <= 130) ? 95 : 170;
-			float rot = target - g[2];
+			float target = punching(L, f) ? 95 : REST_FIST;
+			float rot = target - fistAxis(w, g);
 			ws.angle = faceLeft ? -rot : rot;
 		} else {
 			ws.setFlipped(faceLeft);
@@ -172,6 +188,9 @@ public class HeldWeapon {
 		if (hold == Hold.FIST) {
 			float[][] far = HeroHD.farHands(L);
 			if (far != null && f < far[0].length && far[0][f] >= 0) {
+				//the other hand isn't the one punching: it stays down
+				float rot = REST_FIST - fistAxis(w, g);
+				ws.angle = faceLeft ? -rot : rot;
 				float fx = (faceLeft ? L.frame - far[0][f] : far[0][f]) * k;
 				ws.x = owner.x + fx - ws.origin.x;
 				ws.y = owner.y + far[1][f] * k - ws.origin.y;

@@ -67,18 +67,20 @@ public class WndHero extends WndTabbed {
 		
 		super();
 		
-		resize( WIDTH, HEIGHT );
-		
 		stats = new StatsTab();
 		add( stats );
 
+		//MOD: grow to fit the stats page (a subclass, damage bonus or custom seed adds lines)
+		final int h = Math.max( HEIGHT, (int)Math.ceil( stats.height() ) );
+		resize( WIDTH, h );
+
 		talents = new TalentsTab();
 		add(talents);
-		talents.setRect(0, 0, WIDTH, HEIGHT);
+		talents.setRect(0, 0, WIDTH, h);
 
 		buffs = new BuffsTab();
 		add( buffs );
-		buffs.setRect(0, 0, WIDTH, HEIGHT);
+		buffs.setRect(0, 0, WIDTH, h);
 		buffs.setupList();
 		
 		add( new IconTab( Icons.get(Icons.RANKINGS) ) {
@@ -111,7 +113,7 @@ public class WndHero extends WndTabbed {
 
 		layoutTabs();
 
-		talents.setRect(0, 0, WIDTH, HEIGHT);
+		talents.setRect(0, 0, WIDTH, h);
 		talents.pane.scrollTo(0, talents.pane.content().height() - talents.pane.height());
 		talents.layout();
 

@@ -416,8 +416,11 @@ public class WndBag extends WndTabbed {
 			return Icons.get( Icons.POTION_BANDOLIER );
 		} else if (bag instanceof com.shatteredpixel.shatteredpixeldungeon.items.bags.ForgeSatchel) {
 			//MOD: the forge satchel's tab shows an ingot
-			return new com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite(
+			com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite ingot = new com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite(
 					com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet.INGOT);
+			//sized like the other tab icons (about 12px), not like an item in a slot
+			ingot.scale.set(12f / Math.max(ingot.width, ingot.height));
+			return ingot;
 		} else {
 			return Icons.get( Icons.BACKPACK );
 		}
