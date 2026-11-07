@@ -768,6 +768,8 @@ public class SkillEffects {
 	public static boolean hasWand(Hero hero) {
 		if (hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand.class) != null) return true;
 		com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon w = hero.belongings.weapon();
+		//MOD: a held magic tome counts as a wand for magic skills
+		if (w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome) return true;
 		return w instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff
 				&& ((com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) w).wandInside() != null;
 	}
@@ -786,6 +788,35 @@ public class SkillEffects {
 			Buff.affect(target, ResonanceMark.class, 3f).wand = wand.getClass().getName();
 		}
 		return Math.round(dmg * mult);
+	}
+
+	//MOD: tome spells get the same boosts as wand bolts: proficiency, overcharge and resonance.
+	//`source` names the wand the spell stands in for (resonance and elemental infusion key on it)
+	public static int modifyTomeDamage(Char target, int dmg, String source) {
+		Hero hero = Dungeon.hero;
+		if (hero == null || target == hero) return dmg;
+		float mult = 1f + 0.03f * Proficiency.level(hero.heroClass, Proficiency.Family.WANDS);
+		Overcharge oc = hero.buff(Overcharge.class);
+		if (oc != null) mult += 0.25f + 0.25f * oc.rank;
+		int res = Proficiency.rank(hero.heroClass, Skill.RESONANCE);
+		if (res > 0) {
+			ResonanceMark m = target.buff(ResonanceMark.class);
+			if (m != null && !m.wand.equals(source)) mult += 0.05f + 0.1f * res;
+			Buff.affect(target, ResonanceMark.class, 3f).wand = source;
+		}
+		return Math.round(dmg * mult);
+	}
+
+	//MOD: after a tome spell: true if overcharge or arcane overload refund its cooldown
+	public static boolean afterTomeUsed(String source) {
+		Hero hero = Dungeon.hero;
+		if (hero == null) return false;
+		boolean refund = false;
+		Overcharge oc = hero.buff(Overcharge.class);
+		if (oc != null) { oc.detach(); refund = true; }
+		if (hero.buff(ArcaneOverload.class) != null) refund = true;
+		Buff.affect(hero, LastWand.class).wand = source;
+		return refund;
 	}
 
 	//after a wand is used: overcharge and arcane overload refund the charge; the last wand used is remembered

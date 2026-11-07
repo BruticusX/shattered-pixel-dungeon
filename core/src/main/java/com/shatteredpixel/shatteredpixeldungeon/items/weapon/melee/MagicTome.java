@@ -320,8 +320,26 @@ public class MagicTome extends MeleeWeapon {
 	}
 
 	private void startCooldown(Spell s){
-		cooldowns[s.ordinal()] = cooldownFor(s);
+		boolean refund = com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.afterTomeUsed(source(s));
+		cooldowns[s.ordinal()] = refund ? 0 : cooldownFor(s);
 		updateQuickslot();
+	}
+
+	//the wand each spell stands in for, for magic skills that care which wand was used
+	private static String source(Spell s){
+		String w;
+		switch (s) {
+			case FIREBALL:        w = "WandOfFireblast"; break;
+			case RAY_OF_FROST:    w = "WandOfFrost"; break;
+			case CHAIN_LIGHTNING: w = "WandOfLightning"; break;
+			case DISINT_RAY: case DISINT_AURA: w = "WandOfDisintegration"; break;
+			default:              w = "WandOfMagicMissile";
+		}
+		return "com.shatteredpixel.shatteredpixeldungeon.items.wands." + w;
+	}
+
+	private static int amp(Char target, int dmg, Spell s){
+		return com.shatteredpixel.shatteredpixeldungeon.actors.hero.SkillEffects.modifyTomeDamage(target, dmg, source(s));
 	}
 
 	private void resolve(Hero hero, Spell s, int cell){
@@ -426,7 +444,7 @@ public class MagicTome extends MeleeWeapon {
 			@Override
 			public void call() {
 				if (target.isAlive()) {
-					target.damage(Random.NormalIntRange(2 + p, 4 + 2*p), MagicTome.this);
+					target.damage(amp(target, Random.NormalIntRange(2 + p, 4 + 2*p), Spell.MAGIC_MISSILES), MagicTome.this);
 					target.sprite.burst(0xFFCC66FF, 4);
 				}
 				if (left > 1) {
@@ -464,7 +482,7 @@ public class MagicTome extends MeleeWeapon {
 			if (ch == null || ch == hero) continue;
 			int dmg = Random.NormalIntRange(6 + 2*p, 12 + 4*p);
 			if (c != impact) dmg = Math.round(dmg * 0.5f);
-			ch.damage(dmg, this);
+			ch.damage(amp(ch, dmg, Spell.FIREBALL), this);
 			if (ch.isAlive() && Random.Int(100) < burnChance) Buff.affect(ch, Burning.class).reignite(ch);
 		}
 	}
@@ -488,7 +506,7 @@ public class MagicTome extends MeleeWeapon {
 		}
 		hero.sprite.parent.addToFront(new Lightning(arcs, null));
 		Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
-		for (Char ch : hit) ch.damage(Random.NormalIntRange(4 + p, 9 + 2*p), this);
+		for (Char ch : hit) ch.damage(amp(ch, Random.NormalIntRange(4 + p, 9 + 2*p), Spell.CHAIN_LIGHTNING), this);
 	}
 
 	private void disintRay(Hero hero, int cell, int p){
@@ -513,7 +531,7 @@ public class MagicTome extends MeleeWeapon {
 				GLog.p(Messages.get(MagicTome.class, "disintegrated", ch.name()));
 				ch.die(this);
 			} else {
-				ch.damage(Random.NormalIntRange(6 + 2*p, 14 + 5*p), this);
+				ch.damage(amp(ch, Random.NormalIntRange(6 + 2*p, 14 + 5*p), Spell.DISINT_RAY), this);
 				ch.sprite.centerEmitter().burst(PurpleParticle.BURST, 8);
 			}
 		}
@@ -611,7 +629,7 @@ public class MagicTome extends MeleeWeapon {
 			//stronger up close: full power next to the target, falling off with distance
 			int d = Dungeon.level.distance(hero.pos, t.pos);
 			float falloff = Math.max(0.3f, 1.2f - 0.1f * d);
-			t.damage(Math.round(Random.NormalIntRange(3 + power, 6 + 2*power) * falloff), this);
+			t.damage(amp(t, Math.round(Random.NormalIntRange(3 + power, 6 + 2*power) * falloff), Spell.RAY_OF_FROST), this);
 			if (t.isAlive()) {
 				if (Random.Int(100) < freeze) Buff.affect(t, Frost.class, Frost.DURATION);
 				else Buff.prolong(t, Chill.class, 2f);
