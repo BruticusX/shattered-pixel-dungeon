@@ -726,6 +726,7 @@ abstract public class MissileWeapon extends Weapon {
 		if (levelKnown) {
 			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known_w", weightLabel(), augment.damageFactor(min()), augment.damageFactor(max()));
 			if (!materialInfo().equals("")) info += " " + materialInfo(); //MOD
+			info += "\n\n" + com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon.proficiencyInfo(this); //MOD
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");

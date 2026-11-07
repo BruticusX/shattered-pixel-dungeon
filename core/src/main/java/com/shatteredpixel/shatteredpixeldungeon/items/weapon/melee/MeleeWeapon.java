@@ -401,6 +401,22 @@ public class MeleeWeapon extends Weapon {
 		return damage;
 	}
 	
+	//MOD: armor piercing, and whether you've trained enough to handle a weapon this heavy
+	public static String proficiencyInfo(com.shatteredpixel.shatteredpixeldungeon.items.Item w) {
+		com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.Family f =
+				com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.familyOf(w);
+		if (f == null) return "";
+		String s = Messages.get(MeleeWeapon.class, "pierce_info",
+				Math.round(100 * com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.armorPierce(w)));
+		int over = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.unfamiliarity(Dungeon.hero, w);
+		if (over > 0) {
+			int need = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.levelForTier(
+					com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.tierOf(w));
+			s += " " + Messages.get(MeleeWeapon.class, "unfamiliar", 15 * over, f.title(), need);
+		}
+		return s;
+	}
+
 	@Override
 	public String info() {
 
@@ -428,6 +444,8 @@ public class MeleeWeapon extends Weapon {
 		if (ws != null) {
 			info += " " + Messages.get(MeleeWeapon.class, "weight_info", Messages.decimalFormat("#.##", ws.delay));
 		}
+
+		info += "\n\n" + proficiencyInfo(this);
 
 		String statsInfo = statsInfo();
 		if (!statsInfo.equals("")) info += "\n\n" + statsInfo;

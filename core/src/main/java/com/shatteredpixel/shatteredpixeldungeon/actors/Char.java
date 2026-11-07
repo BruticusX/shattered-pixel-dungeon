@@ -415,6 +415,18 @@ public abstract class Char extends Actor {
 					&& !enemy.properties().contains(Property.BOSS) && dr > 0) {
 				dr = Math.round(dr * 1.25f);
 			}
+			//MOD: deeper enemies are better armored: up to +2 at depth 5, +4 at 10, +8 at 20 (bosses unchanged)
+			if (enemy instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob && enemy.alignment == Alignment.ENEMY
+					&& !enemy.properties().contains(Property.BOSS)) {
+				int bonus = Dungeon.depth * 2 / 5;
+				if (bonus > 0) dr += com.watabou.utils.Random.NormalIntRange(bonus / 2, bonus);
+			}
+			//MOD: heavy and pointed weapons ignore part of the enemy's armor
+			if (this instanceof Hero && dr > 0) {
+				float pierce = com.shatteredpixel.shatteredpixeldungeon.actors.hero.Proficiency.armorPierce(
+						((Hero) this).belongings.attackingWeapon());
+				dr = Math.round(dr * (1f - pierce));
+			}
 			
 			if (this instanceof Hero){
 				Hero h = (Hero)this;

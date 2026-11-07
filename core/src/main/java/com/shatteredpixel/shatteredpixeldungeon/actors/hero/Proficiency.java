@@ -180,7 +180,52 @@ public class Proficiency {
 	public static float accuracyFactor(Hero hero, Object weapon) {
 		if (familyOf(weapon) == null) return 1f;
 		//MOD: 0.70 at level 0 up to 1.30 at level 10: proficiency matters more
-		return 0.70f + 0.06f * level(hero, weapon);
+		float f = 0.70f + 0.06f * level(hero, weapon);
+		//a weapon heavier than you've trained for is clumsy: -15% accuracy per tier too far
+		return f * Math.max(0.4f, 1f - 0.15f * unfamiliarity(hero, weapon));
+	}
+
+	// ---- weapon tiers: proficiency takes the place of the old strength requirement ----
+
+	public static int tierOf(Object weapon) {
+		if (weapon instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon)
+			return ((com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon) weapon).tier;
+		if (weapon instanceof MissileWeapon) return ((MissileWeapon) weapon).tier;
+		return 0; //the spirit bow and wands grow with you, so they're always familiar
+	}
+
+	//the heaviest tier you handle without penalty: tier 2 from the start, 3 at level 2, 4 at 4, 5 at 6
+	public static int familiarTier(int level) {
+		return 2 + level / 2;
+	}
+
+	public static int levelForTier(int tier) {
+		return Math.max(0, (tier - 2) * 2);
+	}
+
+	public static int unfamiliarity(Hero hero, Object weapon) {
+		if (hero == null || familyOf(weapon) == null) return 0;
+		return Math.max(0, tierOf(weapon) - familiarTier(level(hero, weapon)));
+	}
+
+	//how much of an enemy's armor each kind of weapon ignores: crushing and chopping weapons go
+	//through armor, daggers find the gaps, edges and fists mostly glance off it
+	public static float armorPierce(Object weapon) {
+		Family f = familyOf(weapon);
+		if (f == null) return 0f;
+		switch (f) {
+			case BLUNT:    return 0.50f;
+			case AXES:     return 0.40f;
+			case POLEARMS: return 0.35f;
+			case DAGGERS:  return 0.25f;
+			case STAVES:   return 0.20f;
+			case RANGED:   return 0.20f;
+			case SWORDS:   return 0.15f;
+			case SHIELDS:  return 0.15f;
+			case FLEXIBLE: return 0.10f;
+			case FIST:     return 0.05f;
+			default:       return 0f;
+		}
 	}
 
 	public static float damageFactor(Hero hero, Object weapon) {
@@ -196,8 +241,8 @@ public class Proficiency {
 		Hero hero = (Hero) attacker;
 		KindOfWeapon wep = hero.belongings.attackingWeapon();
 		if (familyOf(wep) == null) return false;
-		//MOD: 20% at level 0 up to 70% at level 10
-		return Random.Float() < 0.20f + 0.05f * level(hero, wep);
+		//MOD: 20% at level 0 up to 70% at level 10, 10% less per tier above what you've trained for
+		return Random.Float() < 0.20f + 0.05f * level(hero, wep) - 0.10f * unfamiliarity(hero, wep);
 	}
 
 	public static final float GLANCING_DAMAGE = 0.4f;
