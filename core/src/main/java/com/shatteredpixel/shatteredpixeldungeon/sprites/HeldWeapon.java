@@ -177,7 +177,7 @@ public class HeldWeapon {
 			else        sc *= 0.7f;
 		}
 		//an open book about two hands wide, resting on the palm
-		if (hold == Hold.BOOK) sc *= 16f / 32f;
+		if (hold == Hold.BOOK) sc *= 18f / 32f;
 		ws.scale.set(sc);
 
 		//gloves: one on each visible hand, placed from that frame's own hand positions
@@ -205,9 +205,10 @@ public class HeldWeapon {
 			}
 		}
 		if (hold == Hold.BOOK) {
+			//seen from the side, end-on: tipped so the open pages face the reader
 			ws.setFlipped(faceLeft);
-			ws.origin.set(ws.width / 2f, ws.height * 0.8f);
-			ws.angle = 0;
+			ws.origin.set(ws.width / 2f, ws.height * 0.75f);
+			ws.angle = faceLeft ? 18 : -18;
 		} else if (hold == Hold.DIAGONAL && g != null) {
 			ws.setFlipped(faceLeft);
 			float gx = g[0] / 2f, gy = g[1] / 2f;

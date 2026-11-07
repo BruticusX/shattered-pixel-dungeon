@@ -897,6 +897,10 @@ public class Hero extends Char {
 		}
 		
 		checkVisibleMobs();
+		//MOD: the battlemage's innate disintegration ray and aura
+		if (subClass == HeroSubClass.BATTLEMAGE && buff(com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DisintegrationRay.class) == null) {
+			Buff.affect(this, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DisintegrationRay.class);
+		}
 		BuffIndicator.refreshHero();
 		BuffIndicator.refreshBoss();
 		
