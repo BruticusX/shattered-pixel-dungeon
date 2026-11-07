@@ -460,6 +460,9 @@ public class TestLevel extends Level {
 		Sword worn = new Sword(); worn.material = Material.IRON; worn.condition = 8; place(worn);
 		PlateArmor broken = new PlateArmor(); broken.material = Material.IRON; broken.condition = 0; place(broken);
 		place(new RepairKit().quantity(10));
+		//subclass and armor ability, which unlock talent tiers 3 and 4
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.TengusMask());
+		place(new com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown());
 		place(new com.shatteredpixel.shatteredpixeldungeon.items.TomeOfUnlearning().quantity(3));
 		newRow();
 
