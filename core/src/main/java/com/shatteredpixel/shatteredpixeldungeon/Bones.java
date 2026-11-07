@@ -201,6 +201,10 @@ public class Bones {
 				}
 
 				//Enforces artifact uniqueness
+				//MOD: no more mage's staffs
+				if (item instanceof com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff) {
+					item = com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff.replaced(item, null);
+				}
 				if (item instanceof Artifact){
 					if (Generator.removeArtifact(((Artifact)item).getClass())) {
 						

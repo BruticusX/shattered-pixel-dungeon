@@ -303,6 +303,25 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	//MOD: for staff skills
+	//MOD: the Mage's staff is gone from the game. Any staff that still turns up (an old save, old
+	//remains) is swapped for a magic tome at the same level, and its imbued wand is handed back
+	public static Item replaced( Item item, Bag keepWandIn ){
+		if (!(item instanceof MagesStaff)) return item;
+		MagesStaff staff = (MagesStaff) item;
+		MagicTome tome = new MagicTome();
+		tome.level( Math.max( 0, staff.level() ) );
+		if (staff.enchantment != null) tome.enchant( staff.enchantment );
+		tome.cursed = staff.cursed;
+		if (staff.levelKnown) tome.identify( false );
+		if (staff.wand != null && keepWandIn != null) {
+			Wand w = staff.wand;
+			staff.wand = null;
+			w.resinBonus = 0;
+			keepWandIn.items.add( w );
+		}
+		return tome;
+	}
+
 	public Wand wandInside(){
 		return wand;
 	}

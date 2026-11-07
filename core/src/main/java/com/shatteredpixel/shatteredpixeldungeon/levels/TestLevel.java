@@ -466,7 +466,6 @@ public class TestLevel extends Level {
 				if (w.materialKind() == null) place(w);
 			}
 		}
-		place(new MagesStaff());
 		place(new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome().identify());
 		place(new com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTome().identify());
 		newRow();
