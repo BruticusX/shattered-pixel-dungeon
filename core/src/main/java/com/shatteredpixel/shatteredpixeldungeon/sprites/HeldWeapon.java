@@ -144,7 +144,7 @@ public class HeldWeapon {
 			else        sc *= 0.7f;
 		}
 		//an open book about two hands wide, resting on the palm
-		if (hold == Hold.BOOK) sc *= 20f / 32f;
+		if (hold == Hold.BOOK) sc *= 16f / 32f;
 		ws.scale.set(sc);
 
 		//gloves: one on each visible hand, placed from that frame's own hand positions

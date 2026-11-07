@@ -261,5 +261,77 @@
   "asset_id": "1acf958a-cc8a-47c4-8b8b-7c2877cb29bd",
   "sha12": "a72cff94d4c3",
   "label": "spell effects: arcane missile, fireball, ice beam, arcane burst"
+ },
+ {
+  "asset_id": "32b151e0-c10d-476d-bc4c-1dddd9388963",
+  "label": "mob still sheet 5 upload (style ref)"
+ },
+ {
+  "asset_id": "9949045c-5b03-4b2d-a5f4-8c3abdd1f214",
+  "label": "boss still sheet"
+ },
+ {
+  "asset_id": "56d04ea8-b863-4d59-ae9e-1f43f4c15362",
+  "label": "yog fist still sheet"
+ },
+ {
+  "asset_id": "f9a81f2e-152f-45ca-8d21-82117012b985",
+  "label": "tengu poses"
+ },
+ {
+  "asset_id": "90fc2327-5aa3-46ff-a946-175503cdcd7b",
+  "label": "dm300 poses"
+ },
+ {
+  "asset_id": "43726ae5-b778-4ec3-99b7-a79a2bbc5188",
+  "label": "king poses"
+ },
+ {
+  "asset_id": "7d9e2c18-f9d9-47ac-a70b-021460e68a25",
+  "label": "yog poses"
+ },
+ {
+  "asset_id": "c9a7f6ea-ef3c-49d8-b2ed-a724086e847f",
+  "label": "larva poses"
+ },
+ {
+  "asset_id": "35ebc4aa-68ec-4387-8978-62c4e4f30251",
+  "label": "undead poses"
+ },
+ {
+  "asset_id": "103a48ad-fa84-4137-a616-651f02cbf922",
+  "label": "geomancer poses"
+ },
+ {
+  "asset_id": "1c8018be-e588-4097-b3a0-184a04a14d80",
+  "label": "pylon poses"
+ },
+ {
+  "asset_id": "b9462b67-203c-4973-be65-1e0066c75b18",
+  "label": "fist burning poses"
+ },
+ {
+  "asset_id": "9b893687-8a5d-4913-ab69-61cdf3167047",
+  "label": "fist soiled poses"
+ },
+ {
+  "asset_id": "5f66babe-4aeb-45cc-9ec4-3322939314b7",
+  "label": "fist rotting poses"
+ },
+ {
+  "asset_id": "e75b6a9b-1a6f-4fce-baa8-7a4c851df380",
+  "label": "fist rusted poses"
+ },
+ {
+  "asset_id": "f09a1b99-174a-4a43-8cf2-8f0104a9d593",
+  "label": "fist bright poses"
+ },
+ {
+  "asset_id": "77428c1d-0960-416f-848d-d9200f4273f4",
+  "label": "fist dark poses"
+ },
+ {
+  "asset_id": "aabfc7b9-f27d-4d00-bf64-759ff4ad316f",
+  "label": "tome open, side view"
  }
 ]
